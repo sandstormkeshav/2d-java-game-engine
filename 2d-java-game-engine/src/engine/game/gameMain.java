@@ -14,7 +14,6 @@ package engine.game;
 import engine.game.objects.*;
 import engine.game.objects.Mario;
 
-import java.lang.Math;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
@@ -67,6 +66,7 @@ public class gameMain extends JPanel implements Runnable {
     public static Mario mario;
     public static WorldTile[] tileObject = new WorldTile[99999];
     public static ItemContainer[] box = new ItemContainer[99999];
+    public static int numberOfBoxes;
 
     //File input stream
     StringBuffer strBuffer = new StringBuffer();
@@ -95,6 +95,7 @@ public class gameMain extends JPanel implements Runnable {
         try{
         marioSpriteSheet = ImageIO.read(new File("mario.gif"));
         tileSheet = ImageIO.read(new File("marioworld.png"));
+        boxSpriteSheet = ImageIO.read(new File("questionBox.png"));
         background = ImageIO.read(new File("background.png"));
 
         }
@@ -108,7 +109,7 @@ public class gameMain extends JPanel implements Runnable {
 
         // -- create objects:
         //create a Mario:   (should be included in the tile/sprite loader, later)
-        mario = new Mario();
+        mario = new Mario(new Point(5, 0));
 
         //create world from from .level file:
         LoadTiles("test.level");
@@ -209,6 +210,11 @@ public class gameMain extends JPanel implements Runnable {
             if(mario.sprite.posy > this.getHeight()){
                 mario.sprite.setPosition(0, 0);
                 camera.position = new Point(width/2, camera.position.y);
+            }
+
+            //Periodic Check Abilities:
+            for(int i = 0; i < numberOfBoxes; i++){
+                box[i].open();
             }
 
             //Wrap screen:
@@ -358,8 +364,12 @@ public class gameMain extends JPanel implements Runnable {
                 //Number entered in the position represents tileNumber;
                 //position of the sprite x*16, y*16
                 if(readLine[y].charAt(x) != ' '){
-                    tileObject[numberOfTiles] = new WorldTile(Integer.parseInt(readLine[y].charAt(x) + ""));
-                    tileObject[numberOfTiles-1].sprite.setPosition(x*16, y*16);
+                    if((Integer.parseInt(readLine[y].charAt(x) + "")) == 9){
+                        box[numberOfBoxes] = new ItemContainer(new Point(x*16, y*16));
+                    }else{
+                        tileObject[numberOfTiles] = new WorldTile(Integer.parseInt(readLine[y].charAt(x) + ""));
+                        tileObject[numberOfTiles-1].sprite.setPosition(x*16, y*16);
+                    }
                 }
             }
         }
