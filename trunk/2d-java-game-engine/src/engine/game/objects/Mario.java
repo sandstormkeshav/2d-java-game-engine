@@ -41,7 +41,11 @@ public class Mario{
     //standard Animations (this should be copy-paste for each Object:
     public Animation none = new Animation(sprite, 0, 0, 0, false);
 
-    public Mario(){
+    public Mario(Point position){
+        //set position of sprite:
+        sprite.posx = position.x;
+        sprite.posy = position.y;
+
         //set the sprite up for drawing:
         gameMain.sprite[gameMain.numberOfSprites] = sprite;
         gameMain.numberOfSprites++;
@@ -76,6 +80,12 @@ public class Mario{
         
         for(int i = 0; i < gameMain.numberOfTiles; i++){
             if(sprite.collision(gameMain.tileObject[i].sprite) == true){
+                verticalCollision = true;
+            }
+        }
+
+        for(int i = 0; i < gameMain.numberOfSprites; i++){
+            if(sprite.collision(gameMain.sprite[i]) == true && gameMain.sprite[i] != sprite){
                 verticalCollision = true;
             }
         }
@@ -118,6 +128,11 @@ public class Mario{
                         topCollision = true;
                     }
                 }
+                for(int i = 0; i < gameMain.numberOfSprites; i++){
+                    if(sprite.topCollision(gameMain.sprite[i]) == true && gameMain.sprite[i] != sprite){
+                        topCollision = true;
+                    }
+                }
                 if(topCollision == false){
                     sprite.posy = sprite.posy-(int)(1 - jumpHeight/46);
                 }
@@ -149,12 +164,21 @@ public class Mario{
                 leftCollision = true;
             }
         }
+        for(int i = 0; i < gameMain.numberOfSprites; i++){
+            if(sprite.leftCollision(gameMain.sprite[i]) == true && gameMain.sprite[i] != sprite){
+                leftCollision = true;
+            }
+        }
         for(int i = 0; i < gameMain.numberOfTiles; i++){
             if(sprite.rightCollision(gameMain.tileObject[i].sprite) == true){
                 rightCollision = true;
             }
         }
-
+        for(int i = 0; i < gameMain.numberOfSprites; i++){
+            if(sprite.rightCollision(gameMain.sprite[i]) == true && gameMain.sprite[i] != sprite){
+                rightCollision = true;
+            }
+        }
         //change sprite position:
         if(leftCollision == false && sprite.flipH == -1){
             sprite.setPosition(sprite.posx + sprite.flipH, sprite.posy);

@@ -47,14 +47,14 @@ public class Sprite{
 
     public boolean topCollision(Sprite sprite2){
         Rectangle collisionBoundsSprite2 = new Rectangle(new Point(sprite2.posx, sprite2.posy), new Dimension(sprite2.collisionSize.width+1, sprite2.collisionSize.height+1));
-        Rectangle topBounds = new Rectangle(new Point(this.posx + (this.size.width-2)/2 - this.collisionSize.width/2, this.posy + this.size.height/2 - this.collisionSize.height/2 - 2), new Dimension(this.collisionSize.width+2,1));
+        Rectangle topBounds = new Rectangle(new Point(this.posx + this.flipH*((this.size.width-2)/2 - this.collisionSize.width/2), this.posy + this.size.height/2 - this.collisionSize.height/2 - 2), new Dimension(this.collisionSize.width+2,1));
 
         return topBounds.intersects(collisionBoundsSprite2);
     }
 
     public boolean bottomCollision(Sprite sprite2){
         Rectangle collisionBoundsSprite2 = new Rectangle(new Point(sprite2.posx, sprite2.posy), new Dimension(sprite2.collisionSize.width+1, sprite2.collisionSize.height+1));
-        Rectangle bottomBounds = new Rectangle(new Point(this.posx + (this.size.width-2)/2 - this.collisionSize.width/2, this.posy + this.size.height/2 - this.collisionSize.height/2 + + this.collisionSize.height+2), new Dimension(this.collisionSize.width+2,1));
+        Rectangle bottomBounds = new Rectangle(new Point(this.posx + this.flipH*((this.size.width-2)/2 - this.collisionSize.width/2), this.posy + this.size.height/2 - this.collisionSize.height/2 + + this.collisionSize.height+2), new Dimension(this.collisionSize.width+2,1));
 
         return bottomBounds.intersects(collisionBoundsSprite2);
     }
