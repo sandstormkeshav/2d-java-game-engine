@@ -76,6 +76,10 @@ public class gameMain extends JPanel implements Runnable {
     public static int width;;
     public static int height;
 
+    //Map properties:
+    public int MapHeight = 0;
+    public int MapWidth = 0;
+
     //Cameras
     Camera camera;
 
@@ -102,24 +106,26 @@ public class gameMain extends JPanel implements Runnable {
         catch(Exception e){
         }
 
-        //check if images are loaded:
+        //wait 'till images are loaded:
         while(marioSpriteSheet.getWidth(this) == -1){}
         while(tileSheet.getWidth(this) == -1){}
         while(background.getWidth(this) == -1){}
+        while(boxSpriteSheet.getWidth(this) == -1){}
+
+        //create world from from .level file:
+        LoadTiles("test.level");
 
         // -- create objects:
         //create a Mario:   (should be included in the tile/sprite loader, later)
         mario = new Mario(new Point(5, 0));
 
-        //create world from from .level file:
-        LoadTiles("test.level");
-
         //set up the camera:
-        camera = new Camera(new Point(width/2, height/2), new Rectangle(0, -150, 600, 152));
-        camera.position.y = 150;
+        camera = new Camera(new Point(width/2, height/2), new Rectangle(0, 0, MapWidth*16, (MapHeight)*16 - height + 4*16));
+        camera.setPrefHeight(MapHeight*10 + mario.sprite.size.height, 50);
+        camera.position.y = MapHeight*10 + 50;
         camera.position.x = width/2;
-
-        System.out.println(width + " ," + height);
+        
+        System.out.println();
 
     }
 
@@ -207,9 +213,9 @@ public class gameMain extends JPanel implements Runnable {
             }
 
             //Reset Mario if fallen off from screen:
-            if(mario.sprite.posy > this.getHeight()){
-                mario.sprite.setPosition(0, 0);
-                camera.position = new Point(width/2, camera.position.y);
+            if(mario.sprite.posy > MapHeight*16 ){
+                camera.position = new Point(width/2, camera.prefHeight + camera.tolerance);
+                mario.sprite.setPosition(5, 0);
             }
 
             //Periodic Check Abilities:
@@ -217,7 +223,7 @@ public class gameMain extends JPanel implements Runnable {
                 box[i].open();
             }
 
-            //Wrap screen:
+            //Wrap screen: (buggy with camera bounds ON
             //if(mario.sprite.posx > this.getWidth()){
             //    mario.sprite.posx -= this.getWidth() + 24;
             //}
@@ -358,11 +364,13 @@ public class gameMain extends JPanel implements Runnable {
         // -- create Tiles and sprites from Text-file:
         //Tiles:
         int[] tileNumber = new int[99999];
-
         for(int y = 0; y < a; y++){
+            MapHeight++;
+            MapWidth = 0;
             for(int x = 0; x < readLine[y].length(); x++){
                 //Number entered in the position represents tileNumber;
                 //position of the sprite x*16, y*16
+                MapWidth ++;
                 if(readLine[y].charAt(x) != ' '){
                     if((Integer.parseInt(readLine[y].charAt(x) + "")) == 9){
                         box[numberOfBoxes] = new ItemContainer(new Point(x*16, y*16));
