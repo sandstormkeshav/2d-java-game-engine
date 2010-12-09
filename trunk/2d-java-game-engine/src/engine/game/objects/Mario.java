@@ -136,6 +136,10 @@ public class Mario{
                 if(topCollision == false){
                     sprite.posy = sprite.posy-(int)(1 - jumpHeight/46);
                 }
+                else{
+                    Jumping = false;
+                    canJump = false;
+                }
 
             }
             else{
