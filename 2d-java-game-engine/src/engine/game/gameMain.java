@@ -95,7 +95,7 @@ public class gameMain extends JPanel implements Runnable {
         try{
         marioSpriteSheet = ImageIO.read(new File("mario.gif"));
         tileSheet = ImageIO.read(new File("marioworld.png"));
-        boxSpriteSheet = ImageIO.read(new File("questionBox.png"));
+        boxSpriteSheet = ImageIO.read(new File("box.png"));
         background = ImageIO.read(new File("background.png"));
 
         }

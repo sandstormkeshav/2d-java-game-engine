@@ -25,6 +25,7 @@ public class ItemContainer {
 
     //Animations
     public Animation empty = new Animation(sprite, 1, 0, 0, true);
+    public Animation full = new Animation(sprite, 0, 3, 80, true);
 
     //standard Animations (this should be copy-paste for each Object:
     public Animation none = new Animation(sprite, 0, 0, 0, true);
@@ -39,7 +40,7 @@ public class ItemContainer {
         gameMain.numberOfSprites++;
 
         //set the animation and play it;
-        sprite.animation = none;
+        sprite.animation = full;
         sprite.animation.play();
     }
 
