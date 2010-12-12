@@ -38,8 +38,17 @@ public class Mario{
     public Animation duck = new Animation(sprite, 3, 0, 0, true);
     public Animation look = new Animation(sprite, 4, 0, 0, true);
 
-    //standard Animations (this should be copy-paste for each Object:
+    //standart animation for all objects:
     public Animation none = new Animation(sprite, 0, 0, 0, false);
+
+    //Key Mapping:
+    public Keymapping keymapping = new Keymapping(new Key[]{
+            new Key("keyUp", 38),
+            new Key("keyDown", 40),
+            new Key("keyLeft", 37),
+            new Key("keyRight", 39),
+            new Key("keyJump", 32),
+            });
 
     public Mario(Point position){
         //set position of sprite:
@@ -201,8 +210,81 @@ public class Mario{
         sprite.setCollisionSize(new Dimension(8, 24));
     }
 
-    public Sprite getSprite(){
-        return sprite;
+    public void keyActions(){
+
+        //reset animation:
+        sprite.setAnimation(none);
+
+        //Up Arrow Down:
+        if(keymapping.keyPressed("keyUp") == true){
+            look();
+        }
+
+        //Right Arrow Down:
+        if(keymapping.keyPressed("keyRight") == true && keymapping.keyPressed("keyLeft") == false && (keymapping.keyPressed("keyDown") == false || Jumping == true || canJump == false)){
+            //Flip Sprite if needed:
+            if(sprite.flipH != 1){
+                sprite.FlipHorizontal();
+            }
+            walk();
+        }
+
+        //Left Arrow Down:
+        if(keymapping.keyPressed("keyLeft") == true && keymapping.keyPressed("keyRight") == false && (keymapping.keyPressed("keyDown") == false || Jumping == true || canJump == false)){
+            //Flip Sprite if needed:
+            if(sprite.flipH != -1){
+                sprite.FlipHorizontal();
+            }
+            walk();
+        }
+
+        //Spacebar Down:
+        if(keymapping.keyPressed("keyJump") == true){
+            jump();
+        }
+
+        fall();
+
+        //Down Arrow Down:
+        if(keymapping.keyPressed("keyDown") == true){
+            duck();
+        }
+
+        if(keymapping.keyReleased("keyUp") == true){
+            stand();
+            gameMain.keyReleased[keymapping.getKey("keyUp")] = false;
+        }
+
+        //Right/Left Arrow Up:
+        if(keymapping.keyReleased("keyLeft") == true){
+            stand();
+            gameMain.keyReleased[keymapping.getKey("keyLeft")] = false;
+        }
+
+        if(keymapping.keyReleased("keyRight") == true){
+            stand();
+            gameMain.keyReleased[keymapping.getKey("keyRight")] = false;
+        }
+
+        if(keymapping.keyReleased("keyDown") == true){
+            //"reset collision size:"
+            stand();
+
+            //move mario up by 4 pixel:
+            if(Jumping == false){
+                sprite.setPosition(sprite.posx, sprite.posy-4);
+            }
+
+            gameMain.keyReleased[keymapping.getKey("keyDown")] = false;
+        }
+
+        //Spacebar Up:
+        if(keymapping.keyReleased("keyJump")){
+            Jumping = false;
+            //mario.canJump = true;
+            gameMain.keyReleased[keymapping.getKey("keyJump")] = false;
+        }
+         
     }
 
 }

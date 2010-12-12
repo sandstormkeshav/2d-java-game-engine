@@ -34,14 +34,8 @@ public class gameMain extends JPanel implements Runnable {
     private Graphics dbg;
 
     //Key Mapping
-    private boolean[] keyPressed = new boolean[99999];
-    private boolean[] keyReleased = new boolean[99999];
-
-    private int keyUp = 38;
-    private int keyDown = 40;
-    private int keyLeft = 37;
-    private int keyRight = 39;
-    private int keyJump = 32;
+    public static boolean[] keyPressed = new boolean[99999];
+    public static boolean[] keyReleased = new boolean[99999];
 
     //Threads
     public Thread main;
@@ -140,97 +134,18 @@ public class gameMain extends JPanel implements Runnable {
 
             camera.follow(mario.sprite);
 
-            mario.sprite.setAnimation(mario.none);
+            //actions for objects:
+            mario.keyActions();
 
-            //Up Arrow Down:
-            if(keyPressed[keyUp] == true){
-                mario.look();
-            }
-
-            //Right Arrow Down:
-            if(keyPressed[keyRight] == true && keyPressed[keyLeft] == false && (keyPressed[keyDown] == false || mario.Jumping == true || mario.canJump == false)){
-                //Flip Sprite if needed:
-                if(mario.sprite.flipH != 1){
-                    mario.sprite.FlipHorizontal();
-                }
-                mario.walk();
-            }
-
-            //Left Arrow Down:
-            if(keyPressed[keyLeft] == true && keyPressed[keyRight] == false && (keyPressed[keyDown] == false || mario.Jumping == true || mario.canJump == false)){
-                //Flip Sprite if needed:
-                if(mario.sprite.flipH != -1){
-                    mario.sprite.FlipHorizontal();
-                }
-                mario.walk();
-            }
-
-            //Spacebar Down:
-            if(keyPressed[keyJump] == true){
-                mario.jump();
-            }
-
-            mario.fall();
-
-            //Down Arrow Down:
-            if(keyPressed[keyDown] == true){
-                mario.duck();
-            }
-
-            if(keyReleased[keyUp] == true){
-                mario.stand();
-                keyReleased[keyUp] = false;
-            }
-
-            //Right/Left Arrow Up:
-            if(keyReleased[keyLeft] == true){
-                mario.stand();
-                keyReleased[keyLeft] = false;
-            }
-
-            if(keyReleased[keyRight] == true){
-                mario.stand();
-                keyReleased[keyRight] = false;
-            }
-
-            if(keyReleased[keyDown] == true){
-                //"reset collision size:"
-                mario.stand();
-
-                //move mario up by 4 pixel:
-                if(mario.Jumping == false){
-                    mario.sprite.setPosition(mario.sprite.posx, mario.sprite.posy-4);
-                }
-
-                keyReleased[keyDown] = false;
-            }
-
-            //Spacebar Up:
-            if(keyReleased[keyJump]){
-                mario.Jumping = false;
-                //mario.canJump = true;
-                keyReleased[keyJump] = false;
-            }
-
-            //Reset Mario if fallen off from screen:
-            if(mario.sprite.posy > MapHeight*16 ){
-                camera.position = new Point(width/2, camera.prefHeight + camera.tolerance);
-                mario.sprite.setPosition(5, 0);
-            }
-
-            //Periodic Check Abilities:
             for(int i = 0; i < numberOfBoxes; i++){
                 box[i].open();
             }
 
-            //Wrap screen: (buggy with camera bounds ON
-            //if(mario.sprite.posx > this.getWidth()){
-            //    mario.sprite.posx -= this.getWidth() + 24;
-            //}
-
-            //if(mario.sprite.posx < -24){
-            //    mario.sprite.posx += this.getWidth() + 24;
-            //}
+            //reset mario if fallen off from screen:
+            if(mario.sprite.posy > MapHeight*16 ){
+                camera.position = new Point(width/2, camera.prefHeight + camera.tolerance);
+                mario.sprite.setPosition(5, 0);
+            }
 
             try{
                 repaint();
