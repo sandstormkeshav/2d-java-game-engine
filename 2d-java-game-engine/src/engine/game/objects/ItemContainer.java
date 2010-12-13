@@ -21,7 +21,7 @@ public class ItemContainer {
     Image boxSpriteSheet = gameMain.boxSpriteSheet;
 
     //spritesheet
-    Sprite sprite = new Sprite(boxSpriteSheet, new Dimension(16,16));
+    public Sprite sprite = new Sprite(boxSpriteSheet, new Dimension(16,16));
 
     //Animations
     public Animation empty = new Animation(sprite, 1, 0, 0, true);

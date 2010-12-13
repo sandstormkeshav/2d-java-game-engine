@@ -27,8 +27,9 @@ import java.awt.event.KeyAdapter;
  */
 public class gameMain extends JPanel implements Runnable {
 
-    //debug String
-    String debug = "v. 0.01";
+    //Debug Options
+    public static boolean showSpritePos = false;
+    public static boolean showSpriteNum = false;
 
     private Image dbImage;
     private Graphics dbg;
@@ -64,15 +65,13 @@ public class gameMain extends JPanel implements Runnable {
 
     //File input stream
     StringBuffer strBuffer = new StringBuffer();
-    public static String appDir;
 
     //Window properties:
     public static int width;;
     public static int height;
 
-    //Map properties:
-    public int MapHeight = 0;
-    public int MapWidth = 0;
+    //Levels:
+    public static Level test = new Level("test.level");
 
     //Cameras
     Camera camera;
@@ -87,17 +86,14 @@ public class gameMain extends JPanel implements Runnable {
 
     public void initialize(){
 
-        // -- load images:
-        appDir = System.getProperty("user.dir");
-
         try{
-        marioSpriteSheet = ImageIO.read(new File("mario.gif"));
-        tileSheet = ImageIO.read(new File("marioworld.png"));
-        boxSpriteSheet = ImageIO.read(new File("box.png"));
-        background = ImageIO.read(new File("background.png"));
+            marioSpriteSheet = ImageIO.read(new File("mario.gif"));
+            tileSheet = ImageIO.read(new File("marioworld.png"));
+            boxSpriteSheet = ImageIO.read(new File("box.png"));
+            background = ImageIO.read(new File("background.png"));
 
         }
-        catch(Exception e){
+            catch(Exception e){
         }
 
         //wait 'till images are loaded:
@@ -106,17 +102,21 @@ public class gameMain extends JPanel implements Runnable {
         while(background.getWidth(this) == -1){}
         while(boxSpriteSheet.getWidth(this) == -1){}
 
-        //create world from from .level file:
-        LoadTiles("test.level");
+        //Load Level:
+        while(test.load() != true){}
+
+        System.out.println("Level loaded!");
+        System.out.println("MapWidth: " + test.mapWidth);
+        System.out.println("MapHeight: " + test.mapHeight);
 
         // -- create objects:
         //create a Mario:   (should be included in the tile/sprite loader, later)
         mario = new Mario(new Point(5, 0));
 
         //set up the camera:
-        camera = new Camera(new Point(width/2, height/2), new Rectangle(0, 0, MapWidth*16, (MapHeight)*16 - height + 4*16));
-        camera.setPrefHeight(MapHeight*10 + mario.sprite.size.height, 50);
-        camera.position.y = MapHeight*10 + 50;
+        camera = new Camera(new Point(width/2, height/2), new Rectangle(0, 0, test.mapWidth*16, (test.mapHeight)*16 - height + 4*16));
+        camera.setPrefHeight(test.mapHeight*10 + mario.sprite.size.height, 50);
+        camera.position.y = test.mapHeight*10 + 50;
         camera.position.x = width/2;
         
         System.out.println();
@@ -138,11 +138,16 @@ public class gameMain extends JPanel implements Runnable {
             mario.keyActions();
 
             for(int i = 0; i < numberOfBoxes; i++){
-                box[i].open();
+                try{
+                    box[i].open();
+                }
+                catch(Exception e){
+                    System.out.println("ERROR: " + e);
+                }
             }
 
             //reset mario if fallen off from screen:
-            if(mario.sprite.posy > MapHeight*16 ){
+            if(mario.sprite.posy > test.mapHeight*16 ){
                 camera.position = new Point(width/2, camera.prefHeight + camera.tolerance);
                 mario.sprite.setPosition(5, 0);
             }
@@ -222,10 +227,12 @@ public class gameMain extends JPanel implements Runnable {
                 sprite[i].getAnimation().col*sprite[i].size.width, sprite[i].getAnimation().row*sprite[i].size.height, // source
                 (sprite[i].getAnimation().col+1)*sprite[i].size.width, (sprite[i].getAnimation().row+1)*sprite[i].size.height,
                 this);
+
             }
             catch(Exception e){
                 g2d.drawString("Error drawing a Sprite", 20, 20);
             }
+
 
         }
         //Draw Tiles:
@@ -233,6 +240,7 @@ public class gameMain extends JPanel implements Runnable {
             //apply camera modifiers:
 
             try{
+
                 //Draw tile:
                 g2d.drawImage(tile[i].img,
                 /*X1*/tile[i].posx + ((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/tile[i].posy + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y,
@@ -240,61 +248,35 @@ public class gameMain extends JPanel implements Runnable {
                 tile[i].getAnimation().col*tile[i].size.width, tile[i].getAnimation().row*tile[i].size.height, // source
                 (tile[i].getAnimation().col+1)*tile[i].size.width, (tile[i].getAnimation().row+1)*tile[i].size.height,
                 this);
+
             }
             catch(Exception e){
                 g2d.drawString("Error drawing a Tile", 20, 20);
             }
         }
-
-        //Debug: not needed anymore
-        //g2d.drawString("Debug: " + debug, 5, 15);
-
-    }
-
-    public void LoadTiles(String tileSheet){
-
-        // -- Load the Text-file:
-
-        String[] readLine = new String[99999];
-        int a = 0;
-
-        try{
-            FileInputStream fstream = new FileInputStream("test.level");
-
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader bf = new BufferedReader(new InputStreamReader(in));
-            while((readLine[a] = bf.readLine()) != null){
-                a++;
-            }
-
-            //close input stream:
-            in.close();
-        }
-        catch(Exception e){
-        }
-
-        //Text file is now present in Arrays of Strings:
-        //Line length represents the screen width * 16
-
-        // -- create Tiles and sprites from Text-file:
-        //Tiles:
-        int[] tileNumber = new int[99999];
-        for(int y = 0; y < a; y++){
-            MapHeight++;
-            MapWidth = 0;
-            for(int x = 0; x < readLine[y].length(); x++){
-                //Number entered in the position represents tileNumber;
-                //position of the sprite x*16, y*16
-                MapWidth ++;
-                if(readLine[y].charAt(x) != ' '){
-                    if((Integer.parseInt(readLine[y].charAt(x) + "")) == 9){
-                        box[numberOfBoxes] = new ItemContainer(new Point(x*16, y*16));
-                    }else{
-                        tileObject[numberOfTiles] = new WorldTile(Integer.parseInt(readLine[y].charAt(x) + ""));
-                        tileObject[numberOfTiles-1].sprite.setPosition(x*16, y*16);
-                    }
+        //Debug things:
+        for(int i = 0; i < numberOfSprites; i++){
+                if(showSpritePos == true){
+                    g2d.setColor(Color.red);
+                    g2d.drawRect(/*X1*/sprite[i].posx /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy /*camera*/ - camera.position.y + camera.center.y, 1, 1);
+                    g2d.setColor(Color.black);
                 }
-            }
+
+                if(showSpriteNum == true){
+                    g2d.setColor(Color.black);
+                    g2d.drawString("" + i, /*X1*/sprite[i].posx /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy /*camera*/ - camera.position.y + camera.center.y);
+                    g2d.setColor(Color.white);
+                    g2d.drawString("" + i, /*X1*/sprite[i].posx /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy /*camera*/ - camera.position.y + camera.center.y - 1);
+
+                }
         }
+        for(int i = 0; i < numberOfTiles; i++){
+                if(showSpritePos == true){
+                    g2d.setColor(Color.red);
+                    g2d.drawRect(/*X1*/tile[i].posx + ((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/tile[i].posy + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y, 1, 1);
+                    g2d.setColor(Color.black);
+                }
+        }
+
     }
 }
