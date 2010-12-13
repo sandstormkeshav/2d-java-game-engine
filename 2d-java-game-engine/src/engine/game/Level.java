@@ -57,7 +57,7 @@ public class Level {
 
         // -- create Tiles and sprites from Text-file:
         //Tiles:
-        int[] tileNumber = new int[99999];
+        
         for(int y = 0; y < a; y++){
             mapHeight++;
             mapWidth = 0;
