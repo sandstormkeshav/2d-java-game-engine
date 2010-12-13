@@ -8,6 +8,7 @@ package engine.game;
 import java.io.*;
 import java.awt.*;
 import engine.game.objects.*;
+import java.util.regex.*;
 
 public class Level {
 
@@ -57,6 +58,27 @@ public class Level {
 
         // -- create Tiles and sprites from Text-file:
         //Tiles:
+        /*
+        Pattern valuePattern = Pattern.compile("[0-9]+");
+        Pattern tilePattern = Pattern.compile("<tile>");
+
+        Matcher matchTile = tilePattern.matcher(levelTXT);
+        Matcher matchValue = valuePattern.matcher(levelTXT);
+
+        int b = 0;
+        int c = 0;
+        int[][] value = new int[9999][4];
+
+        while(matchValue.find()){
+            if(b > 3){
+                b = 0;
+                c++;
+            }
+            value[c][b] = Integer.parseInt(matchValue.group(0));
+            System.out.println(value[c][b]);
+            b++;
+        }
+        */
         
         for(int y = 0; y < a; y++){
             mapHeight++;
@@ -75,6 +97,7 @@ public class Level {
                 }
             }
         }
+        
 
     return true;
 

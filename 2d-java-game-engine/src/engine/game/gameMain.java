@@ -86,9 +86,9 @@ public class gameMain extends JPanel implements Runnable {
 
         try{
             marioSpriteSheet = ImageIO.read(new File("mario.gif"));
-            tileSheet = ImageIO.read(new File("marioworld.png"));
+            tileSheet = ImageIO.read(new File("newsmb.png"));
             boxSpriteSheet = ImageIO.read(new File("box.png"));
-            background_layer0 = ImageIO.read(new File("background.png"));
+            background_layer0 = ImageIO.read(new File("background_layer0.png"));
             background_layer1  = ImageIO.read(new File("background_layer1.png"));
 
         }
@@ -203,10 +203,13 @@ public class gameMain extends JPanel implements Runnable {
         try{
 
             //Draw background_layer0:
-            g2d.drawImage(background_layer0, 0 - (int)(camera.position.x * 0.25), 0 - background_layer0.getHeight(this)/8, this);
+            for(int i = 0; i < 20; i++){
+                g2d.drawImage(background_layer0, i*background_layer0.getWidth(this) - (int)(camera.position.x * 0.25), 0 - background_layer0.getHeight(this)/8, this);
+            }
             //Draw background_layer1:
-            g2d.drawImage(background_layer1, 0 - (int)(camera.position.x * 0.5), camera.prefHeight/2 -(int)(camera.position.y * 0.5) - background_layer0.getHeight(this)/8, this);
-
+            for(int i = 0; i < 20; i++){
+                g2d.drawImage(background_layer1, i*background_layer1.getWidth(this) - (int)(camera.position.x * 0.5), camera.prefHeight -(int)(camera.position.y * 0.5) - background_layer0.getHeight(this)/8, this);
+            }
         }
 
         catch(Exception e){
