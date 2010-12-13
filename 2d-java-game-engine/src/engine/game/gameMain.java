@@ -41,7 +41,8 @@ public class gameMain extends JPanel implements Runnable {
     public static Image marioSpriteSheet;
     public static Image boxSpriteSheet;
     public static Image tileSheet;
-    public static Image background;
+    public static Image background_layer0;
+    public static Image background_layer1;
 
     //All kinds of Sprites:
     public static int numberOfSprites;
@@ -87,7 +88,8 @@ public class gameMain extends JPanel implements Runnable {
             marioSpriteSheet = ImageIO.read(new File("mario.gif"));
             tileSheet = ImageIO.read(new File("marioworld.png"));
             boxSpriteSheet = ImageIO.read(new File("box.png"));
-            background = ImageIO.read(new File("background.png"));
+            background_layer0 = ImageIO.read(new File("background.png"));
+            background_layer1  = ImageIO.read(new File("background_layer1.png"));
 
         }
             catch(Exception e){
@@ -96,7 +98,7 @@ public class gameMain extends JPanel implements Runnable {
         //wait 'till images are loaded:
         while(marioSpriteSheet.getWidth(this) == -1){}
         while(tileSheet.getWidth(this) == -1){}
-        while(background.getWidth(this) == -1){}
+        while(background_layer0.getWidth(this) == -1){}
         while(boxSpriteSheet.getWidth(this) == -1){}
 
         test.levelTXT = "test.level";
@@ -198,9 +200,13 @@ public class gameMain extends JPanel implements Runnable {
 
         g2d.setRenderingHints(rh);
 
-        //Draw background Layer:
         try{
-            g2d.drawImage(background, 0 - (int)(camera.position.x * 0.25), 0 - background.getHeight(this)/8, this);
+
+            //Draw background_layer0:
+            g2d.drawImage(background_layer0, 0 - (int)(camera.position.x * 0.25), 0 - background_layer0.getHeight(this)/8, this);
+            //Draw background_layer1:
+            g2d.drawImage(background_layer1, 0 - (int)(camera.position.x * 0.5), camera.prefHeight/2 -(int)(camera.position.y * 0.5) - background_layer0.getHeight(this)/8, this);
+
         }
 
         catch(Exception e){
