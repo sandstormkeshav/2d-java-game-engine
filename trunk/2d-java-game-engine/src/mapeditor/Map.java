@@ -75,6 +75,11 @@ public class Map extends JPanel implements Runnable {
             }
         }
 
+        for (int x=0;x<1600;x+=16){
+            g.setColor(Color.BLUE);
+            g.drawLine(x,0,x,1600);
+            g.drawLine(0,x,1600,x);
+        }
         /*g.setColor(Color.WHITE);
         g.drawString(mousex+"|"+mousey,100,100);
         g.drawString("Button: "+MouseKlick.Button,100,120);*/
