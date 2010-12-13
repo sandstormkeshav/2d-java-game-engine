@@ -1,0 +1,21 @@
+#summary Documentation of the Key.java file
+#labels Phase-Implementation
+
+= Purpose =
+
+Storing key values and accessing them through names.
+
+= Fields =
+
+*name* (String) stores the name of the key.
+*charNumber* (int) stores the character Number of the specified key.
+
+= Constructor =
+
+takes exactly one String and one Integer
+
+= Example =
+
+Key[] keys = new Key[5];
+
+keys[0] = new Key("Button Up", 36);
