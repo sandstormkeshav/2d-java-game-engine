@@ -15,7 +15,7 @@ takes one or more Key Objects.
 
 = Methods =
 
-getKeyNumber* (returns Int, takes String). converts the specified Key-name to the corresponding char value.
+*getKeyNumber* (returns Int, takes String). converts the specified Key-name to the corresponding char value.
 this method returns -1 if the key does not exist in the Keymapping.
 
 *getKeyName* (returns String, takes int). like getKeyNumber but vice versa.
