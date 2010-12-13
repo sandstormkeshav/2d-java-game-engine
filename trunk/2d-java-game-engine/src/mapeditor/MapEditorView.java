@@ -392,14 +392,21 @@ public class MapEditorView extends FrameView {
         String str="";
         try{
             FileWriter fw = new FileWriter(file+".level");
-            str += "\nTiles = "+tilepath;
-            str += "\nSprites = "+spritepath;
-            str += "\n \n";
+            /*str += "<tiles="+tilepath+">";
+            str += "\n<sprites="+spritepath+">";
+            str += "\n\n";
             for (int y=0;y<1600;y+=16){
                 for (int x=0;x<1600;x+=16){
                     if (Map.tile[x/16][y/16].x>-16){
-                        str += "t"+Map.tile[x/16][y/16].x/16+"-"+Map.tile[x/16][y/16].y/16+"@"+x+"-"+y;
-                        str += "\n";
+                        str += "<tile>\n   line="+Map.tile[x/16][y/16].x/16+"\n   row="+Map.tile[x/16][y/16].y/16+"\n   x="+x+"\n   y="+y;
+                        str += "\n</tile>\n";
+                    }
+                }
+            }*/
+            for (int y=0;y<1600;y+=16){
+                for (int x=0;x<1600;x+=16){
+                    if (Map.tile[x/16][y/16].x>-16){
+                        str += ""+Map.tile[x/16][y/16].x/16;
                     }
                 }
             }
