@@ -1,15 +1,15 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * MainDebugMode.java
  *
  * Created on 12.12.2010, 03:45:47
  */
 
 package engine.game;
+
+import javax.swing.*;
+import java.io.*;
+import engine.game.objects.*;
+import java.awt.*;
 
 /**
  *
@@ -148,9 +148,29 @@ public class MainDebugMode extends javax.swing.JFrame {
     }//GEN-LAST:event_OpenMenuItemMouseClicked
 
     private void OpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenMenuItemActionPerformed
-        //TODO show Open Dialog.
-
+        
+        // -- load .level file
         Level level = new Level("");
+        
+        //File Chooser
+        JFileChooser fc = new JFileChooser();
+
+        //Open file dialog to browse for .level files:
+        int returnVal = fc.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            level.levelTXT = file.getPath();
+        } else {
+            System.out.println("Open command cancelled by user." + "\n");
+        }
+
+        level.load();
+        gameMain.loadedLevel = level;
+
+        //create a new Mario:
+        gameMain.mario = new Mario(new Point(5, 0));
+
     }//GEN-LAST:event_OpenMenuItemActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -169,7 +189,13 @@ public class MainDebugMode extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxMenuItem2ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        gameMain.test.reset();
+        // -- load .level file again:
+        Level level = new Level(gameMain.loadedLevel.levelTXT);
+        level.load();
+        gameMain.loadedLevel = level;
+
+        //create a new Mario:
+        gameMain.mario = new Mario(new Point(5, 0));
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**

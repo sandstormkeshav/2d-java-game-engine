@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * MainWindow.java
  *
  * Created on 07.12.2010, 02:40:11
@@ -20,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
+
 
 /**
  *
@@ -71,6 +67,7 @@ public class gameMain extends JPanel implements Runnable {
     public static int height;
 
     //Levels:
+    public static Level loadedLevel = new Level("");
     public static Level test = new Level("test.level");
 
     //Cameras
@@ -102,12 +99,10 @@ public class gameMain extends JPanel implements Runnable {
         while(background.getWidth(this) == -1){}
         while(boxSpriteSheet.getWidth(this) == -1){}
 
-        //Load Level:
-        while(test.load() != true){}
+        test.levelTXT = "test.level";
 
-        System.out.println("Level loaded!");
-        System.out.println("MapWidth: " + test.mapWidth);
-        System.out.println("MapHeight: " + test.mapHeight);
+        while(test.load() != true){}
+        loadedLevel = test;
 
         // -- create objects:
         //create a Mario:   (should be included in the tile/sprite loader, later)

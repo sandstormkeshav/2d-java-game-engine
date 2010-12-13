@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package engine.game;
 
 /**
@@ -25,30 +20,16 @@ public class Level {
         this.levelTXT = levelTXT;
     }
 
-    //Buggy!
-    public void reset(){
-
-        // -- recreate all objects: (Tiles are static)
-        //Boxes:
-        Point tempPoint = new Point(0,0);
-
-        System.out.println(gameMain.numberOfBoxes);
-
-        for(int i = 0; i < gameMain.numberOfBoxes; i++){
-            tempPoint = new Point(gameMain.box[i].sprite.posx, gameMain.box[i].sprite.posy);
-            gameMain.box[i] = new ItemContainer(tempPoint);
-        }
-        //Marios:
-        gameMain.mario = new Mario(new Point(5, 0));
-
-    }
-
     //Basic loader:
     //TODO change level file format.
     public boolean load(){
 
-        //Reset map properties:
+        //Reset numberOf ...
+        gameMain.numberOfBoxes = 0;
+        gameMain.numberOfSprites = 0;
+        gameMain.numberOfTiles = 0;
 
+        //Reset map properties:
         mapHeight = 0;
         mapWidth = 0;
 
