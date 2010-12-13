@@ -28,6 +28,8 @@ public class MapEditorView extends FrameView {
         public static Image tiles;
         public static Image sprites;
         public static int tab;
+        public String tilepath="";
+        public String spritepath="";
 
     public MapEditorView(SingleFrameApplication app) {
         super(app);
@@ -35,9 +37,11 @@ public class MapEditorView extends FrameView {
         initComponents();
 
         tiles = Toolkit.getDefaultToolkit().getImage("D:\\Programme\\NetBeansProj\\tileset3yx.gif");
+        tilepath = "D:\\Programme\\NetBeansProj\\tileset3yx.gif";
         tileChooser.image = tiles;
 
         sprites = Toolkit.getDefaultToolkit().getImage("D:\\Spiele\\GameMaker\\Sprites\\Maze - Platform\\explorer_right_strip8.png");
+        spritepath = "D:\\Spiele\\GameMaker\\Sprites\\Maze - Platform\\explorer_right_strip8.png";
         spriteChooser.image = sprites;
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
@@ -360,6 +364,7 @@ public class MapEditorView extends FrameView {
         System.out.println("Import tile - gedrückt!");
         int value = jFileChooser1.showOpenDialog(null);
         File tilefile = jFileChooser1.getSelectedFile();
+        tilepath = tilefile.getAbsolutePath();
         tiles = Toolkit.getDefaultToolkit().getImage(tilefile.getAbsolutePath());
         ImageIcon tileicon = new ImageIcon(tiles);
         tileChooser.image = tiles;
@@ -372,6 +377,7 @@ public class MapEditorView extends FrameView {
         System.out.println("Import sprite - gedrückt!");
         int value = jFileChooser1.showOpenDialog(null);
         File spritefile = jFileChooser1.getSelectedFile();
+        spritepath = spritefile.getAbsolutePath();
         ImageIcon spriteicon = new ImageIcon(sprites);
         spriteChooser.image = sprites;
         Map.img2 = sprites;
@@ -386,9 +392,17 @@ public class MapEditorView extends FrameView {
         String str="";
         try{
             FileWriter fw = new FileWriter(file+".level");
-            str += "\nTiles = "+tiles;
-            str += "\nSprites = "+sprites;
+            str += "\nTiles = "+tilepath;
+            str += "\nSprites = "+spritepath;
             str += "\n \n";
+            for (int y=0;y<1600;y+=16){
+                for (int x=0;x<1600;x+=16){
+                    if (Map.tile[x/16][y/16].x>-16){
+                        str += "t"+Map.tile[x/16][y/16].x/16+"-"+Map.tile[x/16][y/16].y/16+"@"+x+"-"+y;
+                        str += "\n";
+                    }
+                }
+            }
             fw.write(str);
             fw.close();
         }

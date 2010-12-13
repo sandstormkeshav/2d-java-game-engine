@@ -76,7 +76,7 @@ public class Map extends JPanel implements Runnable {
         }
 
         for (int x=0;x<1600;x+=16){
-            g.setColor(Color.BLUE);
+            g.setColor(Color.LIGHT_GRAY);
             g.drawLine(x,0,x,1600);
             g.drawLine(0,x,1600,x);
         }
