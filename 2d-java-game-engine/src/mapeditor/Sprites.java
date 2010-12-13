@@ -5,17 +5,16 @@
 
 package mapeditor;
 
-
 /**
  *
  * @author Basti
  */
-public class Tiles {
+public class Sprites {
 
         int x=0;
         int y=0;
 
-    public Tiles(int a, int b){
+    public Sprites(int a, int b){
         x = 16*(a-1);
         y = 16*(b-1);
     }
