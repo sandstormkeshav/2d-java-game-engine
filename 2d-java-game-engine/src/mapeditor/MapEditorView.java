@@ -413,7 +413,7 @@ public class MapEditorView extends FrameView {
                 for (int y=0;y<=Map.maxHeight;y+=16){
                     for (int x=0;x<=Map.maxWidth;x+=16){
                         if (Map.tile[x/16][y/16].x>-16){
-                            str += ""+Map.tile[x/16][y/16].x/16;
+                            str += ""+(char)(48+Map.tile[x/16][y/16].x/16);
                         }
                         else{
                             str += " ";

@@ -50,7 +50,7 @@ public class PopupCoin {
     public void fly(){
         sprite.posy --;
         if ((starty-sprite.posy)>32){
-            sprite.posy = -16;
+            sprite.posy = -80;
         }
     }
     

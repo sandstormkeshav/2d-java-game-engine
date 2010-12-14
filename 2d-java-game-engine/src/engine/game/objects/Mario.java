@@ -23,6 +23,8 @@ public class Mario{
         int maxJumpHeight = 60;
         int startJumpHeight;
         int jumpHeight = 0;
+        public static int x;
+        public static int y;
 
         public static int mariosprite;
 
@@ -54,8 +56,8 @@ public class Mario{
 
     public Mario(Point position){
         //set position of sprite:
-        sprite.posx = position.x;
-        sprite.posy = position.y;
+        x=sprite.posx = position.x;
+        y=sprite.posy = position.y;
 
         //set the sprite up for drawing:
         gameMain.sprite[gameMain.numberOfSprites] = sprite;
@@ -287,7 +289,9 @@ public class Mario{
             //mario.canJump = true;
             gameMain.keyReleased[keymapping.getKey("keyJump")] = false;
         }
-         
+
+        x = sprite.posx;
+        y = sprite.posy;
     }
 
 }
