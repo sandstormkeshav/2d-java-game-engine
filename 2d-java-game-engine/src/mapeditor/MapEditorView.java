@@ -416,6 +416,9 @@ public class MapEditorView extends FrameView {
                         if (Map.tile[x/16][y/16].x>-16){
                             str += ""+Map.tile[x/16][y/16].x/16;
                         }
+                        else{
+                            str += " ";
+                        }
                     }
                     str += "\n";
                 }
