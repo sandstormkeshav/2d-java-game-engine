@@ -1,0 +1,16 @@
+#labels Phase-Implementation,Phase-Design
+#Description of the Level File Structure
+
+(zip-)folder *LevelName* (
+
+res/tileset.png
+res/sprite_ObjName.png
+res/background_layer0.png
+res/background_layer1.png
+res/foreground.png
+res/sfx_ObjName_ActionName.wav
+res/bgmusic.wav
+
+level
+
+)
