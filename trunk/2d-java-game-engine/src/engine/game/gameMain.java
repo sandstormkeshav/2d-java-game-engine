@@ -40,6 +40,7 @@ public class gameMain extends JPanel implements Runnable {
     //Images
     public static Image marioSpriteSheet;
     public static Image boxSpriteSheet;
+    public static Image coinSpriteSheet;
     public static Image tileSheet;
     public static Image background_layer0;
     public static Image background_layer1;
@@ -56,6 +57,7 @@ public class gameMain extends JPanel implements Runnable {
 
     //Objects
     public static Mario mario;
+    public static PopupCoin pCoin;
     public static WorldTile[] tileObject = new WorldTile[99999];
     public static ItemContainer[] box = new ItemContainer[99999];
     public static int numberOfBoxes;
@@ -88,6 +90,7 @@ public class gameMain extends JPanel implements Runnable {
             marioSpriteSheet = ImageIO.read(new File("mario.gif"));
             tileSheet = ImageIO.read(new File("newsmb.png"));
             boxSpriteSheet = ImageIO.read(new File("box.png"));
+            coinSpriteSheet = ImageIO.read(new File("coin.png"));
             background_layer0 = ImageIO.read(new File("background_layer0.png"));
             background_layer1  = ImageIO.read(new File("background_layer1.png"));
 
@@ -100,11 +103,14 @@ public class gameMain extends JPanel implements Runnable {
         while(tileSheet.getWidth(this) == -1){}
         while(background_layer0.getWidth(this) == -1){}
         while(boxSpriteSheet.getWidth(this) == -1){}
+        while(coinSpriteSheet.getWidth(this) == -1){}
 
         test.levelTXT = "test.level";
 
         while(test.load() != true){}
         loadedLevel = test;
+
+        pCoin = new PopupCoin(new Point(-80,-80));
 
         // -- create objects:
         //create a Mario:   (should be included in the tile/sprite loader, later)
@@ -133,6 +139,7 @@ public class gameMain extends JPanel implements Runnable {
 
             //actions for objects:
             mario.keyActions();
+            pCoin.fly();
 
             for(int i = 0; i < numberOfBoxes; i++){
                 try{
