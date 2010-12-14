@@ -36,12 +36,12 @@ public class MapEditorView extends FrameView {
 
         initComponents();
 
-        tiles = Toolkit.getDefaultToolkit().getImage("D:\\Programme\\NetBeansProj\\tileset3yx.gif");
-        tilepath = "D:\\Programme\\NetBeansProj\\tileset3yx.gif";
+        tiles = Toolkit.getDefaultToolkit().getImage("newsmb.png");
+        tilepath = "newsmb.png";
         tileChooser.image = tiles;
 
-        sprites = Toolkit.getDefaultToolkit().getImage("D:\\Spiele\\GameMaker\\Sprites\\Maze - Platform\\explorer_right_strip8.png");
-        spritepath = "D:\\Spiele\\GameMaker\\Sprites\\Maze - Platform\\explorer_right_strip8.png";
+        sprites = Toolkit.getDefaultToolkit().getImage("mario.gif");
+        spritepath = "mario.gif";
         spriteChooser.image = sprites;
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
@@ -410,8 +410,8 @@ public class MapEditorView extends FrameView {
                         }
                     }
                 }*/
-                for (int y=0;y<1600;y+=16){
-                    for (int x=0;x<1600;x+=16){
+                for (int y=0;y<=Map.maxHeight;y+=16){
+                    for (int x=0;x<=Map.maxWidth;x+=16){
                         if (Map.tile[x/16][y/16].x>-16){
                             str += ""+Map.tile[x/16][y/16].x/16;
                         }

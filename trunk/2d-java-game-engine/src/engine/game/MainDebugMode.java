@@ -170,6 +170,7 @@ public class MainDebugMode extends javax.swing.JFrame {
 
         //create a new Mario:
         gameMain.mario = new Mario(new Point(5, 0));
+        gameMain.pCoin = new PopupCoin(new Point(-80,-80));
 
     }//GEN-LAST:event_OpenMenuItemActionPerformed
 
