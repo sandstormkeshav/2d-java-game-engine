@@ -1,8 +1,6 @@
 package engine.game;
 
 import java.awt.*;
-import javax.swing.JPanel;
-import java.lang.Math;
 
 public class Sprite{
 

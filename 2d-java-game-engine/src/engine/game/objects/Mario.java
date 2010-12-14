@@ -24,6 +24,8 @@ public class Mario{
         int startJumpHeight;
         int jumpHeight = 0;
 
+        public static int mariosprite;
+
     //Spritesheet Image for Sprite creation:
     Image marioSpritesheet = gameMain.marioSpriteSheet;
 
@@ -57,6 +59,7 @@ public class Mario{
 
         //set the sprite up for drawing:
         gameMain.sprite[gameMain.numberOfSprites] = sprite;
+        mariosprite = gameMain.numberOfSprites;
         gameMain.numberOfSprites++;
 
         //Sprite Properties:

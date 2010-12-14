@@ -16,6 +16,10 @@ public class ItemContainer {
 
     //boolean for state of container:
     boolean opened = false;
+    boolean opening = false;
+
+    int startx;
+    int starty;
 
     //spritesheet Image for sprite creation:
     Image boxSpriteSheet = gameMain.boxSpriteSheet;
@@ -31,8 +35,8 @@ public class ItemContainer {
     public Animation none = new Animation(sprite, 0, 0, 0, true);
 
     public ItemContainer(Point position){
-        sprite.posx = position.x;
-        sprite.posy = position.y;
+        startx = sprite.posx = position.x;
+        starty = sprite.posy = position.y;
         gameMain.numberOfBoxes++;
 
         //set the sprite up for drawing:
@@ -45,11 +49,29 @@ public class ItemContainer {
     }
 
     public void open(){
-        //no need to check for tiles since they should be static:
-        for(int i = 0; i < gameMain.numberOfSprites; i++){
-            if(sprite.bottomCollision(gameMain.sprite[i]) && opened == false){
+        //no need to check for Mario Collision:
+        opening();
+        if(sprite.bottomCollision(gameMain.sprite[Mario.mariosprite])){
+            opening = true;
+            if (opened == false){
+                gameMain.pCoin.set(sprite.posx, sprite.posy-16);
                 sprite.animation = empty;
                 opened = true;
+            }
+        }
+    }
+
+    // opening "animation"
+    public void opening(){
+        if ((opening == false)&&(starty>sprite.posy)){
+            sprite.posy ++;
+        }
+        else{
+            if (opening == true){
+                sprite.posy --;
+                if ((starty-sprite.posy)==8){
+                    opening = false;
+                }
             }
         }
     }
