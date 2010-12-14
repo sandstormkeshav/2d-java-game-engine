@@ -387,34 +387,44 @@ public class MapEditorView extends FrameView {
     // save file
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.out.println("Save - gedrückt!");
+        int ow=0;
         int value = jFileChooser1.showSaveDialog(null);
         File file = jFileChooser1.getSelectedFile();
-        String str="";
-        try{
-            FileWriter fw = new FileWriter(file+".level");
-            /*str += "<tiles="+tilepath+">";
-            str += "\n<sprites="+spritepath+">";
-            str += "\n\n";
-            for (int y=0;y<1600;y+=16){
-                for (int x=0;x<1600;x+=16){
-                    if (Map.tile[x/16][y/16].x>-16){
-                        str += "<tile>\n   line="+Map.tile[x/16][y/16].x/16+"\n   row="+Map.tile[x/16][y/16].y/16+"\n   x="+x+"\n   y="+y;
-                        str += "\n</tile>\n";
-                    }
-                }
-            }*/
-            for (int y=0;y<1600;y+=16){
-                for (int x=0;x<1600;x+=16){
-                    if (Map.tile[x/16][y/16].x>-16){
-                        str += ""+Map.tile[x/16][y/16].x/16;
-                    }
-                }
+        if (file.exists()){
+            ow = JOptionPane.showConfirmDialog(null,"File already exists - overwrite?", "Error", JOptionPane.YES_NO_OPTION);
+            if (ow == 0){
+                file.delete();
             }
-            fw.write(str);
-            fw.close();
         }
-        catch(Exception e){
-            System.out.println("Fehler beim Speichern!");
+        if (ow == 0){
+            String str="";
+            try{
+                FileWriter fw = new FileWriter(file);
+                /*str += "<tiles="+tilepath+">";
+                str += "\n<sprites="+spritepath+">";
+                str += "\n\n";
+                for (int y=0;y<1600;y+=16){
+                    for (int x=0;x<1600;x+=16){
+                        if (Map.tile[x/16][y/16].x>-16){
+                            str += "<tile>\n   line="+Map.tile[x/16][y/16].x/16+"\n   row="+Map.tile[x/16][y/16].y/16+"\n   x="+x+"\n   y="+y;
+                            str += "\n</tile>\n";
+                        }
+                    }
+                }*/
+                for (int y=0;y<1600;y+=16){
+                    for (int x=0;x<1600;x+=16){
+                        if (Map.tile[x/16][y/16].x>-16){
+                            str += ""+Map.tile[x/16][y/16].x/16;
+                        }
+                    }
+                    str += "\n";
+                }
+                fw.write(str);
+                fw.close();
+            }
+            catch(Exception e){
+                System.out.println("Fehler beim Speichern!");
+            }
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
