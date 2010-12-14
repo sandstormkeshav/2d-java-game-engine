@@ -18,7 +18,7 @@ public class WorldTile extends Applet {
     public Sprite sprite = new Sprite(tileSheet, new Dimension(16,16));;
 
     //Animations:
-    public Animation[] tile = new Animation[8];
+    public Animation[] tile = new Animation[99999];
 
     public WorldTile(int a){
         for(int i = 0; i < tileSheet.getWidth(this)/16 ; i++){

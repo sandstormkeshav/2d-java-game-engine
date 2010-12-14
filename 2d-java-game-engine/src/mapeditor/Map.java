@@ -24,6 +24,8 @@ public class Map extends JPanel implements Runnable {
     public static Image img2 = MapEditorView.sprites;
     public static Tiles[][] tile = new Tiles[100][100];
     public static Sprites[][] sprite = new Sprites[100][100];
+    public static int maxWidth;
+    public static int maxHeight;
 
     MouseKlick mb = new MouseKlick();
     MouseMotion m = new MouseMotion();
@@ -80,6 +82,12 @@ public class Map extends JPanel implements Runnable {
                     for (int j=0;j<=tileChooser.lengthy;j++){
                         tile[(int)(m.getX()/16)+i][(int)(m.getY()/16)+j].x=(tileChooser.numbx+i)*16;
                         tile[(int)(m.getX()/16)+i][(int)(m.getY()/16)+j].y=(tileChooser.numby+j)*16;
+                        if (m.getX()>maxWidth){
+                            maxWidth = m.getX();
+                        }
+                        if (m.getY()>maxHeight){
+                            maxHeight = m.getY();
+                        }
                     }
                 }
             }
@@ -103,6 +111,12 @@ public class Map extends JPanel implements Runnable {
                     for (int j=0;j<=spriteChooser.lengthy;j++){
                         sprite[(int)(m.getX()/16)+i][(int)(m.getY()/16)+j].x=(spriteChooser.numbx+i)*16;
                         sprite[(int)(m.getX()/16)+i][(int)(m.getY()/16)+j].y=(spriteChooser.numby+j)*16;
+                        if (m.getX()>maxWidth){
+                            maxWidth = m.getX();
+                        }
+                        if (m.getY()>maxHeight){
+                            maxHeight = m.getY();
+                        }
                     }
                 }
             }
