@@ -8,8 +8,5 @@ map of chars which represent coordinates (position of the char in the text: line
 ##tile end
 
 ##Obj start
-<ObjName>x,y 
-.
-.
-.
+<Object_Name>x,y
 ##Obj end
