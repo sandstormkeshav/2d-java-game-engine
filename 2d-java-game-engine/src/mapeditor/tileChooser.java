@@ -45,7 +45,7 @@ public class tileChooser extends JPanel implements Runnable {
             }
         }
     }
-
+    //draw Tileset
     @Override
      public void paintComponent(Graphics g){
         super.paintComponent(g);
