@@ -60,7 +60,10 @@ public class gameMain extends JPanel implements Runnable {
     public static PopupCoin pCoin;
     public static WorldTile[] tileObject = new WorldTile[99999];
     public static ItemContainer[] box = new ItemContainer[99999];
+    public static Coin[] coin = new Coin[99999];
     public static int numberOfBoxes;
+    public static int numberOfCoins;
+    public static int collectedCoins =0;
 
     //File input stream
     StringBuffer strBuffer = new StringBuffer();
@@ -144,6 +147,14 @@ public class gameMain extends JPanel implements Runnable {
             for(int i = 0; i < numberOfBoxes; i++){
                 try{
                     box[i].open();
+                }
+                catch(Exception e){
+                    System.out.println("ERROR: " + e);
+                }
+            }
+            for(int i = 0; i < numberOfCoins; i++){
+                try{
+                    coin[i].collect();
                 }
                 catch(Exception e){
                     System.out.println("ERROR: " + e);
@@ -265,6 +276,11 @@ public class gameMain extends JPanel implements Runnable {
                 g2d.drawString("Error drawing a Tile", 20, 20);
             }
         }
+
+        g2d.drawImage(coinSpriteSheet,16,16,32,32,0,48,16,64,this);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString("x "+collectedCoins, 32, 29);
+
         //Debug things:
         for(int i = 0; i < numberOfSprites; i++){
                 if(showSpritePos == true){

@@ -88,11 +88,15 @@ public class Level {
                 //position of the sprite x*16, y*16
                 mapWidth ++;
                 if(readLine[y].charAt(x) != ' '){
-                    if((Integer.parseInt(readLine[y].charAt(x) + "")) == 9){
+                    if(((int)(readLine[y].charAt(x))) == 57){
                         gameMain.box[gameMain.numberOfBoxes] = new ItemContainer(new Point(x*16, y*16));
                     }else{
-                        gameMain.tileObject[gameMain.numberOfTiles] = new WorldTile(Integer.parseInt(readLine[y].charAt(x) + ""));
-                        gameMain.tileObject[gameMain.numberOfTiles-1].sprite.setPosition(x*16, y*16);
+                        if(((int)(readLine[y].charAt(x))) == 58){
+                            gameMain.coin[gameMain.numberOfCoins] = new Coin(new Point(x*16, y*16));
+                        }else{
+                            gameMain.tileObject[gameMain.numberOfTiles] = new WorldTile(Integer.parseInt(readLine[y].charAt(x) + ""));
+                            gameMain.tileObject[gameMain.numberOfTiles-1].sprite.setPosition(x*16, y*16);
+                        }
                     }
                 }
             }

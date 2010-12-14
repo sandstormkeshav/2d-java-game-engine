@@ -12,7 +12,7 @@ import engine.game.*;
  *
  * @author Philipp
  */
-public class ItemContainer {
+public class Coin {
 
     //boolean for state of container:
     boolean opened = false;
@@ -22,59 +22,53 @@ public class ItemContainer {
     int starty;
 
     //spritesheet Image for sprite creation:
-    Image boxSpriteSheet = gameMain.boxSpriteSheet;
+    Image coinSpriteSheet = gameMain.coinSpriteSheet;
 
     //spritesheet
-    public Sprite sprite = new Sprite(boxSpriteSheet, new Dimension(16,16));
+    public Sprite sprite = new Sprite(coinSpriteSheet, new Dimension(16,16));
 
     //Animations
-    public Animation empty = new Animation(sprite, 1, 0, 0, true);
-    public Animation full = new Animation(sprite, 0, 3, 80, true);
+    public Animation spinning = new Animation(sprite, 0, 3, 80, true);
 
     //standard Animations (this should be copy-paste for each Object:
     public Animation none = new Animation(sprite, 0, 0, 0, true);
 
-    public ItemContainer(Point position){
+    public Coin(Point position){
         startx = sprite.posx = position.x;
         starty = sprite.posy = position.y;
-        gameMain.numberOfBoxes++;
+        gameMain.numberOfCoins ++;
 
         //set the sprite up for drawing:
         gameMain.sprite[gameMain.numberOfSprites] = sprite;
         gameMain.numberOfSprites++;
 
         //set the animation and play it;
-        sprite.animation = full;
+        sprite.animation = spinning;
         sprite.animation.play();
     }
 
-    public void open(){
+    public void collect(){
         //check for Mario Collision:
         opening();
-        if(sprite.bottomCollision(gameMain.sprite[Mario.mariosprite])){
+        if(Point.distance(sprite.posx+8,sprite.posy+8,gameMain.mario.x+12,gameMain.mario.y+12)<32){
             opening = true;
-            if (opened == false){
-                gameMain.pCoin.set(sprite.posx, sprite.posy-16);
-                gameMain.collectedCoins ++;
-                sprite.animation = empty;
-                opened = true;
-            }
         }
     }
 
     // opening "animation"
     public void opening(){
-        if ((opening == false)&&(starty>sprite.posy)){
-            sprite.posy ++;
-        }
-        else{
+        
             if (opening == true){
+                if (sprite.posy==starty){
+                    gameMain.collectedCoins ++;
+                }
                 sprite.posy --;
                 if ((starty-sprite.posy)==8){
-                    opening = false;
+                    sprite.animation = none;
+                    sprite.posy = -80;
                 }
             }
-        }
+        
     }
 
 }
