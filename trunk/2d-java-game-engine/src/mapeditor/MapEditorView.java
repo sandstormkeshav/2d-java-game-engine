@@ -133,6 +133,7 @@ public class MapEditorView extends FrameView {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
@@ -299,6 +300,16 @@ public class MapEditorView extends FrameView {
         });
         fileMenu.add(jMenuItem1);
 
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText(resourceMap.getString("jMenuItem2.text")); // NOI18N
+        jMenuItem2.setName("jMenuItem2"); // NOI18N
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem2);
+
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
@@ -430,10 +441,56 @@ public class MapEditorView extends FrameView {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        System.out.println("Open - gedrückt!");
+        int value = jFileChooser1.showOpenDialog(null);
+        File file = jFileChooser1.getSelectedFile();
+         // -- Read the Text-file:
+        String[] readLine = new String[99999];
+        int a = 0;
+
+        try{
+            FileInputStream fstream = new FileInputStream(file);
+
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader bf = new BufferedReader(new InputStreamReader(in));
+            while((readLine[a] = bf.readLine()) != null){
+                a++;
+            }
+
+            //close input stream:
+            in.close();
+        }
+        catch(Exception e){
+        }
+
+        //Text file is now present in Arrays of Strings:
+        //Line length represents the screen width * 16
+
+        // -- create Tiles and sprites from Text-file:
+        //Tiles:
+        Map.maxHeight=a;
+        Map.maxHeight =0;
+        Map.clear();
+        for(int y = 0; y < a; y++){
+            for(int x = 0; x < readLine[y].length(); x++){
+                //Number entered in the position represents tileNumber;
+                //position of the sprite x*16, y*16
+                Map.maxWidth ++;
+                if(readLine[y].charAt(x) != ' '){
+                    Map.tile[x][y].x = (((int)(readLine[y].charAt(x)))-48)*16;
+                }
+            }
+        }
+        tileChooser.image = tiles;
+        Map.img = tiles;
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
