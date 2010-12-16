@@ -12,6 +12,8 @@ import org.jdesktop.application.SingleFrameApplication;
  */
 public class MapEditorApp extends SingleFrameApplication {
 
+    public static javax.swing.JFrame toolbox;
+
     /**
      * At startup create and show the main frame of the application.
      */
@@ -39,6 +41,13 @@ public class MapEditorApp extends SingleFrameApplication {
      * Main method launching the application.
      */
     public static void main(String[] args) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+               toolbox = new Toolbox();
+               toolbox.setVisible(true);
+            }
+        });
+        
         launch(MapEditorApp.class, args);
     }
 }

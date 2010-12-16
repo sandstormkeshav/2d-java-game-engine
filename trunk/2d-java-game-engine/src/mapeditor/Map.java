@@ -73,7 +73,7 @@ public class Map extends JPanel implements Runnable {
 
     //add a tile/sprite if a mouseButton is pressed
     public void addThing(){
-        if (MapEditorView.jTabbedPane1.getSelectedIndex()==0){
+        if (Toolbox.ToolboxTab.getSelectedIndex()==0){
 
             if (mb.getButton()==1){
                 img = MapEditorView.tiles;
