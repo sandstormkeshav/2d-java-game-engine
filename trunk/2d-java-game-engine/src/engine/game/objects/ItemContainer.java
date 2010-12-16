@@ -52,6 +52,7 @@ public class ItemContainer {
         //check for Mario Collision:
         opening();
         if(sprite.bottomCollision(gameMain.sprite[Mario.mariosprite])){
+            if ((starty-sprite.posy)<8){
             opening = true;
             if (opened == false){
                 gameMain.pCoin.set(sprite.posx, sprite.posy-16);
@@ -59,6 +60,7 @@ public class ItemContainer {
                 sprite.animation = empty;
                 opened = true;
             }
+        }
         }
     }
 
@@ -70,7 +72,7 @@ public class ItemContainer {
         else{
             if (opening == true){
                 sprite.posy --;
-                if ((starty-sprite.posy)==8){
+                if ((starty-sprite.posy)>=8){
                     opening = false;
                 }
             }

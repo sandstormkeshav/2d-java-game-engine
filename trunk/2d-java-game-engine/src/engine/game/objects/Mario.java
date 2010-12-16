@@ -29,7 +29,7 @@ public class Mario{
         public static int mariosprite;
 
     //Spritesheet Image for Sprite creation:
-    Image marioSpritesheet = gameMain.marioSpriteSheet;
+Image marioSpritesheet = gameMain.marioSpriteSheet;
 
     //Actual Sprite for Mario:
     public Sprite sprite = new Sprite(marioSpritesheet, new Dimension(24,24));;
