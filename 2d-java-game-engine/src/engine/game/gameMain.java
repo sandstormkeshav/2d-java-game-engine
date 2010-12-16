@@ -77,7 +77,7 @@ public class gameMain extends JPanel implements Runnable {
     public static Level test = new Level("test.level");
 
     //Cameras
-    Camera camera;
+    public static Camera camera;
 
     public gameMain(){
             this.setDoubleBuffered(true);
@@ -218,21 +218,23 @@ public class gameMain extends JPanel implements Runnable {
 
         g2d.setRenderingHints(rh);
 
+        
         try{
 
             //Draw background_layer0:
-            for(int i = 0; i < 20; i++){
+            for(int i = 0; i < 5; i++){
                 g2d.drawImage(background_layer0, i*background_layer0.getWidth(this) - (int)(camera.position.x * 0.25), 0 - background_layer0.getHeight(this)/8, this);
             }
             //Draw background_layer1:
-            for(int i = 0; i < 20; i++){
-                g2d.drawImage(background_layer1, i*background_layer1.getWidth(this) - (int)(camera.position.x * 0.5), camera.prefHeight -(int)(camera.position.y * 0.5) - background_layer0.getHeight(this)/8, this);
+            for(int i = 0; i < 5; i++){
+                g2d.drawImage(background_layer1, i*background_layer1.getWidth(this) - (int)(camera.position.x * 0.5), (int)(camera.prefHeight*0.75) -(int)(camera.position.y * 0.5), this);
             }
         }
 
         catch(Exception e){
         }
-
+        
+        
         //Draw all kinds of Sprites:
         for(int i = 0; i < numberOfSprites; i++){
 
