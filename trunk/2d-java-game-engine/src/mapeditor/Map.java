@@ -82,12 +82,6 @@ public class Map extends JPanel implements Runnable {
                     for (int j=0;j<=tileChooser.lengthy;j++){
                         tile[(int)(m.getX()/16)+i][(int)(m.getY()/16)+j].x=(tileChooser.numbx+i)*16;
                         tile[(int)(m.getX()/16)+i][(int)(m.getY()/16)+j].y=(tileChooser.numby+j)*16;
-                        if (m.getX()>maxWidth){
-                            maxWidth = m.getX();
-                        }
-                        if (m.getY()>maxHeight){
-                            maxHeight = m.getY();
-                        }
                     }
                 }
             }
@@ -173,5 +167,37 @@ public class Map extends JPanel implements Runnable {
                 sprite[i][j].x=-16;
             }
         }
+    }
+
+    public static int Height(){
+        int h=0;
+
+        for (int x=0;x<1600;x+=16){
+            for (int y=0;y<1600;y+=16){
+                if (tile[x/16][y/16].x != -16){
+                    if (h<y){
+                        h=y;
+                    }
+                }
+            }
+        }
+
+        return h;
+    }
+
+    public static int Width(){
+        int h=0;
+
+        for (int x=0;x<1600;x+=16){
+            for (int y=0;y<1600;y+=16){
+                if (tile[x/16][y/16].x != -16){
+                    if (h<x){
+                        h=x;
+                    }
+                }
+            }
+        }
+
+        return h;
     }
 }

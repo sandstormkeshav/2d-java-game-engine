@@ -179,6 +179,9 @@ public class MapEditorView extends FrameView {
         //System.out.println("Save - gedrückt!");
         int ow=0;
         int value = jFileChooser1.showSaveDialog(null);
+        if (value == jFileChooser1.APPROVE_OPTION){
+            Map.maxHeight = Map.Height();
+            Map.maxWidth = Map.Width();
         File file = jFileChooser1.getSelectedFile();
         if (file.exists()){
             ow = JOptionPane.showConfirmDialog(null,"File already exists - overwrite?", "Error", JOptionPane.YES_NO_OPTION);
@@ -219,11 +222,13 @@ public class MapEditorView extends FrameView {
                 System.out.println("Fehler beim Speichern!");
             }
         }
+        }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         System.out.println("Open - gedrückt!");
         int value = jFileChooser1.showOpenDialog(null);
+        if (value == jFileChooser1.APPROVE_OPTION){
         File file = jFileChooser1.getSelectedFile();
          // -- Read the Text-file:
         String[] readLine = new String[99999];
@@ -264,6 +269,7 @@ public class MapEditorView extends FrameView {
         }
         tileChooser.image = tiles;
         Map.img = tiles;
+        }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
