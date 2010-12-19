@@ -222,11 +222,17 @@ public class MapEditorView extends FrameView {
                 System.out.println("ERROR saving level file: " + e);
             }
 
-            new File(Toolbox.bg0TextField.getText()).renameTo(new File("bg0.png"));
-            new File(Toolbox.bg1TextField.getText()).renameTo(new File("bg1.png"));
-            new File(tilepath).renameTo(new File("tilesheet.png"));
+            // Copy files to cache
+            try{
+                copyFile(new File(Toolbox.bg0TextField.getText()), new File("bg0.png"));
+                copyFile(new File(Toolbox.bg1TextField.getText()), new File("bg1.png"));
+                copyFile(new File(tilepath), new File("tilesheet.png"));
+            }
+            catch(Exception e){
+                System.out.println("ERROR copying files: " + e);
+            }
 
-            //Add files to Achrive
+            // Add files to achrive
             String filenames[] = {
                 "level",
                 "tilesheet.png",
@@ -273,6 +279,23 @@ public class MapEditorView extends FrameView {
         }
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    public void copyFile(File src, File dest) throws IOException{
+
+        File inputFile = src;
+        File outputFile = dest;
+
+        FileReader in = new FileReader(inputFile);
+        FileWriter out = new FileWriter(outputFile);
+        int c;
+
+        while ((c = in.read()) != -1)
+          out.write(c);
+
+        in.close();
+        out.close();
+
+    }
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         //System.out.println("Open - gedrückt!");

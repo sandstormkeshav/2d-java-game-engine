@@ -6,6 +6,9 @@ package mapeditor;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import java.awt.event.*;
+
+import engine.game.*;
 
 /**
  * The main class of the application.
@@ -26,9 +29,21 @@ public class MapEditorApp extends SingleFrameApplication {
      * Windows shown in our application come fully initialized from the GUI
      * builder, so this additional configuration is not needed.
      */
-    @Override protected void configureWindow(java.awt.Window root) {
-    }
+    @Override
+    protected void configureWindow(java.awt.Window root) {
+        root.addWindowListener(new WindowAdapter() {
 
+        @Override
+        public void windowClosing(WindowEvent e) {
+            // clean up the mess, zip thing did to the project folder:
+            new Level("").clean();
+        }
+
+    });
+
+    }
+    
+    
     /**
      * A convenient static getter for the application instance.
      * @return the instance of MapEditorApp
