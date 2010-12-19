@@ -12,8 +12,8 @@ package mapeditor;
  */
 public class Tiles {
 
-        int x=0;
-        int y=0;
+        public int x = 0;
+        public int y = 0;
 
     public Tiles(int a, int b){
         x = 16*(a-1);

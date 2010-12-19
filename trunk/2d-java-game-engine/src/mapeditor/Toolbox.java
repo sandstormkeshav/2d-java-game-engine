@@ -57,14 +57,14 @@ public class Toolbox extends javax.swing.JFrame {
         prefHeightLabel = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        bg0TextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
+        browseButtonBG0 = new javax.swing.JButton();
+        browseButtonBG1 = new javax.swing.JButton();
+        bg1TextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
+        browseButtonFG = new javax.swing.JButton();
+        fgTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -188,26 +188,36 @@ public class Toolbox extends javax.swing.JFrame {
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        jTextField1.setName("jTextField1"); // NOI18N
+        bg0TextField.setName("bg0TextField"); // NOI18N
 
         jLabel1.setText("Background Layer 0");
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jButton1.setText("Browse");
-        jButton1.setName("jButton1"); // NOI18N
+        browseButtonBG0.setText("Browse");
+        browseButtonBG0.setName("browseButtonBG0"); // NOI18N
+        browseButtonBG0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                browseButtonBG0ActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Browse");
-        jButton2.setName("jButton2"); // NOI18N
+        browseButtonBG1.setText("Browse");
+        browseButtonBG1.setName("browseButtonBG1"); // NOI18N
+        browseButtonBG1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                browseButtonBG1ActionPerformed(evt);
+            }
+        });
 
-        jTextField2.setName("jTextField2"); // NOI18N
+        bg1TextField.setName("bg1TextField"); // NOI18N
 
         jLabel2.setText("Background Layer 1");
         jLabel2.setName("jLabel2"); // NOI18N
 
-        jButton3.setText("Browse");
-        jButton3.setName("jButton3"); // NOI18N
+        browseButtonFG.setText("Browse");
+        browseButtonFG.setName("browseButtonFG"); // NOI18N
 
-        jTextField3.setName("jTextField3"); // NOI18N
+        fgTextField.setName("fgTextField"); // NOI18N
 
         jLabel3.setText("Foreground Layer");
         jLabel3.setName("jLabel3"); // NOI18N
@@ -220,19 +230,19 @@ public class Toolbox extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel2Layout.createSequentialGroup()
-                        .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 141, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(bg0TextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 141, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton1))
+                        .add(browseButtonBG0))
                     .add(jLabel1)
                     .add(jPanel2Layout.createSequentialGroup()
-                        .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 141, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(bg1TextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 141, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton2))
+                        .add(browseButtonBG1))
                     .add(jLabel2)
                     .add(jPanel2Layout.createSequentialGroup()
-                        .add(jTextField3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 141, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(fgTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 141, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton3))
+                        .add(browseButtonFG))
                     .add(jLabel3))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -243,20 +253,20 @@ public class Toolbox extends javax.swing.JFrame {
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButton1))
+                    .add(bg0TextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(browseButtonBG0))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel2)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButton2))
+                    .add(bg1TextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(browseButtonBG1))
                 .add(18, 18, 18)
                 .add(jLabel3)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jTextField3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButton3))
+                    .add(fgTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(browseButtonFG))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -302,6 +312,22 @@ public class Toolbox extends javax.swing.JFrame {
         MapEditorView.jCheckBoxMenuItem1.setState(false);
     }//GEN-LAST:event_formWindowClosing
 
+    private void browseButtonBG0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonBG0ActionPerformed
+        
+        javax.swing.JFileChooser jfc =  new javax.swing.JFileChooser();
+        jfc.showOpenDialog(null);
+        bg0TextField.setText(jfc.getSelectedFile().getPath());
+
+    }//GEN-LAST:event_browseButtonBG0ActionPerformed
+
+    private void browseButtonBG1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonBG1ActionPerformed
+
+        javax.swing.JFileChooser jfc =  new javax.swing.JFileChooser();
+        jfc.showOpenDialog(null);
+        bg1TextField.setText(jfc.getSelectedFile().getPath());
+
+    }//GEN-LAST:event_browseButtonBG1ActionPerformed
+
     /**
     * @param args the command line arguments
     */
@@ -310,13 +336,16 @@ public class Toolbox extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ImportButton;
+    public static javax.swing.JButton ImportButton;
     public static javax.swing.JPanel TileTabPanel;
-    private javax.swing.JPanel TilesetPanel;
+    public static javax.swing.JPanel TilesetPanel;
     public static javax.swing.JTabbedPane ToolboxTab;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    public static javax.swing.JTextField bg0TextField;
+    public static javax.swing.JTextField bg1TextField;
+    private javax.swing.JButton browseButtonBG0;
+    private javax.swing.JButton browseButtonBG1;
+    private javax.swing.JButton browseButtonFG;
+    public static javax.swing.JTextField fgTextField;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -324,9 +353,6 @@ public class Toolbox extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JButton prefHeightButton;
     private javax.swing.JLabel prefHeightLabel;
     // End of variables declaration//GEN-END:variables
