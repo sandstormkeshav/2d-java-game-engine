@@ -75,7 +75,8 @@ public class MapEditorView extends FrameView {
         jMenuItem2 = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        toolsCheckBox = new javax.swing.JCheckBoxMenuItem();
+        bgLayerCheckBox = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jFileChooser1 = new javax.swing.JFileChooser();
@@ -146,16 +147,21 @@ public class MapEditorView extends FrameView {
         jMenu1.setText(resourceMap.getString("jMenu1.text")); // NOI18N
         jMenu1.setName("jMenu1"); // NOI18N
 
-        jCheckBoxMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
-        jCheckBoxMenuItem1.setSelected(true);
-        jCheckBoxMenuItem1.setText(resourceMap.getString("jCheckBoxMenuItem1.text")); // NOI18N
-        jCheckBoxMenuItem1.setName("jCheckBoxMenuItem1"); // NOI18N
-        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        toolsCheckBox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        toolsCheckBox.setSelected(true);
+        toolsCheckBox.setText(resourceMap.getString("toolsCheckBox.text")); // NOI18N
+        toolsCheckBox.setName("toolsCheckBox"); // NOI18N
+        toolsCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMenuItem1ActionPerformed(evt);
+                toolsCheckBoxActionPerformed(evt);
             }
         });
-        jMenu1.add(jCheckBoxMenuItem1);
+        jMenu1.add(toolsCheckBox);
+
+        bgLayerCheckBox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
+        bgLayerCheckBox.setText(resourceMap.getString("bgLayerCheckBox.text")); // NOI18N
+        bgLayerCheckBox.setName("bgLayerCheckBox"); // NOI18N
+        jMenu1.add(bgLayerCheckBox);
 
         menuBar.add(jMenu1);
 
@@ -321,9 +327,9 @@ public class MapEditorView extends FrameView {
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
-            MapEditorApp.toolbox.setVisible(jCheckBoxMenuItem1.getState());       
-    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+    private void toolsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolsCheckBoxActionPerformed
+            MapEditorApp.toolbox.setVisible(toolsCheckBox.getState());
+    }//GEN-LAST:event_toolsCheckBoxActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {
             new Level("").clean();
@@ -331,7 +337,7 @@ public class MapEditorView extends FrameView {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public static javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    public static javax.swing.JCheckBoxMenuItem bgLayerCheckBox;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -339,6 +345,7 @@ public class MapEditorView extends FrameView {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
+    public static javax.swing.JCheckBoxMenuItem toolsCheckBox;
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer = null;
