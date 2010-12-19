@@ -8,6 +8,9 @@ package mapeditor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener.*;
+
+import engine.game.gameMain;
+
 /**
  *
  * @author Basti
@@ -132,6 +135,29 @@ public class Map extends JPanel implements Runnable {
         super.paintComponent(g);
         g.setColor(Color.GRAY);
         g.fillRect(0,0,1600,1600);
+
+        //draw background layer 0
+        try{
+            if(MapEditorView.bgLayerCheckBox.getState() == true){
+                for(int i = 0; i < 5; i++){
+                    g.drawImage(gameMain.background_layer0, gameMain.background_layer0.getWidth(this)*i, 0, this);
+                }
+            }
+        }
+        catch(Exception e){
+        }
+
+        //draw background layer 1
+        try{
+            if(MapEditorView.bgLayerCheckBox.getState() == true){
+                for(int i = 0; i < 5; i++){
+                    g.drawImage(gameMain.background_layer1, gameMain.background_layer1.getWidth(this)*i, gameMain.background_layer1.getHeight(this)/2, this);
+                }
+            }
+        }
+        catch(Exception e){
+        }
+
         //draw tiles
         for (int x=0;x<1600;x+=16){
             for (int y=0;y<1600;y+=16){
@@ -147,6 +173,7 @@ public class Map extends JPanel implements Runnable {
             }
         }
 
+        //draw grid
         for (int x=0;x<1600;x+=16){
             g.setColor(Color.LIGHT_GRAY);
             g.drawLine(x,0,x,1600);
@@ -156,6 +183,7 @@ public class Map extends JPanel implements Runnable {
         g.drawString(mousex+"|"+mousey,100,100);
         g.drawString("Button: "+MouseKlick.Button,100,120);*/
     }
+
     public static void clear(){
         for (int i=0;i<100;i++){
             for (int j=0;j<100;j++){

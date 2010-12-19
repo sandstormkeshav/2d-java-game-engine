@@ -26,6 +26,8 @@ import javax.swing.ImageIcon;
 import java.awt.*;
 import java.io.*;
 import javax.swing.JOptionPane;
+import engine.game.*;
+import javax.imageio.*;
 
 /**
  *
@@ -309,7 +311,7 @@ public class Toolbox extends javax.swing.JFrame {
     }//GEN-LAST:event_ImportButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        MapEditorView.jCheckBoxMenuItem1.setState(false);
+        MapEditorView.toolsCheckBox.setState(false);
     }//GEN-LAST:event_formWindowClosing
 
     private void browseButtonBG0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonBG0ActionPerformed
@@ -317,7 +319,12 @@ public class Toolbox extends javax.swing.JFrame {
         javax.swing.JFileChooser jfc =  new javax.swing.JFileChooser();
         jfc.showOpenDialog(null);
         bg0TextField.setText(jfc.getSelectedFile().getPath());
-
+        
+        try{
+           gameMain.background_layer0 = ImageIO.read(jfc.getSelectedFile());
+        }
+        catch(Exception e){
+        }
     }//GEN-LAST:event_browseButtonBG0ActionPerformed
 
     private void browseButtonBG1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonBG1ActionPerformed
@@ -325,6 +332,12 @@ public class Toolbox extends javax.swing.JFrame {
         javax.swing.JFileChooser jfc =  new javax.swing.JFileChooser();
         jfc.showOpenDialog(null);
         bg1TextField.setText(jfc.getSelectedFile().getPath());
+
+        try{
+           gameMain.background_layer1 = ImageIO.read(jfc.getSelectedFile());
+        }
+        catch(Exception e){
+        }
 
     }//GEN-LAST:event_browseButtonBG1ActionPerformed
 
