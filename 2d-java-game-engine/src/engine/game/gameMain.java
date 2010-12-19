@@ -27,9 +27,6 @@ public class gameMain extends JPanel implements Runnable {
     public static boolean showSpritePos = false;
     public static boolean showSpriteNum = false;
 
-    private Image dbImage;
-    private Graphics dbg;
-
     //Key Mapping
     public static boolean[] keyPressed = new boolean[99999];
     public static boolean[] keyReleased = new boolean[99999];
@@ -63,7 +60,7 @@ public class gameMain extends JPanel implements Runnable {
     public static Coin[] coin = new Coin[99999];
     public static int numberOfBoxes;
     public static int numberOfCoins;
-    public static int collectedCoins =0;
+    public static int collectedCoins = 0;
 
     //File input stream
     StringBuffer strBuffer = new StringBuffer();
@@ -89,28 +86,22 @@ public class gameMain extends JPanel implements Runnable {
 
     public void initialize(){
 
+        //load images:
         try{
             marioSpriteSheet = ImageIO.read(new File("mario.gif"));
-            tileSheet = ImageIO.read(new File("newsmb.png"));
             boxSpriteSheet = ImageIO.read(new File("box.png"));
             coinSpriteSheet = ImageIO.read(new File("coin.png"));
-            background_layer0 = ImageIO.read(new File("background_layer0.png"));
-            background_layer1  = ImageIO.read(new File("background_layer1.png"));
-
         }
             catch(Exception e){
         }
 
-        //wait 'till images are loaded:
-        while(marioSpriteSheet.getWidth(this) == -1){}
-        while(tileSheet.getWidth(this) == -1){}
-        while(background_layer0.getWidth(this) == -1){}
-        while(boxSpriteSheet.getWidth(this) == -1){}
-        while(coinSpriteSheet.getWidth(this) == -1){}
-
-        test.levelTXT = "test.level";
+        //load level:
+        test.levelArchive = "test.level";
 
         while(test.load() != true){}
+        //clean up:
+        test.clean();
+
         loadedLevel = test;
 
         pCoin = new PopupCoin(new Point(-80,-80));

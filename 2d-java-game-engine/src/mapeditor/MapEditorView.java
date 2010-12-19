@@ -14,6 +14,9 @@ import javax.swing.JFrame;
 import java.awt.*;
 import java.io.*;
 import javax.swing.JOptionPane;
+import java.util.zip.*;
+import engine.game.*;
+import javax.swing.ImageIcon;
 
 /**
  * The application's main frame.
@@ -183,27 +186,24 @@ public class MapEditorView extends FrameView {
             Map.maxHeight = Map.Height();
             Map.maxWidth = Map.Width();
         File file = jFileChooser1.getSelectedFile();
+
+        //Check if file already exists
         if (file.exists()){
             ow = JOptionPane.showConfirmDialog(null,"File already exists - overwrite?", "Error", JOptionPane.YES_NO_OPTION);
             if (ow == 0){
                 file.delete();
             }
         }
+
+        //Create the level file
+        File levelFile = new File("level");
+        if(levelFile.exists()){
+            System.out.println("level already exists");
+        }
         if (ow == 0){
             String str="";
             try{
-                FileWriter fw = new FileWriter(file);
-                /*str += "<tiles="+tilepath+">";
-                str += "\n<sprites="+spritepath+">";
-                str += "\n\n";
-                for (int y=0;y<1600;y+=16){
-                    for (int x=0;x<1600;x+=16){
-                        if (Map.tile[x/16][y/16].x>-16){
-                            str += "<tile>\n   line="+Map.tile[x/16][y/16].x/16+"\n   row="+Map.tile[x/16][y/16].y/16+"\n   x="+x+"\n   y="+y;
-                            str += "\n</tile>\n";
-                        }
-                    }
-                }*/
+                FileWriter fw = new FileWriter(levelFile);
                 for (int y=0;y<=Map.maxHeight;y+=16){
                     for (int x=0;x<=Map.maxWidth;x+=16){
                         if (Map.tile[x/16][y/16].x>-16){
@@ -219,63 +219,93 @@ public class MapEditorView extends FrameView {
                 fw.close();
             }
             catch(Exception e){
-                System.out.println("Fehler beim Speichern!");
+                System.out.println("ERROR saving level file: " + e);
             }
+
+            new File(Toolbox.bg0TextField.getText()).renameTo(new File("bg0.png"));
+            new File(Toolbox.bg1TextField.getText()).renameTo(new File("bg1.png"));
+            new File(tilepath).renameTo(new File("tilesheet.png"));
+
+            //Add files to Achrive
+            String filenames[] = {
+                "level",
+                "tilesheet.png",
+                "bg0.png",
+                "bg1.png",
+            };
+
+            // Create a buffer for reading the files
+            byte[] buf = new byte[1024];
+
+            try {
+                // Create the ZIP file
+                String outFilename = file.getPath();
+                ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
+
+                // Compress the files
+                for (int i=0; i<filenames.length; i++) {
+                    FileInputStream in = new FileInputStream(filenames[i]);
+
+                    // Add ZIP entry to output stream.
+                    out.putNextEntry(new ZipEntry(filenames[i]));
+
+                    // Transfer bytes from the file to the ZIP file
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+
+                    // Complete the entry
+                    out.closeEntry();
+                    in.close();
+                }
+
+                // Complete the ZIP file
+                out.close();
+
+                // Delete the created level file
+                levelFile.delete();
+            } 
+            catch (IOException e) {
+                System.out.println("ERROR saving level archive: " + e);
+            }
+
         }
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        System.out.println("Open - gedrückt!");
+        //System.out.println("Open - gedrückt!");
         int value = jFileChooser1.showOpenDialog(null);
         if (value == jFileChooser1.APPROVE_OPTION){
         File file = jFileChooser1.getSelectedFile();
-         // -- Read the Text-file:
-        String[] readLine = new String[99999];
-        int a = 0;
 
-        try{
-            FileInputStream fstream = new FileInputStream(file);
+        new Level(file.getPath()).load();
 
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader bf = new BufferedReader(new InputStreamReader(in));
-            while((readLine[a] = bf.readLine()) != null){
-                a++;
-            }
+        //load images into editor:
+        Toolbox.bg1TextField.setText(new File("bg1.png").getPath());
+        Toolbox.bg0TextField.setText(new File("bg0.png").getPath());
 
-            //close input stream:
-            in.close();
-        }
-        catch(Exception e){
-        }
-
-        //Text file is now present in Arrays of Strings:
-        //Line length represents the screen width * 16
-
-        // -- create Tiles and sprites from Text-file:
-        //Tiles:
-        Map.maxHeight=a;
-        Map.maxHeight =0;
-        Map.clear();
-        for(int y = 0; y < a; y++){
-            for(int x = 0; x < readLine[y].length(); x++){
-                //Number entered in the position represents tileNumber;
-                //position of the sprite x*16, y*16
-                Map.maxWidth ++;
-                if(readLine[y].charAt(x) != ' '){
-                    Map.tile[x][y].x = (((int)(readLine[y].charAt(x)))-48)*16;
-                }
-            }
-        }
+        //load tile sheet into editor:
+        MapEditorView.tilepath = "tilesheet.png";
+        MapEditorView.tiles = Toolkit.getDefaultToolkit().getImage("tilesheet.png");
+        ImageIcon tileicon = new ImageIcon(MapEditorView.tiles);
+        tileChooser.image = MapEditorView.tiles;
+        Map.img = MapEditorView.tiles;
+        Toolbox.TilesetPanel.setPreferredSize(new Dimension(MapEditorView.tiles.getWidth(Toolbox.ImportButton), MapEditorView.tiles.getHeight(Toolbox.ImportButton)));
         tileChooser.image = tiles;
         Map.img = tiles;
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
-            MapEditorApp.toolbox.setVisible(jCheckBoxMenuItem1.getState());
-       
+            MapEditorApp.toolbox.setVisible(jCheckBoxMenuItem1.getState());       
     }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {
+            new Level("").clean();
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;

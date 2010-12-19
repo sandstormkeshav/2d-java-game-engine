@@ -46,6 +46,11 @@ public class MainDebugMode extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("2D Game Engine (Debug Mode)");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setName("jPanel1"); // NOI18N
 
@@ -148,25 +153,21 @@ public class MainDebugMode extends javax.swing.JFrame {
     }//GEN-LAST:event_OpenMenuItemMouseClicked
 
     private void OpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenMenuItemActionPerformed
-        
-        // -- load .level file
-        Level level = new Level("");
-        
         //File Chooser
         JFileChooser fc = new JFileChooser();
-
-        //Open file dialog to browse for .level files:
         int returnVal = fc.showOpenDialog(this);
 
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            level.levelTXT = file.getPath();
-        } else {
+            Level level = new Level(file.getPath());
+            level.load();
+            level.clean();
+
+            gameMain.loadedLevel = level;
+        }
+        else{
             System.out.println("Open command cancelled by user." + "\n");
         }
-
-        level.load();
-        gameMain.loadedLevel = level;
 
         //create a new Mario:
         gameMain.mario = new Mario(new Point(5, 0));
@@ -191,13 +192,17 @@ public class MainDebugMode extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // -- load .level file again:
-        Level level = new Level(gameMain.loadedLevel.levelTXT);
+        Level level = new Level(gameMain.loadedLevel.levelArchive);
         level.load();
         gameMain.loadedLevel = level;
 
         //create a new Mario:
         gameMain.mario = new Mario(new Point(5, 0));
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        
+    }//GEN-LAST:event_formWindowClosing
 
     /**
     * @param args the command line arguments
