@@ -1,16 +1,11 @@
+#summary Description of the Level File Structure
 #labels Phase-Implementation,Phase-Design
-#Description of the Level File Structure
 
-(zip-)folder *LevelName* (
+The level File format is zip.
 
-res/tileset.png
-res/sprite_ObjName.png
-res/background_layer0.png
-res/background_layer1.png
-res/foreground.png
-res/sfx_ObjName_ActionName.wav
-res/bgmusic.wav
+The contents are (r37):
 
-level
-
-)
+*level*: Contains the level map.
+*bg0.png*: Background Layer 0
+*bg1.png*: Background Layer 1
+*tilesheet.png*: Tilesheet
