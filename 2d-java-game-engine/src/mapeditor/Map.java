@@ -25,9 +25,9 @@ public class Map extends JPanel implements Runnable {
     Thread main;
     public static Image img = MapEditorView.tiles;
     public static Image img2 = MapEditorView.sprites;
-    public static Tiles[][] tile = new Tiles[100][100];
-    public static int maxWidth;
-    public static int maxHeight;
+    public static Tiles[][] tile = new Tiles[999][999];
+    public static int maxWidth=0;
+    public static int maxHeight=0;
 
     MouseKlick mb = new MouseKlick();
     MouseMotion m = new MouseMotion();
@@ -35,6 +35,7 @@ public class Map extends JPanel implements Runnable {
 
     public Map(){
 
+        //this.setPreferredSize(new Dimension(maxWidth,maxHeight));
         //create (empty) Tiles and Sprites all over the map
         for (int i=0;i<100;i++){
             for (int j=0;j<100;j++){
@@ -63,11 +64,19 @@ public class Map extends JPanel implements Runnable {
             catch(Exception e){
 
             }
+            if (getPreferredSize() != new Dimension(maxWidth,maxHeight)){
+                setPreferredSize(new Dimension(maxWidth,maxHeight));
+            }
             addThing();
             repaint();
         }
     }
 
+    //set new MapSize
+    public static void setMapSize(int a, int b){
+        maxWidth = a;
+        maxHeight = b;
+    }
 
     //add a tile/sprite if a mouseButton is pressed
     public void addThing(){
@@ -102,7 +111,7 @@ public class Map extends JPanel implements Runnable {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         g.setColor(Color.GRAY);
-        g.fillRect(0,0,1600,1600);
+        g.fillRect(0,0,maxWidth,maxHeight);
 
         //draw background layer 0
         try{
@@ -127,8 +136,8 @@ public class Map extends JPanel implements Runnable {
         }
 
         //draw tiles
-        for (int x=0;x<1600;x+=16){
-            for (int y=0;y<1600;y+=16){
+        for (int x=0;x<maxWidth;x+=16){
+            for (int y=0;y<maxHeight;y+=16){
                 g.drawImage(img,x,y,x+16,y+16,tile[x/16][y/16].x,tile[x/16][y/16].y,tile[x/16][y/16].x+16,tile[x/16][y/16].y+16,this);
                 //g.setColor(Color.WHITE);
                 //g.drawString(tile[x/16][y/16].x+"", x, y+16);
@@ -136,10 +145,10 @@ public class Map extends JPanel implements Runnable {
         }
 
         //draw grid
-        for (int x=0;x<1600;x+=16){
+        for (int x=0;x<maxWidth;x+=16){
             g.setColor(Color.LIGHT_GRAY);
-            g.drawLine(x,0,x,1600);
-            g.drawLine(0,x,1600,x);
+            g.drawLine(x,0,x,maxHeight);
+            g.drawLine(0,x,maxWidth,x);
         }
     }
 
@@ -154,8 +163,8 @@ public class Map extends JPanel implements Runnable {
     public static int Height(){
         int h=0;
 
-        for (int x=0;x<1600;x+=16){
-            for (int y=0;y<1600;y+=16){
+        for (int x=0;x<maxWidth;x+=16){
+            for (int y=0;y<maxHeight;y+=16){
                 if (tile[x/16][y/16].x != -16){
                     if (h<y){
                         h=y;
@@ -170,8 +179,8 @@ public class Map extends JPanel implements Runnable {
     public static int Width(){
         int h=0;
 
-        for (int x=0;x<1600;x+=16){
-            for (int y=0;y<1600;y+=16){
+        for (int x=0;x<maxWidth;x+=16){
+            for (int y=0;y<maxHeight;y+=16){
                 if (tile[x/16][y/16].x != -16){
                     if (h<x){
                         h=x;

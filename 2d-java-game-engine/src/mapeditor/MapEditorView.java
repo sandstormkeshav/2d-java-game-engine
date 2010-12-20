@@ -17,8 +17,6 @@ import javax.swing.JOptionPane;
 import java.util.zip.*;
 import engine.game.*;
 import javax.swing.ImageIcon;
-import java.nio.channels.*;
-
 /**
  * The application's main frame.
  */
@@ -72,6 +70,7 @@ public class MapEditorView extends FrameView {
         jPanel3 = new Map();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         javax.swing.JMenuItem jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
@@ -81,10 +80,16 @@ public class MapEditorView extends FrameView {
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jFileChooser1 = new javax.swing.JFileChooser();
+        jFrame1 = new javax.swing.JFrame();
+        jButton1 = new javax.swing.JButton();
+        jSpinner1 = new javax.swing.JSpinner();
+        jSpinner2 = new javax.swing.JSpinner();
 
         mainPanel.setName("mainPanel");
 
+        jScrollPane3.setMinimumSize(new java.awt.Dimension(0, 0));
         jScrollPane3.setName("jScrollPane3");
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(586, 447));
 
         jPanel3.setName("jPanel3"); // NOI18N
 
@@ -96,7 +101,7 @@ public class MapEditorView extends FrameView {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+            .addGap(0, 428, Short.MAX_VALUE)
         );
 
         jScrollPane3.setViewportView(jPanel3);
@@ -109,7 +114,7 @@ public class MapEditorView extends FrameView {
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -118,6 +123,16 @@ public class MapEditorView extends FrameView {
         fileMenu.setAction(actionMap.get("saveFile")); // NOI18N
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(MapEditorView.class);
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
+
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem3.setText(resourceMap.getString("jMenuItem3.text")); // NOI18N
+        jMenuItem3.setName("jMenuItem3"); // NOI18N
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem3);
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
@@ -177,6 +192,60 @@ public class MapEditorView extends FrameView {
 
         jFileChooser1.setName("jFileChooser1"); // NOI18N
 
+        jFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jFrame1.setTitle(resourceMap.getString("jFrame1.title")); // NOI18N
+        jFrame1.setAlwaysOnTop(true);
+        jFrame1.setMinimumSize(new java.awt.Dimension(151, 100));
+        jFrame1.setName("jFrame1"); // NOI18N
+        jFrame1.setResizable(false);
+
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jSpinner1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jSpinner1.setName("jSpinner1"); // NOI18N
+        jSpinner1.setValue(10);
+        jSpinner1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jSpinner1PropertyChange(evt);
+            }
+        });
+
+        jSpinner2.setName("jSpinner2"); // NOI18N
+        jSpinner2.setValue(10);
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton1))
+                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
     }// </editor-fold>//GEN-END:initComponents
@@ -190,8 +259,8 @@ public class MapEditorView extends FrameView {
         int ow=0;
         int value = jFileChooser1.showSaveDialog(null);
         if (value == jFileChooser1.APPROVE_OPTION){
-            Map.maxHeight = Map.Height();
-            Map.maxWidth = Map.Width();
+            int h = Map.Height();
+            int w = Map.Width();
         File file = jFileChooser1.getSelectedFile();
 
         //Check if file already exists
@@ -211,8 +280,8 @@ public class MapEditorView extends FrameView {
             String str="";
             try{
                 FileWriter fw = new FileWriter(levelFile);
-                for (int y=0;y<=Map.maxHeight;y+=16){
-                    for (int x=0;x<=Map.maxWidth;x+=16){
+                for (int y=0;y<=h;y+=16){
+                    for (int x=0;x<=w;x+=16){
                         if (Map.tile[x/16][y/16].x>-16){
                             str += ""+(char)(48+Map.tile[x/16][y/16].x/16);
                         }
@@ -342,6 +411,31 @@ public class MapEditorView extends FrameView {
             MapEditorApp.toolbox.setVisible(toolsCheckBox.getState());
     }//GEN-LAST:event_toolsCheckBoxActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        Map.clear();
+        jFrame1.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Map.setMapSize(Integer.parseInt(jSpinner1.getValue().toString())*16,Integer.parseInt(jSpinner2.getValue().toString())*16);
+        jFrame1.dispose();
+}//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jSpinner1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSpinner1PropertyChange
+        if (Integer.parseInt(jSpinner2.getValue().toString())<0){
+            jSpinner2.setValue("0");
+        }
+        if (Integer.parseInt(jSpinner2.getValue().toString())>999){
+            jSpinner2.setValue("999");
+        }
+        if (Integer.parseInt(jSpinner1.getValue().toString())<0){
+            jSpinner2.setValue("0");
+        }
+        if (Integer.parseInt(jSpinner1.getValue().toString())>999){
+            jSpinner2.setValue("999");
+        }
+    }//GEN-LAST:event_jSpinner1PropertyChange
+
     private void formWindowClosing(java.awt.event.WindowEvent evt) {
             new Level("").clean();
     }
@@ -349,11 +443,16 @@ public class MapEditorView extends FrameView {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JCheckBoxMenuItem bgLayerCheckBox;
+    private javax.swing.JButton jButton1;
     private javax.swing.JFileChooser jFileChooser1;
+    public static javax.swing.JFrame jFrame1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane3;
+    public javax.swing.JMenuItem jMenuItem3;
+    public static javax.swing.JPanel jPanel3;
+    public static javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinner2;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     public static javax.swing.JCheckBoxMenuItem toolsCheckBox;

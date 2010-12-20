@@ -58,6 +58,7 @@ public class Toolbox extends javax.swing.JFrame {
         prefHeightButton = new javax.swing.JButton();
         prefHeightLabel = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         bg0TextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -90,11 +91,11 @@ public class Toolbox extends javax.swing.JFrame {
         TilesetPanel.setLayout(TilesetPanelLayout);
         TilesetPanelLayout.setHorizontalGroup(
             TilesetPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 273, Short.MAX_VALUE)
+            .add(0, 289, Short.MAX_VALUE)
         );
         TilesetPanelLayout.setVerticalGroup(
             TilesetPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 161, Short.MAX_VALUE)
+            .add(0, 194, Short.MAX_VALUE)
         );
 
         ImportButton.setText("Import");
@@ -109,16 +110,16 @@ public class Toolbox extends javax.swing.JFrame {
         TileTabPanel.setLayout(TileTabPanelLayout);
         TileTabPanelLayout.setHorizontalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+            .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, TileTabPanelLayout.createSequentialGroup()
                 .add(83, 83, 83)
-                .add(ImportButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .add(ImportButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                 .add(92, 92, 92))
         );
         TileTabPanelLayout.setVerticalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, TileTabPanelLayout.createSequentialGroup()
-                .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                 .add(18, 18, 18)
                 .add(ImportButton)
                 .addContainerGap())
@@ -145,8 +146,8 @@ public class Toolbox extends javax.swing.JFrame {
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(prefHeightLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                    .add(prefHeightButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
+                    .add(prefHeightLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                    .add(prefHeightButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -162,6 +163,14 @@ public class Toolbox extends javax.swing.JFrame {
         jButton4.setText("Mario Spawn Point");
         jButton4.setName("jButton4"); // NOI18N
 
+        jButton1.setText("Change Map Size");
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -173,17 +182,22 @@ public class Toolbox extends javax.swing.JFrame {
                         .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(55, 55, 55)
-                        .add(jButton4)))
+                        .add(jButton4))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jButton1)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(8, 8, 8)
+                .add(11, 11, 11)
                 .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jButton4)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 47, Short.MAX_VALUE)
+                .add(jButton1)
+                .addContainerGap())
         );
 
         ToolboxTab.addTab("Properties", jPanel1);
@@ -246,7 +260,7 @@ public class Toolbox extends javax.swing.JFrame {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(browseButtonFG))
                     .add(jLabel3))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -269,7 +283,7 @@ public class Toolbox extends javax.swing.JFrame {
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(fgTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(browseButtonFG))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
         ToolboxTab.addTab("Background", jPanel2);
@@ -287,7 +301,7 @@ public class Toolbox extends javax.swing.JFrame {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(ToolboxTab, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+                .add(ToolboxTab)
                 .addContainerGap())
         );
 
@@ -341,6 +355,10 @@ public class Toolbox extends javax.swing.JFrame {
 
     }//GEN-LAST:event_browseButtonBG1ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MapEditorView.jFrame1.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
     * @param args the command line arguments
     */
@@ -359,6 +377,7 @@ public class Toolbox extends javax.swing.JFrame {
     private javax.swing.JButton browseButtonBG1;
     private javax.swing.JButton browseButtonFG;
     public static javax.swing.JTextField fgTextField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
