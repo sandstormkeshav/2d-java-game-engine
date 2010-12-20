@@ -2,7 +2,6 @@ package engine.game.objects;
 
 import java.awt.*;
 import engine.game.*;
-import java.awt.image.ImageObserver;
 import java.applet.Applet;
 
 /**

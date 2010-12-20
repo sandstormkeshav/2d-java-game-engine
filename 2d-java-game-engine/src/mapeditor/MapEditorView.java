@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import java.util.zip.*;
 import engine.game.*;
 import javax.swing.ImageIcon;
+import java.nio.channels.*;
 
 /**
  * The application's main frame.
@@ -230,9 +231,11 @@ public class MapEditorView extends FrameView {
 
             // Copy files to cache
             try{
+
                 copyFile(new File(Toolbox.bg0TextField.getText()), new File("bg0.png"));
                 copyFile(new File(Toolbox.bg1TextField.getText()), new File("bg1.png"));
                 copyFile(new File(tilepath), new File("tilesheet.png"));
+
             }
             catch(Exception e){
                 System.out.println("ERROR copying files: " + e);
@@ -286,20 +289,28 @@ public class MapEditorView extends FrameView {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    public void copyFile(File src, File dest) throws IOException{
+    public boolean copyFile(File src, File dest) throws IOException{
 
-        File inputFile = src;
-        File outputFile = dest;
-
-        FileReader in = new FileReader(inputFile);
-        FileWriter out = new FileWriter(outputFile);
-        int c;
-
-        while ((c = in.read()) != -1)
-          out.write(c);
-
-        in.close();
-        out.close();
+        if(!src.equals(dest)){
+            FileInputStream fis  = new FileInputStream(src);
+            FileOutputStream fos = new FileOutputStream(dest);
+            try {
+                byte[] buf = new byte[1024];
+                int i = 0;
+                while ((i = fis.read(buf)) != -1) {
+                    fos.write(buf, 0, i);
+                }
+            }
+            catch (Exception e) {
+                System.out.println("ERROR copying files: " + e);
+            }
+            finally {
+                if (fis != null) fis.close();
+                if (fos != null) fos.close();
+            }
+            return true;
+        }
+        return false;
 
     }
 
