@@ -74,10 +74,7 @@ public class Level {
     public boolean load(){
 
         //clean up old loads:
-        new File("bg0.png").delete();
-        new File("bg1.png").delete();
-        new File("tilesheet.png").delete();
-        new File("level").delete();
+        clean();
 
         //Reset numberOf ...
         gameMain.numberOfBoxes = 0;
@@ -157,6 +154,14 @@ public class Level {
                     }
                 }
             }
+        }
+        try{
+            Map.maxWidth = mapWidth*16;
+            Map.maxHeight = mapHeight*16;
+            MapEditorView.jScrollPane3.setPreferredSize(new Dimension(Map.maxWidth,Map.maxHeight));
+        }
+        catch(Exception e){
+            System.out.println("ERROR resizing Editor-map: "+e);
         }
 
         
