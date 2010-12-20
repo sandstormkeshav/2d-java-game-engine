@@ -300,7 +300,7 @@ public class Toolbox extends javax.swing.JFrame {
         
         int value = jFileChooser1.showOpenDialog(null);
         File tilefile = jFileChooser1.getSelectedFile();
-        MapEditorView.tilepath = tilefile.getAbsolutePath();
+        MapEditorView.tilepath = tilefile.getPath();
         MapEditorView.tiles = Toolkit.getDefaultToolkit().getImage(tilefile.getAbsolutePath());
         ImageIcon tileicon = new ImageIcon(MapEditorView.tiles);
         tileChooser.image = MapEditorView.tiles;

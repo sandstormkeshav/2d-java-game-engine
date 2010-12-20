@@ -270,10 +270,11 @@ public class gameMain extends JPanel implements Runnable {
             }
         }
 
-        g2d.drawImage(coinSpriteSheet,16,16,32,32,0,48,16,64,this);
+        g2d.drawImage(coinSpriteSheet,16,16,32,32,0,0,16,16,this);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("x "+collectedCoins, 32, 30);
         g2d.setColor(Color.WHITE);
         g2d.drawString("x "+collectedCoins, 32, 29);
-
         //Debug things:
         for(int i = 0; i < numberOfSprites; i++){
                 if(showSpritePos == true){
