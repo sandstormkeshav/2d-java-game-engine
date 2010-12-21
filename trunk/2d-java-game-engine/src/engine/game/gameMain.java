@@ -94,8 +94,8 @@ public class gameMain extends JPanel implements Runnable {
         //load images:
         try{
             marioSpriteSheet = ImageIO.read(new File("mario.gif"));
-            boxSpriteSheet = ImageIO.read(new File("box.png"));
-            coinSpriteSheet = ImageIO.read(new File("coin.png"));
+            boxSpriteSheet = ImageIO.read(new File("itemContainer.png"));
+            coinSpriteSheet = ImageIO.read(new File("coin.PNG"));
         }
             catch(Exception e){
         }
@@ -276,7 +276,7 @@ public class gameMain extends JPanel implements Runnable {
         }
 
         //Draw "GUI":
-        g2d.drawImage(coinSpriteSheet,16,16,32,32,0,0,16,16,this);
+        g2d.drawImage(coinSpriteSheet,16,16,32,32,0,48,16,64,this);
         g2d.setColor(Color.BLACK);
         g2d.drawString("x "+collectedCoins, 32, 30);
         g2d.setColor(Color.WHITE);
