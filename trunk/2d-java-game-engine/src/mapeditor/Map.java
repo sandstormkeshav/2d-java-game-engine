@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.MouseListener.*;
 
 import engine.game.gameMain;
+import java.awt.image.VolatileImage;
 
 /**
  *
@@ -23,8 +24,8 @@ public class Map extends JPanel implements Runnable {
     //public static int mousey=0;
     
     Thread main;
-    public static Image img = MapEditorView.tiles;
-    public static Image img2 = MapEditorView.sprites;
+    public static Image img = MapEditor.tiles;
+    public static Image img2 = MapEditor.sprites;
     public static Tiles[][] tile = new Tiles[999][999];
     public static int maxWidth=0;
     public static int maxHeight=0;
@@ -35,14 +36,11 @@ public class Map extends JPanel implements Runnable {
 
     public Map(){
 
-        //this.setPreferredSize(new Dimension(maxWidth,maxHeight));
-        //create (empty) Tiles and Sprites all over the map
-        for (int i=0;i<100;i++){
-            for (int j=0;j<100;j++){
+        for (int i=0;i<999;i++){
+            for (int j=0;j<999;j++){
                 tile[i][j] = new Tiles(0,0);
             }
         }
-
 
         setPreferredSize(new Dimension(1000,1000));
         this.setDoubleBuffered(true);
@@ -83,8 +81,8 @@ public class Map extends JPanel implements Runnable {
         if (Toolbox.ToolboxTab.getSelectedIndex()==0){
 
             if (mb.getButton()==1){
-                img = MapEditorView.tiles;
-                img2 = MapEditorView.sprites;
+                img = MapEditor.tiles;
+                img2 = MapEditor.sprites;
                 for (int i=0;i<=tileChooser.lengthx;i++){
                     for (int j=0;j<=tileChooser.lengthy;j++){
                         tile[(int)(m.getX()/16)+i][(int)(m.getY()/16)+j].x=(tileChooser.numbx+i)*16;
@@ -109,15 +107,21 @@ public class Map extends JPanel implements Runnable {
 
     @Override
     public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        g.setColor(Color.GRAY);
-        g.fillRect(0,0,maxWidth,maxHeight);
+        
+        Graphics2D g2d = (Graphics2D)g.create();
+
+        super.paintComponent(g2d);
+
+        AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
+
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(0,0,maxWidth,maxHeight);
 
         //draw background layer 0
         try{
-            if(MapEditorView.bgLayerCheckBox.getState() == true){
+            if(MapEditor.bgLayerCheckBox.getState() == true){
                 for(int i = 0; i < 5; i++){
-                    g.drawImage(gameMain.background_layer0, gameMain.background_layer0.getWidth(this)*i, 0, this);
+                    g2d.drawImage(gameMain.background_layer0, gameMain.background_layer0.getWidth(this)*i, 0, this);
                 }
             }
         }
@@ -126,9 +130,9 @@ public class Map extends JPanel implements Runnable {
 
         //draw background layer 1
         try{
-            if(MapEditorView.bgLayerCheckBox.getState() == true){
+            if(MapEditor.bgLayerCheckBox.getState() == true){
                 for(int i = 0; i < 5; i++){
-                    g.drawImage(gameMain.background_layer1, gameMain.background_layer1.getWidth(this)*i, gameMain.background_layer1.getHeight(this)/2, this);
+                    g2d.drawImage(gameMain.background_layer1, gameMain.background_layer1.getWidth(this)*i, gameMain.background_layer1.getHeight(this)/2, this);
                 }
             }
         }
@@ -138,17 +142,30 @@ public class Map extends JPanel implements Runnable {
         //draw tiles
         for (int x=0;x<maxWidth;x+=16){
             for (int y=0;y<maxHeight;y+=16){
-                g.drawImage(img,x,y,x+16,y+16,tile[x/16][y/16].x,tile[x/16][y/16].y,tile[x/16][y/16].x+16,tile[x/16][y/16].y+16,this);
-                //g.setColor(Color.WHITE);
-                //g.drawString(tile[x/16][y/16].x+"", x, y+16);
+                g2d.drawImage(img,x,y,x+16,y+16,tile[x/16][y/16].x,tile[x/16][y/16].y,tile[x/16][y/16].x+16,tile[x/16][y/16].y+16,this);
+                //g2d.setColor(Color.WHITE);
+                //g2d.drawString(tile[x/16][y/16].x+"", x, y+16);
             }
         }
 
         //draw grid
-        for (int x=0;x<maxWidth;x+=16){
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawLine(x,0,x,maxHeight);
-            g.drawLine(0,x,maxWidth,x);
+        if(MapEditor.gridCheckBox.getState() == true){
+            //g2d.setColor(new Color(1f, 1f, 1f, 0.5f));
+            g2d.setColor(Color.lightGray);
+            for (int x=0;x<maxWidth;x+=16){
+                g2d.drawLine(x,0,x,maxHeight);
+            }
+            for (int y=0;y<maxHeight;y+=16){
+                g2d.drawLine(0,y,maxWidth,y);
+            }
+        }
+
+        //draw camera
+        if(MapEditor.cameraCheckBox.getState() == true){
+            g2d.setColor(new Color(1.0f,0f,0f, 0.33f));
+            g2d.fillRect(0, MapEditor.cameraPrefHeight - MapEditor.cameraTolerance/2, maxWidth, MapEditor.cameraTolerance);
+            g2d.setColor(Color.red);
+            g2d.drawLine(0, MapEditor.cameraPrefHeight, maxWidth, MapEditor.cameraPrefHeight);
         }
     }
 

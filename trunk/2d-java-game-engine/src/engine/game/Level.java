@@ -12,7 +12,6 @@ import java.util.zip.*;
 import java.util.Enumeration;
 import javax.imageio.*;
 import mapeditor.*;
-import javax.swing.ImageIcon;
 
 public class Level {
 
@@ -158,7 +157,11 @@ public class Level {
         try{
             Map.maxWidth = mapWidth*16;
             Map.maxHeight = mapHeight*16;
-            MapEditorView.jScrollPane3.setPreferredSize(new Dimension(Map.maxWidth,Map.maxHeight));
+            MapEditor.MapScrollPane.setPreferredSize(new Dimension(Map.maxWidth,Map.maxHeight));
+            Toolbox.jSpinner1.setValue(mapWidth);
+            Toolbox.jSpinner2.setValue(mapHeight);
+            MapEditor.mapEdit.setSize(MapEditor.maxSize);
+
         }
         catch(Exception e){
             System.out.println("ERROR resizing Editor-map: "+e);

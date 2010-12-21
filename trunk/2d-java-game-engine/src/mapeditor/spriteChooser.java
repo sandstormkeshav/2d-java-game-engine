@@ -36,7 +36,7 @@ public class spriteChooser extends JPanel implements Runnable {
     public void run(){
         while(true){
             repaint();
-            image = MapEditorView.sprites;
+            image = MapEditor.sprites;
             try{
                 main.sleep(20L);
             }
