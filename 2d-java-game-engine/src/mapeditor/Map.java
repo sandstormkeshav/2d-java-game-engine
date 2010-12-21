@@ -29,6 +29,9 @@ public class Map extends JPanel implements Runnable {
     public static Tiles[][] tile = new Tiles[999][999];
     public static int maxWidth=0;
     public static int maxHeight=0;
+    public static int fillx;
+
+    public boolean magic=true;
 
     MouseKlick mb = new MouseKlick();
     MouseMotion m = new MouseMotion();
@@ -90,7 +93,7 @@ public class Map extends JPanel implements Runnable {
                     }
                 }
             }
-            else{
+           else{
                 if (mb.getButton()==3){
                     for (int i=0;i<=tileChooser.lengthx;i++){
                         for (int j=0;j<=tileChooser.lengthy;j++){

@@ -8,6 +8,7 @@ package engine.game;
 
 import engine.game.objects.*;
 import engine.game.objects.Mario;
+import mapeditor.*;
 
 import java.io.*;
 import javax.imageio.*;
@@ -30,6 +31,10 @@ public class gameMain extends JPanel implements Runnable {
     //Key Mapping
     public static boolean[] keyPressed = new boolean[99999];
     public static boolean[] keyReleased = new boolean[99999];
+
+    //Mouse
+    MouseMotion mouse = new MouseMotion();
+    MouseKlick button = new MouseKlick();
 
     //Threads
     public Thread main;
@@ -270,6 +275,7 @@ public class gameMain extends JPanel implements Runnable {
             }
         }
 
+        //Draw "GUI":
         g2d.drawImage(coinSpriteSheet,16,16,32,32,0,0,16,16,this);
         g2d.setColor(Color.BLACK);
         g2d.drawString("x "+collectedCoins, 32, 30);

@@ -13,21 +13,21 @@ import java.awt.event.*;
  */
 public class MouseMotion extends MouseAdapter implements MouseMotionListener{
 
-    int mousex;
-    int mousey;
-    boolean inside;
+    public int mousex,x;
+    public int mousey,y;
+    public boolean inside;
 
     @Override
     public void mouseDragged(MouseEvent e){
-        mousex = e.getPoint().x;
-        mousey = e.getPoint().y;
+        x=mousex = e.getPoint().x;
+        y=mousey = e.getPoint().y;
     }
 
 
     @Override
     public void mouseMoved(MouseEvent e){
-        mousex = e.getPoint().x;
-        mousey = e.getPoint().y;
+        x=mousex = e.getPoint().x;
+        y=mousey = e.getPoint().y;
     }
 
     @Override

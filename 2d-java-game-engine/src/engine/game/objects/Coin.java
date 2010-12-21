@@ -39,7 +39,7 @@ public class Coin {
         gameMain.numberOfCoins ++;
 
         //set the sprite up for drawing:
-        sprite.setCollisionSize(new Dimension(0,0));
+        sprite.setCollisionSize(new Dimension(-1,-1));
         gameMain.sprite[gameMain.numberOfSprites] = sprite;
         gameMain.numberOfSprites++;
 
@@ -51,7 +51,7 @@ public class Coin {
     public void collect(){
         //check for Mario Collision:
         opening();
-        if(Point.distance(sprite.posx+8,sprite.posy+8,gameMain.mario.x+12,gameMain.mario.y+12)<24){
+        if(Point.distance(sprite.posx+8,sprite.posy+8,gameMain.mario.x+12,gameMain.mario.y+12)<16){
             opening = true;
         }
     }
@@ -64,7 +64,9 @@ public class Coin {
                     gameMain.collectedCoins ++;
                 }
                 sprite.posy --;
-                sprite.posy = -80;
+                if (starty-sprite.posy>16){
+                    sprite.posy = -80;
+                }
             }
         
     }
