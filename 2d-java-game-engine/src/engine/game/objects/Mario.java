@@ -20,7 +20,7 @@ public class Mario{
     // jump()
         public boolean canJump = true;
         public boolean Jumping = false;
-        int maxJumpHeight = 60;
+        int maxJumpHeight = 80;
         int startJumpHeight;
         int jumpHeight = 0;
         public static int x;
