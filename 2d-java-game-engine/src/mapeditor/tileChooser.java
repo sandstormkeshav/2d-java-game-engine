@@ -36,7 +36,7 @@ public class tileChooser extends JPanel implements Runnable {
     public void run(){
         while(true){
             repaint();
-            image = MapEditorView.tiles;
+            image = MapEditor.tiles;
             try{
                 main.sleep(20L);
             }

@@ -11,23 +11,13 @@
 
 package mapeditor;
 
-import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
-import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
-import org.jdesktop.application.TaskMonitor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;
-import javax.swing.Icon;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import java.awt.*;
 import java.io.*;
-import javax.swing.JOptionPane;
 import engine.game.*;
 import javax.imageio.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -55,10 +45,18 @@ public class Toolbox extends javax.swing.JFrame {
         ImportButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        prefHeightButton = new javax.swing.JButton();
-        prefHeightLabel = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jSpinner3 = new javax.swing.JSpinner();
+        jSpinner3.addChangeListener(cameraSpinnerListener);
+        jLabel6 = new javax.swing.JLabel();
+        jSpinner4 = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jSpinner1.addChangeListener(mapSizeSpinnerListener);
+        jSpinner2 = new javax.swing.JSpinner();
+        jSpinner2.addChangeListener(mapSizeSpinnerListener);
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         bg0TextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -71,7 +69,7 @@ public class Toolbox extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Toolbox");
+        setTitle("Tools");
         setAlwaysOnTop(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -91,11 +89,11 @@ public class Toolbox extends javax.swing.JFrame {
         TilesetPanel.setLayout(TilesetPanelLayout);
         TilesetPanelLayout.setHorizontalGroup(
             TilesetPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 289, Short.MAX_VALUE)
+            .add(0, 273, Short.MAX_VALUE)
         );
         TilesetPanelLayout.setVerticalGroup(
             TilesetPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 194, Short.MAX_VALUE)
+            .add(0, 62, Short.MAX_VALUE)
         );
 
         ImportButton.setText("Import");
@@ -110,19 +108,19 @@ public class Toolbox extends javax.swing.JFrame {
         TileTabPanel.setLayout(TileTabPanelLayout);
         TileTabPanelLayout.setHorizontalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, TileTabPanelLayout.createSequentialGroup()
-                .add(83, 83, 83)
-                .add(ImportButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                .add(92, 92, 92))
+            .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+            .add(TileTabPanelLayout.createSequentialGroup()
+                .add(81, 81, 81)
+                .add(ImportButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 106, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         TileTabPanelLayout.setVerticalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, TileTabPanelLayout.createSequentialGroup()
-                .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                .add(18, 18, 18)
+            .add(TileTabPanelLayout.createSequentialGroup()
+                .add(TilesetPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(ImportButton)
-                .addContainerGap())
+                .addContainerGap(155, Short.MAX_VALUE))
         );
 
         ToolboxTab.addTab("Tiles", TileTabPanel);
@@ -132,72 +130,115 @@ public class Toolbox extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Camera"));
         jPanel3.setName("jPanel3"); // NOI18N
 
-        prefHeightButton.setText("Preferred Height");
-        prefHeightButton.setName("prefHeightButton"); // NOI18N
+        jSpinner3.setName("jSpinner3"); // NOI18N
 
-        prefHeightLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        prefHeightLabel.setText("no Preferred Height set");
-        prefHeightLabel.setName("prefHeightLabel"); // NOI18N
+        jLabel6.setText("Preferred Height");
+        jLabel6.setName("jLabel6"); // NOI18N
+
+        jSpinner4.setName("jSpinner4"); // NOI18N
+        jSpinner4.addChangeListener(cameraSpinnerListener);
+
+        jLabel7.setText("Tolerance");
+        jLabel7.setName("jLabel7"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel3Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(prefHeightLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                    .add(prefHeightButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
+                    .add(jLabel6)
+                    .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinner4)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinner3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(prefHeightButton)
-                .add(11, 11, 11)
-                .add(prefHeightLabel)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                    .add(jLabel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jSpinner3))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinner4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        jButton4.setText("Mario Spawn Point");
-        jButton4.setName("jButton4"); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Map Size"));
+        jPanel4.setToolTipText("");
+        jPanel4.setName("jPanel4"); // NOI18N
 
-        jButton1.setText("Change Map Size");
-        jButton1.setName("jButton1"); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        jSpinner1.setName("jSpinner1"); // NOI18N
+        jSpinner1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jSpinner1PropertyChange(evt);
             }
         });
+
+        jSpinner2.setName("jSpinner2"); // NOI18N
+        jSpinner2.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jSpinner2PropertyChange(evt);
+            }
+        });
+
+        jLabel4.setText("X");
+        jLabel4.setName("jLabel4"); // NOI18N
+
+        jLabel5.setText("Y");
+        jLabel5.setName("jLabel5"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 13, Short.MAX_VALUE)
+                .add(jLabel5)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jSpinner2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinner1)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                    .add(jSpinner2))
+                .addContainerGap())
+        );
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .add(55, 55, 55)
-                        .add(jButton4))
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jButton1)))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(11, 11, 11)
-                .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(18, 18, 18)
-                .add(jButton4)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 47, Short.MAX_VALUE)
-                .add(jButton1)
-                .addContainerGap())
+                .addContainerGap()
+                .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 105, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         ToolboxTab.addTab("Properties", jPanel1);
@@ -260,7 +301,7 @@ public class Toolbox extends javax.swing.JFrame {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(browseButtonFG))
                     .add(jLabel3))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -283,7 +324,7 @@ public class Toolbox extends javax.swing.JFrame {
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(fgTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(browseButtonFG))
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         ToolboxTab.addTab("Background", jPanel2);
@@ -299,9 +340,9 @@ public class Toolbox extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(ToolboxTab)
+                .add(ToolboxTab, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -314,18 +355,18 @@ public class Toolbox extends javax.swing.JFrame {
         
         int value = jFileChooser1.showOpenDialog(null);
         File tilefile = jFileChooser1.getSelectedFile();
-        MapEditorView.tilepath = tilefile.getPath();
-        MapEditorView.tiles = Toolkit.getDefaultToolkit().getImage(tilefile.getAbsolutePath());
-        ImageIcon tileicon = new ImageIcon(MapEditorView.tiles);
-        tileChooser.image = MapEditorView.tiles;
-        Map.img = MapEditorView.tiles;
-        while(MapEditorView.tiles.getWidth(ImportButton) == -1){} //wait till image is loaded
-        TilesetPanel.setPreferredSize(new Dimension(MapEditorView.tiles.getWidth(ImportButton), MapEditorView.tiles.getHeight(ImportButton)));
+        MapEditor.tilepath = tilefile.getPath();
+        MapEditor.tiles = Toolkit.getDefaultToolkit().getImage(tilefile.getAbsolutePath());
+        ImageIcon tileicon = new ImageIcon(MapEditor.tiles);
+        tileChooser.image = MapEditor.tiles;
+        Map.img = MapEditor.tiles;
+        while(MapEditor.tiles.getWidth(ImportButton) == -1){} //wait till image is loaded
+        TilesetPanel.setPreferredSize(new Dimension(MapEditor.tiles.getWidth(ImportButton), MapEditor.tiles.getHeight(ImportButton)));
 
     }//GEN-LAST:event_ImportButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        MapEditorView.toolsCheckBox.setState(false);
+        MapEditor.toolsCheckBox.setState(false);
     }//GEN-LAST:event_formWindowClosing
 
     private void browseButtonBG0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonBG0ActionPerformed
@@ -355,13 +396,51 @@ public class Toolbox extends javax.swing.JFrame {
 
     }//GEN-LAST:event_browseButtonBG1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        MapEditorView.jFrame1.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jSpinner1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSpinner1PropertyChange
+        
+    }//GEN-LAST:event_jSpinner1PropertyChange
 
-    /**
-    * @param args the command line arguments
-    */
+    private void jSpinner2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSpinner2PropertyChange
+        
+    }//GEN-LAST:event_jSpinner2PropertyChange
+
+    ChangeListener mapSizeSpinnerListener = new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+        
+            if(Integer.parseInt(jSpinner1.getValue().toString()) < 0){
+                jSpinner1.setValue(0);
+            }
+            if(Integer.parseInt(jSpinner1.getValue().toString()) > 999){
+                jSpinner1.setValue(999);
+            }
+            if(Integer.parseInt(jSpinner2.getValue().toString()) < 0){
+                jSpinner2.setValue(0);
+            }
+            if(Integer.parseInt(jSpinner2.getValue().toString()) > 999){
+                jSpinner2.setValue(999);
+            }
+
+            Map.setMapSize(Integer.parseInt(jSpinner1.getValue().toString())*16,Integer.parseInt(jSpinner2.getValue().toString())*16);
+            MapEditor.mapEdit.setMaximumSize(new Dimension(Map.maxWidth + 7,Map.maxHeight + 50));
+        }
+    };
+
+    ChangeListener cameraSpinnerListener = new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+
+            if(Integer.parseInt(jSpinner3.getValue().toString()) < 0){
+                jSpinner3.setValue(0);
+            }
+            if(Integer.parseInt(jSpinner4.getValue().toString()) < 0){
+                jSpinner4.setValue(0);
+            }
+
+            MapEditor.cameraPrefHeight = Integer.parseInt(jSpinner3.getValue().toString());
+            MapEditor.cameraTolerance = Integer.parseInt(jSpinner4.getValue().toString());
+
+        }
+    };
+    
     public static void main(String args[]) {
 
     }
@@ -377,16 +456,21 @@ public class Toolbox extends javax.swing.JFrame {
     private javax.swing.JButton browseButtonBG1;
     private javax.swing.JButton browseButtonFG;
     public static javax.swing.JTextField fgTextField;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JButton prefHeightButton;
-    private javax.swing.JLabel prefHeightLabel;
+    private javax.swing.JPanel jPanel4;
+    public static javax.swing.JSpinner jSpinner1;
+    public static javax.swing.JSpinner jSpinner2;
+    private javax.swing.JSpinner jSpinner3;
+    private javax.swing.JSpinner jSpinner4;
     // End of variables declaration//GEN-END:variables
 
 }
