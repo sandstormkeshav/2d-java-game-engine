@@ -43,6 +43,7 @@ public class Toolbox extends javax.swing.JFrame {
         TileTabPanel = new javax.swing.JPanel();
         TilesetPanel = new tileChooser();
         ImportButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jSpinner3 = new javax.swing.JSpinner();
@@ -89,11 +90,11 @@ public class Toolbox extends javax.swing.JFrame {
         TilesetPanel.setLayout(TilesetPanelLayout);
         TilesetPanelLayout.setHorizontalGroup(
             TilesetPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 273, Short.MAX_VALUE)
+            .add(0, 289, Short.MAX_VALUE)
         );
         TilesetPanelLayout.setVerticalGroup(
             TilesetPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 62, Short.MAX_VALUE)
+            .add(0, 226, Short.MAX_VALUE)
         );
 
         ImportButton.setText("Import");
@@ -104,23 +105,35 @@ public class Toolbox extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Magic ...");
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout TileTabPanelLayout = new org.jdesktop.layout.GroupLayout(TileTabPanel);
         TileTabPanel.setLayout(TileTabPanelLayout);
         TileTabPanelLayout.setHorizontalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
             .add(TileTabPanelLayout.createSequentialGroup()
-                .add(81, 81, 81)
+                .addContainerGap()
                 .add(ImportButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 106, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 90, Short.MAX_VALUE)
+                .add(jButton1)
+                .addContainerGap())
+            .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
         );
         TileTabPanelLayout.setVerticalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(TileTabPanelLayout.createSequentialGroup()
-                .add(TilesetPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(ImportButton)
-                .addContainerGap(155, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, TileTabPanelLayout.createSequentialGroup()
+                .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(ImportButton)
+                    .add(jButton1))
+                .addContainerGap())
         );
 
         ToolboxTab.addTab("Tiles", TileTabPanel);
@@ -149,7 +162,7 @@ public class Toolbox extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel6)
-                    .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))
+                    .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinner4)
@@ -164,9 +177,9 @@ public class Toolbox extends javax.swing.JFrame {
                     .add(jSpinner3))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                    .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinner4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Map Size"));
@@ -202,7 +215,7 @@ public class Toolbox extends javax.swing.JFrame {
                 .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 13, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 80, Short.MAX_VALUE)
                 .add(jLabel5)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jSpinner2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -214,9 +227,9 @@ public class Toolbox extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinner1)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinner1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                    .add(jSpinner2))
+                    .add(jSpinner2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -235,10 +248,10 @@ public class Toolbox extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 105, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         ToolboxTab.addTab("Properties", jPanel1);
@@ -301,7 +314,7 @@ public class Toolbox extends javax.swing.JFrame {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(browseButtonFG))
                     .add(jLabel3))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -324,7 +337,7 @@ public class Toolbox extends javax.swing.JFrame {
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(fgTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(browseButtonFG))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
 
         ToolboxTab.addTab("Background", jPanel2);
@@ -404,6 +417,19 @@ public class Toolbox extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jSpinner2PropertyChange
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        for (int x=0;x<Map.maxWidth;x+=16){
+            for (int y=0;y<Map.maxHeight;y+=16){
+                Map.tile[x/16][y/16].magic(x/16,y/16);
+            }
+        }
+        for (int x=0;x<Map.maxWidth;x+=16){
+            for (int y=0;y<Map.maxHeight;y+=16){
+                Map.tile[x/16][y/16].magic(x/16,y/16);
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     ChangeListener mapSizeSpinnerListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
         
@@ -456,6 +482,7 @@ public class Toolbox extends javax.swing.JFrame {
     private javax.swing.JButton browseButtonBG1;
     private javax.swing.JButton browseButtonFG;
     public static javax.swing.JTextField fgTextField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
