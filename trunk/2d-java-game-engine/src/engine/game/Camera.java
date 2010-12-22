@@ -53,10 +53,10 @@ public class Camera{
         if( newPosition.y + center.y >= bounds.getMinY() && newPosition.y - center.y <= bounds.getMaxY()){
 
             // check distance from preferred height:
-            if(newPosition.y - tolerance > prefHeight){
+            if(newPosition.y - tolerance/2 > prefHeight){
                 position.y = newPosition.y - tolerance;
             }
-            if(newPosition.y + tolerance < prefHeight){
+            if(newPosition.y + tolerance/2 < prefHeight){
                 position.y = newPosition.y + tolerance;
             }
         }
