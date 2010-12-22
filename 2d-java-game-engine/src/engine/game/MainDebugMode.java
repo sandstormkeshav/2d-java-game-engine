@@ -39,10 +39,11 @@ public class MainDebugMode extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         OpenMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
+        resetMarioMenuItem = new javax.swing.JMenuItem();
+        resetLevelMenuItem = new javax.swing.JMenuItem();
+        spritePosCheckBox = new javax.swing.JCheckBoxMenuItem();
+        spriteNumCheckBox = new javax.swing.JCheckBoxMenuItem();
+        cameraCheckBox = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("2D Game Engine (Debug Mode)");
@@ -90,46 +91,54 @@ public class MainDebugMode extends javax.swing.JFrame {
         jMenu2.setText("Engine");
         jMenu2.setName("jMenu2"); // NOI18N
 
-        jMenuItem1.setText("Reset Mario");
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        resetMarioMenuItem.setText("Reset Mario");
+        resetMarioMenuItem.setName("resetMarioMenuItem"); // NOI18N
+        resetMarioMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                resetMarioMenuItemActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        jMenu2.add(resetMarioMenuItem);
 
-        jMenuItem2.setText("Reset Level");
-        jMenuItem2.setName("jMenuItem2"); // NOI18N
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        resetLevelMenuItem.setText("Reset Level");
+        resetLevelMenuItem.setName("resetLevelMenuItem"); // NOI18N
+        resetLevelMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                resetLevelMenuItemActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenu2.add(resetLevelMenuItem);
 
-        jCheckBoxMenuItem1.setText("Display sprite positions");
-        jCheckBoxMenuItem1.setName("SpritePosMenuCheck"); // NOI18N
-        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        spritePosCheckBox.setText("Display sprite positions");
+        spritePosCheckBox.setName("SpritePosMenuCheck"); // NOI18N
+        spritePosCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMenuItem1ActionPerformed(evt);
+                spritePosCheckBoxActionPerformed(evt);
             }
         });
-        jCheckBoxMenuItem1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        spritePosCheckBox.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jCheckBoxMenuItem1PropertyChange(evt);
+                spritePosCheckBoxPropertyChange(evt);
             }
         });
-        jMenu2.add(jCheckBoxMenuItem1);
+        jMenu2.add(spritePosCheckBox);
 
-        jCheckBoxMenuItem2.setText("Display sprite numbers");
-        jCheckBoxMenuItem2.setName("jCheckBoxMenuItem2"); // NOI18N
-        jCheckBoxMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        spriteNumCheckBox.setText("Display sprite numbers");
+        spriteNumCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMenuItem2ActionPerformed(evt);
+                spriteNumCheckBoxActionPerformed(evt);
             }
         });
-        jMenu2.add(jCheckBoxMenuItem2);
+        jMenu2.add(spriteNumCheckBox);
+
+        cameraCheckBox.setText("Display camera");
+        cameraCheckBox.setName("cameraCheckBox"); // NOI18N
+        cameraCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cameraCheckBoxActionPerformed(evt);
+            }
+        });
+        jMenu2.add(cameraCheckBox);
 
         jMenuBar1.add(jMenu2);
 
@@ -160,7 +169,12 @@ public class MainDebugMode extends javax.swing.JFrame {
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
             Level level = new Level(file.getPath());
-            level.load();
+            try{
+                level.load();
+            }
+            catch(Exception e){
+            }
+
             level.clean();
 
             gameMain.loadedLevel = level;
@@ -175,34 +189,42 @@ public class MainDebugMode extends javax.swing.JFrame {
 
     }//GEN-LAST:event_OpenMenuItemActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void resetMarioMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetMarioMenuItemActionPerformed
         gameMain.mario.sprite.setPosition(0, 5);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_resetMarioMenuItemActionPerformed
 
-    private void jCheckBoxMenuItem1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1PropertyChange
-    }//GEN-LAST:event_jCheckBoxMenuItem1PropertyChange
+    private void spritePosCheckBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_spritePosCheckBoxPropertyChange
+    }//GEN-LAST:event_spritePosCheckBoxPropertyChange
 
-    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
-        gameMain.showSpritePos = jCheckBoxMenuItem1.getState();
-    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+    private void spritePosCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spritePosCheckBoxActionPerformed
+        gameMain.showSpritePos = spritePosCheckBox.getState();
+    }//GEN-LAST:event_spritePosCheckBoxActionPerformed
 
-    private void jCheckBoxMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem2ActionPerformed
-        gameMain.showSpriteNum = jCheckBoxMenuItem2.getState();
-    }//GEN-LAST:event_jCheckBoxMenuItem2ActionPerformed
+    private void spriteNumCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spriteNumCheckBoxActionPerformed
+        gameMain.showSpriteNum = spriteNumCheckBox.getState();
+    }//GEN-LAST:event_spriteNumCheckBoxActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void resetLevelMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetLevelMenuItemActionPerformed
         // -- load .level file again:
         Level level = new Level(gameMain.loadedLevel.levelArchive);
-        level.load();
+        try{
+            level.load();
+        }
+        catch(Exception e){
+        }
         gameMain.loadedLevel = level;
 
         //create a new Mario:
         gameMain.mario = new Mario(new Point(5, 0));
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_resetLevelMenuItemActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         
     }//GEN-LAST:event_formWindowClosing
+
+    private void cameraCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cameraCheckBoxActionPerformed
+        gameMain.showCamera = cameraCheckBox.getState();
+    }//GEN-LAST:event_cameraCheckBoxActionPerformed
 
     /**
     * @param args the command line arguments
@@ -217,14 +239,15 @@ public class MainDebugMode extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem OpenMenuItem;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
+    public static javax.swing.JCheckBoxMenuItem cameraCheckBox;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenuItem resetLevelMenuItem;
+    private javax.swing.JMenuItem resetMarioMenuItem;
+    private javax.swing.JCheckBoxMenuItem spriteNumCheckBox;
+    private javax.swing.JCheckBoxMenuItem spritePosCheckBox;
     // End of variables declaration//GEN-END:variables
 
 }

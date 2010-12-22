@@ -27,6 +27,7 @@ public class gameMain extends JPanel implements Runnable {
     //Debug Options
     public static boolean showSpritePos = false;
     public static boolean showSpriteNum = false;
+    public static boolean showCamera = false;
 
     //Key Mapping
     public static boolean[] keyPressed = new boolean[99999];
@@ -105,7 +106,7 @@ public class gameMain extends JPanel implements Runnable {
         //load level:
         loadedLevel = new Level(fc.getSelectedFile().getPath());
         try{
-        loadedLevel.load();
+            loadedLevel.load();
         }
         catch(Exception e){
             System.out.println(e);
@@ -119,13 +120,6 @@ public class gameMain extends JPanel implements Runnable {
         //create a Mario:   (should be included in the tile/sprite loader, later)
         mario = new Mario(new Point(5, 0));
 
-        //set up the camera:
-        /*
-        camera = new Camera(new Point(width/2, height/2), new Rectangle(0, 0, test.mapWidth*16, (test.mapHeight)*16 - height + 4*16));
-        camera.setPrefHeight(test.mapHeight*10 + mario.sprite.size.height, 50);
-        camera.position.y = test.mapHeight*10 + 50;
-        camera.position.x = width/2;
-        */
         System.out.println();
 
     }
@@ -309,6 +303,18 @@ public class gameMain extends JPanel implements Runnable {
                     g2d.drawRect(/*X1*/tile[i].posx + ((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/tile[i].posy + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y, 1, 1);
                     g2d.setColor(Color.black);
                 }
+        }
+        if(showCamera == true){
+            g2d.setColor(Color.red);
+            g2d.drawLine(0, camera.prefHeight - camera.position.y + camera.center.y, loadedLevel.mapWidth * 16, camera.prefHeight - camera.position.y + camera.center.y);
+            g2d.setColor(new Color(1,0,0,0.33f));
+            g2d.fillRect(0, camera.prefHeight - camera.position.y + camera.tolerance, loadedLevel.mapWidth * 16, camera.tolerance);
+            g2d.setColor(new Color(0,1,0,0.33f));
+            g2d.fillRect(camera.center.x - camera.position.x + camera.center.x, camera.center.y - camera.position.y + camera.center.y, camera.bounds.width - 2*camera.center.x, camera.bounds.height);
+            g2d.setColor(Color.green);
+            g2d.drawLine(camera.center.x - camera.position.x + camera.center.x, 0, camera.center.x - camera.position.x + camera.center.x, 999);
+            g2d.drawLine(camera.bounds.width - camera.center.x - camera.position.x + camera.center.x , 0, camera.bounds.width - camera.center.x - camera.position.x + camera.center.x, 999);
+
         }
 
     }
