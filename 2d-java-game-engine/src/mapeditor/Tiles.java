@@ -18,7 +18,7 @@ public class Tiles {
 
     public Tiles(int a, int b){
         x = 16*(a-1);
-        y = 16*(b);
+        y = 16*(b-1);
     }
 
     public void setPart(int c, int r){

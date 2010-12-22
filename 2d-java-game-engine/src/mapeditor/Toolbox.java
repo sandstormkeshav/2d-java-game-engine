@@ -44,6 +44,9 @@ public class Toolbox extends javax.swing.JFrame {
         TilesetPanel = new tileChooser();
         ImportButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         camPrefHeightSpinner = new javax.swing.JSpinner();
@@ -94,7 +97,7 @@ public class Toolbox extends javax.swing.JFrame {
         );
         TilesetPanelLayout.setVerticalGroup(
             TilesetPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 198, Short.MAX_VALUE)
+            .add(0, 46, Short.MAX_VALUE)
         );
 
         ImportButton.setText("Import");
@@ -113,27 +116,60 @@ public class Toolbox extends javax.swing.JFrame {
             }
         });
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel5.setName("jPanel5"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 273, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 71, Short.MAX_VALUE)
+        );
+
+        jLabel8.setText("Tiles");
+        jLabel8.setName("jLabel8"); // NOI18N
+
+        jLabel9.setText("Objects");
+        jLabel9.setName("jLabel9"); // NOI18N
+
         org.jdesktop.layout.GroupLayout TileTabPanelLayout = new org.jdesktop.layout.GroupLayout(TileTabPanel);
         TileTabPanel.setLayout(TileTabPanelLayout);
         TileTabPanelLayout.setHorizontalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(TileTabPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(ImportButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 106, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 38, Short.MAX_VALUE)
-                .add(jButton1)
+                .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(TileTabPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(ImportButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 106, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 38, Short.MAX_VALUE)
+                        .add(jButton1))
+                    .add(jLabel8))
                 .addContainerGap())
             .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+            .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(TileTabPanelLayout.createSequentialGroup()
+                .add(jLabel9)
+                .addContainerGap())
         );
         TileTabPanelLayout.setVerticalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, TileTabPanelLayout.createSequentialGroup()
-                .add(TilesetPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+            .add(TileTabPanelLayout.createSequentialGroup()
+                .add(jLabel8)
+                .add(4, 4, 4)
+                .add(TilesetPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 48, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
                 .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(ImportButton)
                     .add(jButton1))
-                .addContainerGap())
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel9)
+                .add(4, 4, 4)
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         ToolboxTab.addTab("Tiles", TileTabPanel);
@@ -492,10 +528,13 @@ public class Toolbox extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     public static javax.swing.JSpinner mapHeightSpinner;
     public static javax.swing.JSpinner mapWidthSpinner;
     // End of variables declaration//GEN-END:variables

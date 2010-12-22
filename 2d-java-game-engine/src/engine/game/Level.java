@@ -137,6 +137,7 @@ public class Level {
                     //Load the map into editor:
                     try{
                         Map.tile[x][y].x = (((int)(readLine[y].charAt(x)))-48)*16;
+                        Map.tile[x][y].y = Map.tile[x][y].y + 16;
                     }
                     catch(Exception e){
                     }
