@@ -76,17 +76,17 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="ImportButton" min="-2" pref="106" max="-2" attributes="0"/>
-                      <EmptySpace pref="90" max="32767" attributes="0"/>
+                      <EmptySpace pref="38" max="32767" attributes="0"/>
                       <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
-                  <Component id="TilesetPanel" alignment="0" pref="291" max="32767" attributes="0"/>
+                  <Component id="TilesetPanel" alignment="0" pref="275" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="TilesetPanel" pref="228" max="32767" attributes="0"/>
+                      <Component id="TilesetPanel" pref="200" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="ImportButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -118,12 +118,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="289" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="273" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="226" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="198" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -183,7 +183,7 @@
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="67" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -206,12 +206,12 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel7" pref="166" max="32767" attributes="0"/>
+                              <Component id="jLabel7" pref="107" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jSpinner4" alignment="0" max="32767" attributes="1"/>
-                              <Component id="jSpinner3" alignment="0" pref="66" max="32767" attributes="1"/>
+                              <Component id="camToleranceSpinner" alignment="0" max="32767" attributes="1"/>
+                              <Component id="camPrefHeightSpinner" alignment="0" pref="66" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -222,25 +222,26 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Component id="jLabel6" alignment="1" max="32767" attributes="1"/>
-                              <Component id="jSpinner3" alignment="1" max="32767" attributes="1"/>
+                              <Component id="camPrefHeightSpinner" alignment="1" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jLabel7" pref="32" max="32767" attributes="1"/>
-                              <Component id="jSpinner4" alignment="0" min="-2" max="-2" attributes="1"/>
+                              <Component id="camToleranceSpinner" alignment="0" min="-2" max="-2" attributes="1"/>
                           </Group>
-                          <EmptySpace pref="18" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JSpinner" name="jSpinner3">
+                <Component class="javax.swing.JSpinner" name="camPrefHeightSpinner">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="jSpinner3" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="camPrefHeightSpinner" noResource="true"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="jSpinner3.addChangeListener(cameraSpinnerListener);"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="camPrefHeightSpinner.addChangeListener(cameraSpinnerListener);"/>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel6">
@@ -249,12 +250,13 @@
                     <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JSpinner" name="jSpinner4">
+                <Component class="javax.swing.JSpinner" name="camToleranceSpinner">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="jSpinner4" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="camToleranceSpinner" noResource="true"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jSpinner4.addChangeListener(cameraSpinnerListener);"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="camToleranceSpinner.addChangeListener(cameraSpinnerListener);"/>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel7">
@@ -283,11 +285,11 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel4" min="-2" pref="8" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jSpinner1" min="-2" pref="67" max="-2" attributes="0"/>
-                          <EmptySpace pref="80" max="32767" attributes="0"/>
+                          <Component id="mapWidthSpinner" min="-2" pref="67" max="-2" attributes="0"/>
+                          <EmptySpace pref="13" max="32767" attributes="0"/>
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jSpinner2" min="-2" pref="67" max="-2" attributes="0"/>
+                          <Component id="mapHeightSpinner" min="-2" pref="67" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -298,9 +300,9 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jLabel4" alignment="0" pref="28" max="32767" attributes="1"/>
-                              <Component id="jSpinner1" alignment="0" pref="28" max="32767" attributes="1"/>
+                              <Component id="mapWidthSpinner" alignment="0" pref="28" max="32767" attributes="1"/>
                               <Component id="jLabel5" alignment="0" pref="28" max="32767" attributes="1"/>
-                              <Component id="jSpinner2" alignment="1" pref="28" max="32767" attributes="1"/>
+                              <Component id="mapHeightSpinner" alignment="1" pref="28" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -308,27 +310,27 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JSpinner" name="jSpinner1">
+                <Component class="javax.swing.JSpinner" name="mapWidthSpinner">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="jSpinner1" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="mapWidthSpinner" noResource="true"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jSpinner1PropertyChange"/>
+                    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="mapWidthSpinnerPropertyChange"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="jSpinner1.addChangeListener(mapSizeSpinnerListener);"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="mapWidthSpinner.addChangeListener(mapSizeSpinnerListener);"/>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JSpinner" name="jSpinner2">
+                <Component class="javax.swing.JSpinner" name="mapHeightSpinner">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="jSpinner2" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="mapHeightSpinner" noResource="true"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jSpinner2PropertyChange"/>
+                    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="mapHeightSpinnerPropertyChange"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="jSpinner2.addChangeListener(mapSizeSpinnerListener);"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="mapHeightSpinner.addChangeListener(mapSizeSpinnerListener);"/>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
                   </AuxValues>
                 </Component>
@@ -385,7 +387,7 @@
                           </Group>
                           <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="67" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -413,7 +415,7 @@
                           <Component id="fgTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="browseButtonFG" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="109" max="32767" attributes="0"/>
+                      <EmptySpace pref="46" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

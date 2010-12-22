@@ -35,23 +35,36 @@ public class Camera{
     }
 
     public void setPosition(Point newPosition){
-        position = newPosition;
+
+        // check if inside of camera bounds:
+        if(newPosition.x - center.x >= bounds.getMinX() && newPosition.x + center.x <= bounds.getMaxX()){
+            position.x = newPosition.x;
+        }
+        else{
+            if(newPosition.x - center.x < bounds.getMinX()){
+                position.x = (int)bounds.getMinX() + center.x;
+            }
+            if(newPosition.x + center.x > bounds.getMaxX()){
+                position.x = (int)bounds.getMaxX() - center.x;
+            }
+        }
+
+        // check if inside of camera bounds:
+        if( newPosition.y + center.y >= bounds.getMinY() && newPosition.y - center.y <= bounds.getMaxY()){
+
+            // check distance from preferred height:
+            if(newPosition.y - tolerance > prefHeight){
+                position.y = newPosition.y - tolerance;
+            }
+            if(newPosition.y + tolerance < prefHeight){
+                position.y = newPosition.y + tolerance;
+            }
+        }
     }
 
     public void follow(Sprite sprite){
-        if(sprite.posx + sprite.size.width/2 - center.x >= bounds.getMinX() && sprite.posx + sprite.size.width/2 + center.x <= bounds.getMaxX()){
-            position.x = sprite.posx + sprite.size.width/2;
-        }
-        //First check if inside of camera bounds:
-        if(sprite.posy + sprite.size.height/2 + center.y >= bounds.getMinY() && sprite.posy + sprite.size.height/2 - center.y <= bounds.getMaxY()){
-            //check distance from preferred height:
-            if(sprite.posy + sprite.size.height/2 - tolerance > prefHeight){
-                position.y = sprite.posy + sprite.size.height/2 - tolerance;
-            }
-            if(sprite.posy + sprite.size.height/2 + tolerance < prefHeight){
-                position.y = sprite.posy + sprite.size.height/2 + tolerance;
-            }
-        }
+
+        setPosition(new Point(sprite.posx + sprite.size.width/2, sprite.posy + sprite.size.height/2));
 
     }
 
