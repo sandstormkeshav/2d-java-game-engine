@@ -76,7 +76,6 @@ public class gameMain extends JPanel implements Runnable {
 
     //Levels:
     public static Level loadedLevel = new Level("");
-    public static Level test = new Level("test.level");
 
     //Cameras
     public static Camera camera;
@@ -93,21 +92,26 @@ public class gameMain extends JPanel implements Runnable {
 
         //load images:
         try{
-            marioSpriteSheet = ImageIO.read(new File("mario.gif"));
+            marioSpriteSheet = ImageIO.read(new File("mario.png"));
             boxSpriteSheet = ImageIO.read(new File("itemContainer.png"));
-            coinSpriteSheet = ImageIO.read(new File("coin.PNG"));
+            coinSpriteSheet = ImageIO.read(new File("coin.png"));
         }
             catch(Exception e){
         }
 
+        JFileChooser fc = new JFileChooser();
+        fc.showOpenDialog(this);
+
         //load level:
-        test.levelArchive = "test.level";
-
-        while(test.load() != true){}
+        loadedLevel = new Level(fc.getSelectedFile().getPath());
+        try{
+        loadedLevel.load();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
         //clean up:
-        test.clean();
-
-        loadedLevel = test;
+        loadedLevel.clean();
 
         pCoin = new PopupCoin(new Point(-80,-80));
 
@@ -116,11 +120,12 @@ public class gameMain extends JPanel implements Runnable {
         mario = new Mario(new Point(5, 0));
 
         //set up the camera:
+        /*
         camera = new Camera(new Point(width/2, height/2), new Rectangle(0, 0, test.mapWidth*16, (test.mapHeight)*16 - height + 4*16));
         camera.setPrefHeight(test.mapHeight*10 + mario.sprite.size.height, 50);
         camera.position.y = test.mapHeight*10 + 50;
         camera.position.x = width/2;
-        
+        */
         System.out.println();
 
     }
@@ -158,7 +163,7 @@ public class gameMain extends JPanel implements Runnable {
             }
 
             //reset mario if fallen off from screen:
-            if(mario.sprite.posy > test.mapHeight*16 ){
+            if(mario.sprite.posy > loadedLevel.mapHeight*16 ){
                 camera.position = new Point(width/2, camera.prefHeight + camera.tolerance);
                 mario.sprite.setPosition(5, 0);
             }
@@ -276,12 +281,13 @@ public class gameMain extends JPanel implements Runnable {
         }
 
         //Draw "GUI":
-        g2d.drawImage(coinSpriteSheet,16,16,32,32,0,48,16,64,this);
+        g2d.drawImage(coinSpriteSheet,16,16,32,32,0,0,16,16,this);
         g2d.setColor(Color.BLACK);
         g2d.drawString("x "+collectedCoins, 32, 30);
         g2d.setColor(Color.WHITE);
         g2d.drawString("x "+collectedCoins, 32, 29);
         //Debug things:
+        
         for(int i = 0; i < numberOfSprites; i++){
                 if(showSpritePos == true){
                     g2d.setColor(Color.red);

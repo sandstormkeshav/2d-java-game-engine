@@ -10,6 +10,8 @@ import java.awt.*;
 import engine.game.objects.*;
 import java.util.zip.*;
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.*;
 import mapeditor.*;
 
@@ -70,7 +72,7 @@ public class Level {
         return new File(destDir, internalPathToEntry);
     }
 
-    public boolean load(){
+    public boolean load() throws Exception{
 
         //clean up old loads:
         clean();
@@ -89,7 +91,7 @@ public class Level {
             extractArchive(new File(levelArchive), new File("."));
         }
         catch(Exception e){
-
+            throw e;
         }
 
         try{
@@ -98,10 +100,10 @@ public class Level {
             gameMain.background_layer1 = ImageIO.read(new File("bg1.png"));
         }
         catch(Exception e){
-            System.out.println("ERROR loading images: " + e);
+            throw new Exception("ERROR loading images: " + e);
         }
 
-        // -- Read the Text-file:
+        // -- Read the level file
         String[] readLine = new String[99999];
         int a = 0;
 
@@ -118,11 +120,10 @@ public class Level {
             in.close();
         }
         catch(Exception e){
-            System.out.println("ERROR reading level: " + e);
+            throw new Exception("ERROR reading level: " + e);
         }
-
-        //Text file is now present in Arrays of Strings:
-        //Line length represents the screen width * 16
+        //Level file is now present in Arrays of Strings:
+        //Line length represents the map width / 16
 
         for(int y = 0; y < a; y++){
             mapHeight++;
@@ -133,14 +134,13 @@ public class Level {
                 mapWidth ++;
                 if(readLine[y].charAt(x) != ' '){
 
-                    //Load the Map into Mapeditor:
-                    
+                    //Load the map into editor:
                     try{
                         Map.tile[x][y].x = (((int)(readLine[y].charAt(x)))-48)*16;
                     }
                     catch(Exception e){
-                        
                     }
+                    //Load the map into the engine/game
                     if(((int)(readLine[y].charAt(x))) == 57){
                         gameMain.box[gameMain.numberOfBoxes] = new ItemContainer(new Point(x*16, y*16));
                     }else{
@@ -154,21 +154,90 @@ public class Level {
                 }
             }
         }
+
+        // -- Read the properties file
+            String properties = "";
+
+            try {
+                BufferedReader in = new BufferedReader(new FileReader("properties"));
+                String str;
+                while ((str = in.readLine()) != null) {
+                    properties += str + "\n";
+                }
+                in.close();
+            }
+            catch(Exception e){
+                throw new Exception("ERROR reading poperties: " + e);
+            }
+
+            //Initialize camera
+            gameMain.camera = new Camera(new Point(gameMain.width/2, gameMain.height/2), new Rectangle(0, 0, mapWidth*16, (mapHeight)*16 - gameMain.height));
+
+            //create regex pattern/matcher to parse the string:
+            Pattern cameraTolerancePattern = Pattern.compile("cameraTolerance ?= ?[0-9]+");
+            Pattern cameraPrefHeightPattern = Pattern.compile("cameraPrefHeight ?= ?[0-9]+");
+            Pattern number = Pattern.compile("[0-9]+");
+
+            Matcher cameraToleranceMatcher = cameraTolerancePattern.matcher(properties);
+            Matcher cameraPrefHeightMatcher = cameraPrefHeightPattern.matcher(properties);
+
+            String found = "";
+
+            //set camera tolerance
+            if(cameraToleranceMatcher.find()){
+                found = properties.substring(cameraToleranceMatcher.start(), cameraToleranceMatcher.end());
+                Matcher numberMatcher = number.matcher(found);
+                if(numberMatcher.find()){
+                    try{
+                        Toolbox.camToleranceSpinner.setValue(Integer.parseInt(numberMatcher.group(0)));
+                    }
+                    catch(Exception e){
+                    }
+                    try{
+                        gameMain.camera.tolerance = Integer.parseInt(numberMatcher.group(0));
+                    }
+                    catch(Exception e){
+                    }                   
+                }
+            }
+            else{
+                throw new Exception("ERROR camera tolerance not found");
+            }
+
+            //set camera preferred height
+            if(cameraPrefHeightMatcher.find()){
+                found = properties.substring(cameraPrefHeightMatcher.start(), cameraPrefHeightMatcher.end());
+                Matcher numberMatcher = number.matcher(found);
+                if(numberMatcher.find()){
+                    try{
+                        gameMain.camera.prefHeight = Integer.parseInt(numberMatcher.group(0));
+                    }
+                    catch(Exception e){
+                    }   
+                    try{
+                        Toolbox.camPrefHeightSpinner.setValue(Integer.parseInt(numberMatcher.group(0)));
+                    }
+                    catch(Exception e){
+                    }
+                }
+            }
+            else{
+                throw new Exception("ERROR cameraPrefHeight not found");
+            }
+
+        //Set editor window properties
         try{
             Map.maxWidth = mapWidth*16;
             Map.maxHeight = mapHeight*16;
             MapEditor.MapScrollPane.setPreferredSize(new Dimension(Map.maxWidth,Map.maxHeight));
-            Toolbox.jSpinner1.setValue(mapWidth);
-            Toolbox.jSpinner2.setValue(mapHeight);
+            Toolbox.mapWidthSpinner.setValue(mapWidth);
+            Toolbox.mapHeightSpinner.setValue(mapHeight);
             MapEditor.mapEdit.setSize(MapEditor.maxSize);
-
         }
         catch(Exception e){
-            System.out.println("ERROR resizing Editor-map: "+e);
+            throw new Exception("ERROR setting-up the editor: "+e);
         }
-
         
-
     return true;
 
     }
@@ -178,5 +247,6 @@ public class Level {
         new File("bg1.png").delete();
         new File("tilesheet.png").delete();
         new File("level").delete();
+        new File("properties").delete();
     }
 }

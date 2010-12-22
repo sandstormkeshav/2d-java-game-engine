@@ -385,6 +385,26 @@ public class MapEditor extends JFrame {
                     System.out.println("ERROR saving level file: " + e);
                 }
 
+                //create properties file
+
+                File propertiesFile = new File("properties");
+                if(propertiesFile.exists()){
+                    System.out.println("properties file already exists");
+                }
+                str="";
+                try{
+                    FileWriter fw = new FileWriter(propertiesFile);
+
+                    str += "cameraPrefHeight =" + cameraPrefHeight + "\n";
+                    str += "cameraTolerance =" + cameraTolerance + "\n";
+                    str += "\n";
+
+                    fw.write(str);
+                    fw.close();
+                } catch(Exception e){
+                    System.out.println("ERROR saving properties file: " + e);
+                }
+
                 // Copy files to cache
                 try{
 
@@ -402,6 +422,7 @@ public class MapEditor extends JFrame {
                     "tilesheet.png",
                     "bg0.png",
                     "bg1.png",
+                    "properties"
                 };
 
                 // Create a buffer for reading the files
@@ -451,8 +472,13 @@ public class MapEditor extends JFrame {
         if (value == fc.APPROVE_OPTION){
             File file = fc.getSelectedFile();
 
-            new Level(file.getPath()).load();
-
+            try{
+                new Level(file.getPath()).load();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+            
             //load images into editor:
             Toolbox.bg1TextField.setText(new File("bg1.png").getPath());
             Toolbox.bg0TextField.setText(new File("bg0.png").getPath());
@@ -473,8 +499,8 @@ public class MapEditor extends JFrame {
 }//GEN-LAST:event_toolsCheckBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Toolbox.jSpinner1.setValue(jSpinner1.getValue());
-        Toolbox.jSpinner2.setValue(jSpinner1.getValue());
+        Toolbox.mapWidthSpinner.setValue(jSpinner1.getValue());
+        Toolbox.mapHeightSpinner.setValue(jSpinner1.getValue());
 
         Map.setMapSize(Integer.parseInt(jSpinner1.getValue().toString())*16,Integer.parseInt(jSpinner2.getValue().toString())*16);
         createNewMapFrame.dispose();
