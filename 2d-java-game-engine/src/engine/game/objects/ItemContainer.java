@@ -37,15 +37,19 @@ public class ItemContainer {
     public ItemContainer(Point position){
         startx = sprite.posx = position.x;
         starty = sprite.posy = position.y;
-        gameMain.numberOfBoxes++;
-
-        //set the sprite up for drawing:
-        gameMain.sprite[gameMain.numberOfSprites] = sprite;
-        gameMain.numberOfSprites++;
 
         //set the animation and play it;
         sprite.animation = full;
         sprite.animation.play();
+    }
+
+    public static void newItemContainer(Point p){
+
+        gameMain.box[gameMain.numberOfBoxes] = new ItemContainer(p);
+        gameMain.sprite[gameMain.numberOfSprites] = gameMain.box[gameMain.numberOfBoxes].sprite;
+        gameMain.numberOfSprites++;
+        gameMain.numberOfBoxes++;
+
     }
 
     public void open(){

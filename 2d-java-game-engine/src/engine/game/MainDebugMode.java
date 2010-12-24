@@ -183,14 +183,16 @@ public class MainDebugMode extends javax.swing.JFrame {
             System.out.println("Open command cancelled by user." + "\n");
         }
 
-        //create a new Mario:
-        gameMain.mario = new Mario(new Point(5, 0));
+        gameMain.camera.forceSetPosition(gameMain.mario.spawn);
+
         gameMain.pCoin = new PopupCoin(new Point(-80,-80));
 
     }//GEN-LAST:event_OpenMenuItemActionPerformed
 
     private void resetMarioMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetMarioMenuItemActionPerformed
-        gameMain.mario.sprite.setPosition(0, 5);
+        gameMain.mario.sprite.setPosition(gameMain.mario.spawn);
+        System.out.println("resetting mario to spawn point: " + gameMain.mario.spawn.x + ", " + gameMain.mario.spawn.y);
+        gameMain.camera.forceSetPosition(gameMain.mario.spawn);
     }//GEN-LAST:event_resetMarioMenuItemActionPerformed
 
     private void spritePosCheckBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_spritePosCheckBoxPropertyChange
@@ -214,8 +216,7 @@ public class MainDebugMode extends javax.swing.JFrame {
         }
         gameMain.loadedLevel = level;
 
-        //create a new Mario:
-        gameMain.mario = new Mario(new Point(5, 0));
+        gameMain.camera.forceSetPosition(gameMain.mario.spawn);
     }//GEN-LAST:event_resetLevelMenuItemActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

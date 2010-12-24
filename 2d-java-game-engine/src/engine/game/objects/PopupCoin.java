@@ -42,6 +42,10 @@ public class PopupCoin {
         sprite.animation.play();
     }
 
+    public static void newPopupCoin(Point p){
+        gameMain.pCoin = new PopupCoin(p);
+    }
+
     public void set(int x, int y){
         startx = sprite.posx = x;
         starty = sprite.posy = y;

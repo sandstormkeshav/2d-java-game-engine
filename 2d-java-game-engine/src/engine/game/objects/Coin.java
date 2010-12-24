@@ -34,18 +34,22 @@ public class Coin {
     public Animation none = new Animation(sprite, 0, 0, 0, true);
 
     public Coin(Point position){
-        startx = sprite.posx = position.x;
-        starty = sprite.posy = position.y;
-        gameMain.numberOfCoins ++;
-
-        //set the sprite up for drawing:
+        //set the collision properties:
         sprite.setCollisionSize(new Dimension(-1,-1));
-        gameMain.sprite[gameMain.numberOfSprites] = sprite;
-        gameMain.numberOfSprites++;
 
         //set the animation and play it;
         sprite.animation = spinning;
         sprite.animation.play();
+
+        startx = sprite.posx = position.x;
+        starty = sprite.posy = position.y;
+    }
+
+    public static void newCoin(Point p){
+        gameMain.coin[gameMain.numberOfCoins] = new Coin(p);
+        gameMain.sprite[gameMain.numberOfSprites] = gameMain.coin[gameMain.numberOfCoins].sprite;
+        gameMain.numberOfSprites++;
+        gameMain.numberOfCoins ++;
     }
 
     public void collect(){

@@ -1,3 +1,0 @@
-mario 100
-coin 57
-itemContainer 56

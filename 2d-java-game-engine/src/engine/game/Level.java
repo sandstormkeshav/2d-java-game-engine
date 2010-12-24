@@ -8,8 +8,12 @@ package engine.game;
 import java.io.*;
 import java.awt.*;
 import engine.game.objects.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.zip.*;
 import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.*;
@@ -103,7 +107,52 @@ public class Level {
             throw new Exception("ERROR loading images: " + e);
         }
 
-        // -- Read the level file
+        // -- read the object database
+        String objectsDB = "";
+        try {
+            BufferedReader in = new BufferedReader(new FileReader("objects"));
+            String str;
+            while ((str = in.readLine()) != null) {
+                objectsDB += str;
+            }
+            in.close();
+        }
+        catch (Exception e) {
+            throw new Exception("ERROR reading objects db: " + e);
+        }
+
+        String[] tempList = new String[99999];
+        int numberOfEntries = 0;
+
+        // search objects db for objects and write them to list:
+        Pattern objectNamePattern = Pattern.compile("[a-zA-Z]+");
+        Matcher objectNameMatcher = objectNamePattern.matcher(objectsDB);
+
+        while(objectNameMatcher.find()){
+            tempList[numberOfEntries] = objectNameMatcher.group();
+            numberOfEntries++;
+        }
+        String[] objectList = new String[numberOfEntries];
+        for(int i = 0; i < numberOfEntries; i++){
+            objectList[i] = tempList[i];
+        }
+        
+        // Get list of objects
+        
+        // create regex pattern to read the db
+        Pattern[] objectPattern = new Pattern[objectList.length];
+        Matcher[] objectMatcher = new Matcher[objectList.length];
+        int[] objectNumber = new int[objectList.length];
+
+        for(int i = 0; i < objectList.length; i++){
+            objectPattern[i] = Pattern.compile(objectList[i] + " ?= ?[0-9]+");
+            objectMatcher[i] = objectPattern[i].matcher(objectsDB);
+            if(objectMatcher[i].find()){
+                objectNumber[i] = Integer.parseInt(objectMatcher[i].group(0).replaceAll(objectList[i] + " ?= ?", ""));
+            }
+        }
+
+        // -- read the level file
         String[] readLine = new String[99999];
         int a = 0;
 
@@ -142,15 +191,19 @@ public class Level {
                     catch(Exception e){
                     }
                     //Load the map into the engine/game
-                    if(((int)(readLine[y].charAt(x))) == 57){
-                        gameMain.box[gameMain.numberOfBoxes] = new ItemContainer(new Point(x*16, y*16));
-                    }else{
-                        if(((int)(readLine[y].charAt(x))) == 58){
-                            gameMain.coin[gameMain.numberOfCoins] = new Coin(new Point(x*16, y*16));
-                        }else{
-                            gameMain.tileObject[gameMain.numberOfTiles] = new WorldTile(Integer.parseInt(readLine[y].charAt(x) + ""));
-                            gameMain.tileObject[gameMain.numberOfTiles-1].sprite.setPosition(x*16, y*16);
+                    for(int i = 0; i < objectList.length; i++){
+                        if(readLine[y].charAt(x) == (char)objectNumber[i]){
+                            try{
+                                invoke("engine.game.objects." + objectList[i], "new"+objectList[i], new Class[] { Point.class }, new Object[] { new Point (x*16, y*16) });
+                            }
+                            catch(Exception e){
+                                System.out.println("ERROR trying to invoke method: " + e);
+                            }
                         }
+                    }
+                    if(((int)(readLine[y].charAt(x))) < 57){
+                        gameMain.tileObject[gameMain.numberOfTiles] = new WorldTile(Integer.parseInt(readLine[y].charAt(x) + ""));
+                        gameMain.tileObject[gameMain.numberOfTiles-1].sprite.setPosition(x*16, y*16);
                     }
                 }
             }
@@ -243,6 +296,14 @@ public class Level {
 
     }
 
+    public static void invoke(String aClass, String aMethod, Class[] params, Object[] args) throws Exception {
+        Class c = Class.forName(aClass);
+        Constructor constructor = c.getConstructor(params);
+        Method m = c.getDeclaredMethod(aMethod, params);
+        Object i = constructor.newInstance(args);
+        Object r = m.invoke(i, args);
+    }
+
     public void clean(){
         new File("bg0.png").delete();
         new File("bg1.png").delete();
@@ -250,4 +311,42 @@ public class Level {
         new File("level").delete();
         new File("properties").delete();
     }
+
+    public static String[] getObjects(){
+        String[] classes = new String[9999];
+        String jarName = new String();
+        String[] ret = new String[0];
+        try{
+            jarName = new File(Level.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getName();
+        }
+        catch(Exception e){
+        }
+        int numberOfClasses = 0;
+
+        String packageName = "engine/game/objects/";
+            try{
+                JarInputStream jarFile = new JarInputStream(new FileInputStream (jarName));
+                JarEntry jarEntry;
+
+                while(true) {
+                    jarEntry=jarFile.getNextJarEntry ();
+                    if(jarEntry == null){
+                        break;
+                    }
+                    if((jarEntry.getName().startsWith (packageName)) && (jarEntry.getName ().endsWith (".class")) && !(jarEntry.getName().replaceAll(packageName, "").replaceAll(".class", "").equals("WorldTile"))) {
+                        classes[numberOfClasses] = jarEntry.getName().replaceAll(packageName, "").replaceAll(".class", "");
+                        numberOfClasses++;
+                    }
+                }
+                ret = new String[numberOfClasses];
+                for(int i = 0; i < numberOfClasses; i++){
+                    ret[i] = classes[i];
+                }
+            }
+            catch( Exception e){
+                e.printStackTrace ();
+            }
+       return ret;
+    }
+
 }
