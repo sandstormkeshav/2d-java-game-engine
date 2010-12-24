@@ -30,6 +30,9 @@ public class WorldTile extends Applet {
         gameMain.numberOfTiles++;
     }
 
+    public static void newWorldTile(Point p){
+    }
+
      public WorldTile(int a, int x, int y){
         //apply animation:
         for(int i = 0; i < 8; i++){

@@ -34,6 +34,10 @@ public class Camera{
         center = newCenter;
     }
 
+    public void forceSetPosition(Point newPosition){
+        position = newPosition;
+    }
+
     public void setPosition(Point newPosition){
 
         // check if inside of camera bounds:

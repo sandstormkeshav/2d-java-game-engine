@@ -114,11 +114,10 @@ public class gameMain extends JPanel implements Runnable {
         //clean up:
         loadedLevel.clean();
 
-        pCoin = new PopupCoin(new Point(-80,-80));
+        //additional game-specific loading options:
+        camera.forceSetPosition(mario.spawn);
 
-        // -- create objects:
-        //create a Mario:   (should be included in the tile/sprite loader, later)
-        mario = new Mario(new Point(5, 0));
+        pCoin = new PopupCoin(new Point(-80,-80));
 
         System.out.println();
 

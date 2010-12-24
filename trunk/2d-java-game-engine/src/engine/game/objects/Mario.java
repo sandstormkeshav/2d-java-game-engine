@@ -18,18 +18,20 @@ public class Mario{
     // -- Variables for "Abilites":
     
     // jump()
-        public boolean canJump = true;
-        public boolean Jumping = false;
-        int maxJumpHeight = 80;
-        int startJumpHeight;
-        int jumpHeight = 0;
-        public static int x;
-        public static int y;
+    public boolean canJump = true;
+    public boolean Jumping = false;
+    int maxJumpHeight = 80;
+    int startJumpHeight;
+    int jumpHeight = 0;
+    public static int x;
+    public static int y;
 
-        public static int mariosprite;
+    public static int mariosprite;
+
+    public Point spawn = new Point(0,0);
 
     //Spritesheet Image for Sprite creation:
-Image marioSpritesheet = gameMain.marioSpriteSheet;
+    Image marioSpritesheet = gameMain.marioSpriteSheet;
 
     //Actual Sprite for Mario:
     public Sprite sprite = new Sprite(marioSpritesheet, new Dimension(24,24));;
@@ -55,14 +57,12 @@ Image marioSpritesheet = gameMain.marioSpriteSheet;
             });
 
     public Mario(Point position){
-        //set position of sprite:
-        x=sprite.posx = position.x;
-        y=sprite.posy = position.y;
+        //set spawn point
+        spawn = position;
 
-        //set the sprite up for drawing:
-        gameMain.sprite[gameMain.numberOfSprites] = sprite;
-        mariosprite = gameMain.numberOfSprites;
-        gameMain.numberOfSprites++;
+        //set position of sprite:
+        x = sprite.posx = position.x;
+        y = sprite.posy = position.y;
 
         //Sprite Properties:
         sprite.setCollisionSize(new Dimension(8,24));
@@ -72,6 +72,15 @@ Image marioSpritesheet = gameMain.marioSpriteSheet;
 
         //play animation:
         sprite.animation.play();
+    }
+
+    public static void newMario(Point p){
+        gameMain.mario = new Mario(p);
+        gameMain.sprite[gameMain.numberOfSprites] = gameMain.mario.sprite;
+        gameMain.mario.mariosprite = gameMain.numberOfSprites;
+        gameMain.numberOfSprites++;
+
+        System.out.println("new Mario created at point " + p.x + ", " + p.y);
     }
 
     public void duck(){

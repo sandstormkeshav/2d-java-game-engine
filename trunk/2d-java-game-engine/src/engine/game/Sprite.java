@@ -35,6 +35,11 @@ public class Sprite{
         posy = y;
     }
 
+    public void setPosition(Point p){
+        posx = p.x;
+        posy = p.y;
+    }
+
     public boolean collision(Sprite sprite2){
         Rectangle collisionBoundsSprite1 = new Rectangle(new Point(this.posx + this.size.width/2 - this.collisionSize.width/2, this.posy + this.size.height/2 - this.collisionSize.height/2), new Dimension(this.collisionSize.width+1, this.collisionSize.height+1));
         Rectangle collisionBoundsSprite2 = new Rectangle(new Point(sprite2.posx, sprite2.posy), new Dimension(sprite2.collisionSize.width+1, sprite2.collisionSize.height+1));
