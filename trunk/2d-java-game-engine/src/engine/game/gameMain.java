@@ -16,6 +16,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 
 /**
@@ -28,6 +30,8 @@ public class gameMain extends JPanel implements Runnable {
     public static boolean showSpritePos = false;
     public static boolean showSpriteNum = false;
     public static boolean showCamera = false;
+
+    //
 
     //Key Mapping
     public static boolean[] keyPressed = new boolean[99999];
@@ -93,31 +97,14 @@ public class gameMain extends JPanel implements Runnable {
 
         //load images:
         try{
-            marioSpriteSheet = ImageIO.read(new File("mario.png"));
-            boxSpriteSheet = ImageIO.read(new File("itemContainer.png"));
-            coinSpriteSheet = ImageIO.read(new File("coin.png"));
+            marioSpriteSheet = ImageIO.read(new File("Mario.png"));
+            boxSpriteSheet = ImageIO.read(new File("ItemContainer.png"));
+            coinSpriteSheet = ImageIO.read(new File("Coin.png"));
         }
             catch(Exception e){
         }
 
-        JFileChooser fc = new JFileChooser();
-        fc.showOpenDialog(this);
-
-        //load level:
-        loadedLevel = new Level(fc.getSelectedFile().getPath());
-        try{
-            loadedLevel.load();
-        }
-        catch(Exception e){
-            System.out.println(e);
-        }
-        //clean up:
-        loadedLevel.clean();
-
-        //additional game-specific loading options:
-        camera.forceSetPosition(mario.spawn);
-
-        pCoin = new PopupCoin(new Point(-80,-80));
+        loadLevel();
 
         System.out.println();
 
@@ -132,40 +119,44 @@ public class gameMain extends JPanel implements Runnable {
         //start main loop:
         while(true){
 
-            camera.follow(mario.sprite);
+            if(){
 
-            //actions for objects:
-            mario.keyActions();
-            pCoin.fly();
+                camera.follow(mario.sprite);
 
-            for(int i = 0; i < numberOfBoxes; i++){
+                //actions for objects:
+                mario.keyActions();
+                pCoin.fly();
+
+                for(int i = 0; i < numberOfBoxes; i++){
+                    try{
+                        box[i].open();
+                    }
+                    catch(Exception e){
+                        System.out.println("ERROR: " + e);
+                    }
+                }
+                for(int i = 0; i < numberOfCoins; i++){
+                    try{
+                        coin[i].collect();
+                    }
+                    catch(Exception e){
+                        System.out.println("ERROR: " + e);
+                    }
+                }
+
+                //reset mario if fallen off from screen:
+                if(mario.sprite.posy > loadedLevel.getHeight()*16 ){
+                    camera.position = new Point(width/2, camera.prefHeight + camera.tolerance);
+                    mario.sprite.setPosition(5, 0);
+                }
+
                 try{
-                    box[i].open();
+                    repaint();
+                    main.sleep(7L);
                 }
                 catch(Exception e){
-                    System.out.println("ERROR: " + e);
-                }
-            }
-            for(int i = 0; i < numberOfCoins; i++){
-                try{
-                    coin[i].collect();
-                }
-                catch(Exception e){
-                    System.out.println("ERROR: " + e);
-                }
-            }
 
-            //reset mario if fallen off from screen:
-            if(mario.sprite.posy > loadedLevel.mapHeight*16 ){
-                camera.position = new Point(width/2, camera.prefHeight + camera.tolerance);
-                mario.sprite.setPosition(5, 0);
-            }
-
-            try{
-                repaint();
-                main.sleep(7L);
-            }
-            catch(Exception e){
+                }
 
             }
 
@@ -305,9 +296,9 @@ public class gameMain extends JPanel implements Runnable {
         }
         if(showCamera == true){
             g2d.setColor(Color.red);
-            g2d.drawLine(0, camera.prefHeight - camera.position.y + camera.center.y, loadedLevel.mapWidth * 16, camera.prefHeight - camera.position.y + camera.center.y);
+            g2d.drawLine(0, camera.prefHeight - camera.position.y + camera.center.y, loadedLevel.getWidth() * 16, camera.prefHeight - camera.position.y + camera.center.y);
             g2d.setColor(new Color(1,0,0,0.33f));
-            g2d.fillRect(0, camera.prefHeight - camera.position.y + camera.tolerance, loadedLevel.mapWidth * 16, camera.tolerance);
+            g2d.fillRect(0, camera.prefHeight - camera.position.y + camera.tolerance, loadedLevel.getWidth() * 16, camera.tolerance);
             g2d.setColor(new Color(0,1,0,0.33f));
             g2d.fillRect(camera.center.x - camera.position.x + camera.center.x, camera.center.y - camera.position.y + camera.center.y, camera.bounds.width - 2*camera.center.x, camera.bounds.height);
             g2d.setColor(Color.green);
@@ -316,5 +307,100 @@ public class gameMain extends JPanel implements Runnable {
 
         }
 
+    }
+
+    public static void loadLevel(){
+
+        //clean up old loads:
+        loadedLevel.clean();
+
+        // Open File Dialog:
+        FileDialog filedialog = new FileDialog((Frame)null, "Open ...", FileDialog.LOAD);
+        filedialog.setVisible(true);
+        File fileSelected = null;
+        try{
+            fileSelected = new File(filedialog.getDirectory(), filedialog.getFile());
+        }
+        catch(Exception e){
+
+        }
+
+        if(fileSelected != null){
+            GameObject[] go = new GameObject[0];
+
+            try{
+                loadedLevel = new Level(fileSelected.getPath());
+                camera = loadedLevel.getCamera();
+                go = loadedLevel.getGameObjects();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+
+            //Reset numberOf ...
+            numberOfBoxes = 0;
+            numberOfSprites = 0;
+            numberOfTiles = 0;
+
+            try{
+                tileSheet = ImageIO.read(new File("tilesheet.png"));
+                background_layer0 = ImageIO.read(new File("bg0.png"));
+                background_layer1 = ImageIO.read(new File("bg1.png"));
+            }
+            catch(Exception e){
+                System.out.println("ERROR loading images: " + e);
+            }
+
+            int MapWidth = loadedLevel.getWidth();
+            int MapHeight = loadedLevel.getHeight();
+
+            for(int y = 0; y < MapHeight; y++){
+                for(int x = 0; x < MapWidth; x++){
+                    //Number entered in the position represents tileNumber;
+                    //position of the sprite x*16, y*16
+
+                    //get char at position X/Y in the level string
+                    char CharAtXY = loadedLevel.level.substring(MapWidth * y, loadedLevel.level.length()).charAt(x);
+
+                    // Load objects into the engine/game
+                    for(int i = 0; i < go.length; i++){
+                        if(CharAtXY == go[i].objectChar){
+                            try{
+                                invoke("engine.game.objects." + go[i].name, "new" + go[i].name, new Class[] { Point.class }, new Object[] { new Point (x*16, y*16) });
+                            }
+                            catch(Exception e){
+                                System.out.println("ERROR trying to invoke method: " + e);
+                            }
+                        }
+                    }
+
+                    // Load tiles into engine/game
+                    // 48 = '0' , 57 = '9'
+                    if( (int)CharAtXY >= 48 && (int)CharAtXY <= 57 ){
+                        tileObject[gameMain.numberOfTiles] = new WorldTile(Integer.parseInt(CharAtXY + ""));
+                        tileObject[gameMain.numberOfTiles-1].sprite.setPosition(x*16, y*16);
+                    }
+                }
+            }
+
+            //clean up:
+            loadedLevel.clean();
+
+            //additional game-specific loading options:
+            camera.forceSetPosition(new Point(mario.spawn.x, camera.prefHeight));
+            pCoin = new PopupCoin(new Point(-80,-80));
+        }
+        else{
+            System.out.println("Loading cancelled...");
+        }
+
+    }
+    
+    public static void invoke(String aClass, String aMethod, Class[] params, Object[] args) throws Exception {
+        Class c = Class.forName(aClass);
+        Constructor constructor = c.getConstructor(params);
+        Method m = c.getDeclaredMethod(aMethod, params);
+        Object i = constructor.newInstance(args);
+        Object r = m.invoke(i, args);
     }
 }

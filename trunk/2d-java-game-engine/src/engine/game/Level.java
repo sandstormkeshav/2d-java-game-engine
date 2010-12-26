@@ -21,16 +21,30 @@ import mapeditor.*;
 
 public class Level {
 
-    public int mapHeight;
-    public int mapWidth;
-
     public String levelArchive;
-
+    
+    private String properties = "";
+    private String objects = "";
+    public String level = "";
+    
     public Level(String levelArchive){
         this.levelArchive = levelArchive;
+        
+        //Unpack the level archive:
+        try{
+            extractArchive(new File(levelArchive), new File("."));
+            properties = readTextFile("properties");
+            objects = readTextFile("objects");
+            level = readTextFile("level");
+        }
+        catch(Exception e){
+            if(e.toString().substring(0, 4).equals("ERROR")){
+                System.out.println(e);
+            }
+        }
     }
 
-    public void extractArchive(File archive, File destDir) throws Exception {
+    private void extractArchive(File archive, File destDir) throws Exception {
         if (!destDir.exists()) {
             destDir.mkdir();
         }
@@ -66,7 +80,7 @@ public class Level {
                 bis.close();
             }
         }
-                zipFile.close();
+            zipFile.close();
     }
 
     private File buildDirectoryHierarchyFor(String entryName, File destDir) {
@@ -77,7 +91,9 @@ public class Level {
     }
 
     public boolean load() throws Exception{
-
+        
+        System.out.println("this loading method is legacy... use a combination of the other methods instead");
+        
         //clean up old loads:
         clean();
 
@@ -85,10 +101,6 @@ public class Level {
         gameMain.numberOfBoxes = 0;
         gameMain.numberOfSprites = 0;
         gameMain.numberOfTiles = 0;
-
-        //Reset map properties:
-        mapHeight = 0;
-        mapWidth = 0;
 
         //Unpack the level archive:
         try{
@@ -137,8 +149,6 @@ public class Level {
             objectList[i] = tempList[i];
         }
         
-        // Get list of objects
-        
         // create regex pattern to read the db
         Pattern[] objectPattern = new Pattern[objectList.length];
         Matcher[] objectMatcher = new Matcher[objectList.length];
@@ -150,6 +160,13 @@ public class Level {
             if(objectMatcher[i].find()){
                 objectNumber[i] = Integer.parseInt(objectMatcher[i].group(0).replaceAll(objectList[i] + " ?= ?", ""));
             }
+        }
+
+        //create gameObjects for the MapEditor:
+        GameObject[] gameObjects = new GameObject[objectList.length];
+
+        for(int i = 0; i < objectList.length; i++){
+            gameObjects[i] = new GameObject(objectList[i], objectNumber[i]);
         }
 
         // -- read the level file
@@ -175,22 +192,34 @@ public class Level {
         //Line length represents the map width / 16
 
         for(int y = 0; y < a; y++){
-            mapHeight++;
-            mapWidth = 0;
             for(int x = 0; x < readLine[y].length(); x++){
                 //Number entered in the position represents tileNumber;
                 //position of the sprite x*16, y*16
-                mapWidth ++;
                 if(readLine[y].charAt(x) != ' '){
 
-                    //Load the map into editor:
-                    try{
-                        Map.tile[x][y].x = (((int)(readLine[y].charAt(x)))-48)*16;
-                        Map.tile[x][y].y = Map.tile[x][y].y + 16;
+                    // Load objects into editor:
+                    for(int i = 0; i < objectList.length; i++){
+                        if(readLine[y].charAt(x) == (char)objectNumber[i]){
+                            try{
+                                Map.tile[x][y] = gameObjects[i].getTile();
+                            }
+                            catch(Exception e){
+                                System.out.println("ERROR trying to create object for editor: " + e);
+                            }
+                        }
                     }
-                    catch(Exception e){
+
+                    // Load tiles into editor:
+                    if(((int)(readLine[y].charAt(x))) >= 48 && ((int)(readLine[y].charAt(x))) <= 57){
+                        try{
+                            Map.tile[x][y].x = (((int)(readLine[y].charAt(x)))-48)*16;
+                            Map.tile[x][y].y += 16;
+                        }
+                        catch(Exception e){
+                        }
                     }
-                    //Load the map into the engine/game
+
+                    // Load objects into the engine/game
                     for(int i = 0; i < objectList.length; i++){
                         if(readLine[y].charAt(x) == (char)objectNumber[i]){
                             try{
@@ -201,7 +230,9 @@ public class Level {
                             }
                         }
                     }
-                    if(((int)(readLine[y].charAt(x))) < 57){
+                    // Load tiles into engine/game
+                    // 48 = '0' , 57 = '9'
+                    if( ((int)(readLine[y].charAt(x))) >= 48 && ((int)(readLine[y].charAt(x))) <= 57 ){
                         gameMain.tileObject[gameMain.numberOfTiles] = new WorldTile(Integer.parseInt(readLine[y].charAt(x) + ""));
                         gameMain.tileObject[gameMain.numberOfTiles-1].sprite.setPosition(x*16, y*16);
                     }
@@ -210,82 +241,82 @@ public class Level {
         }
 
         // -- Read the properties file
-            String properties = "";
+        String properties = "";
 
-            try {
-                BufferedReader in = new BufferedReader(new FileReader("properties"));
-                String str;
-                while ((str = in.readLine()) != null) {
-                    properties += str + "\n";
+        try {
+            BufferedReader in = new BufferedReader(new FileReader("properties"));
+            String str;
+            while ((str = in.readLine()) != null) {
+                properties += str + "\n";
+            }
+            in.close();
+        }
+        catch(Exception e){
+            throw new Exception("ERROR reading poperties: " + e);
+        }
+
+        //Initialize camera
+        gameMain.camera = new Camera(new Point(gameMain.width/2, gameMain.height/2), new Rectangle(0, 0, getWidth()*16, (getHeight())*16 - gameMain.height));
+
+        //create regex pattern/matcher to parse the string:
+        Pattern cameraTolerancePattern = Pattern.compile("cameraTolerance ?= ?[0-9]+");
+        Pattern cameraPrefHeightPattern = Pattern.compile("cameraPrefHeight ?= ?[0-9]+");
+        Pattern number = Pattern.compile("[0-9]+");
+
+        Matcher cameraToleranceMatcher = cameraTolerancePattern.matcher(properties);
+        Matcher cameraPrefHeightMatcher = cameraPrefHeightPattern.matcher(properties);
+
+        String found = "";
+
+        //set camera tolerance
+        if(cameraToleranceMatcher.find()){
+            found = properties.substring(cameraToleranceMatcher.start(), cameraToleranceMatcher.end());
+            Matcher numberMatcher = number.matcher(found);
+            if(numberMatcher.find()){
+                try{
+                    Toolbox.camToleranceSpinner.setValue(Integer.parseInt(numberMatcher.group(0)));
                 }
-                in.close();
+                catch(Exception e){
+                }
+                try{
+                    gameMain.camera.tolerance = Integer.parseInt(numberMatcher.group(0));
+                }
+                catch(Exception e){
+                }                   
             }
-            catch(Exception e){
-                throw new Exception("ERROR reading poperties: " + e);
-            }
+        }
+        else{
+            throw new Exception("ERROR camera tolerance not found");
+        }
 
-            //Initialize camera
-            gameMain.camera = new Camera(new Point(gameMain.width/2, gameMain.height/2), new Rectangle(0, 0, mapWidth*16, (mapHeight)*16 - gameMain.height));
-
-            //create regex pattern/matcher to parse the string:
-            Pattern cameraTolerancePattern = Pattern.compile("cameraTolerance ?= ?[0-9]+");
-            Pattern cameraPrefHeightPattern = Pattern.compile("cameraPrefHeight ?= ?[0-9]+");
-            Pattern number = Pattern.compile("[0-9]+");
-
-            Matcher cameraToleranceMatcher = cameraTolerancePattern.matcher(properties);
-            Matcher cameraPrefHeightMatcher = cameraPrefHeightPattern.matcher(properties);
-
-            String found = "";
-
-            //set camera tolerance
-            if(cameraToleranceMatcher.find()){
-                found = properties.substring(cameraToleranceMatcher.start(), cameraToleranceMatcher.end());
-                Matcher numberMatcher = number.matcher(found);
-                if(numberMatcher.find()){
-                    try{
-                        Toolbox.camToleranceSpinner.setValue(Integer.parseInt(numberMatcher.group(0)));
-                    }
-                    catch(Exception e){
-                    }
-                    try{
-                        gameMain.camera.tolerance = Integer.parseInt(numberMatcher.group(0));
-                    }
-                    catch(Exception e){
-                    }                   
+        //set camera preferred height
+        if(cameraPrefHeightMatcher.find()){
+            found = properties.substring(cameraPrefHeightMatcher.start(), cameraPrefHeightMatcher.end());
+            Matcher numberMatcher = number.matcher(found);
+            if(numberMatcher.find()){
+                try{
+                    gameMain.camera.prefHeight = Integer.parseInt(numberMatcher.group(0));
+                }
+                catch(Exception e){
+                }   
+                try{
+                    Toolbox.camPrefHeightSpinner.setValue(Integer.parseInt(numberMatcher.group(0)));
+                }
+                catch(Exception e){
                 }
             }
-            else{
-                throw new Exception("ERROR camera tolerance not found");
-            }
-
-            //set camera preferred height
-            if(cameraPrefHeightMatcher.find()){
-                found = properties.substring(cameraPrefHeightMatcher.start(), cameraPrefHeightMatcher.end());
-                Matcher numberMatcher = number.matcher(found);
-                if(numberMatcher.find()){
-                    try{
-                        gameMain.camera.prefHeight = Integer.parseInt(numberMatcher.group(0));
-                    }
-                    catch(Exception e){
-                    }   
-                    try{
-                        Toolbox.camPrefHeightSpinner.setValue(Integer.parseInt(numberMatcher.group(0)));
-                    }
-                    catch(Exception e){
-                    }
-                }
-            }
-            else{
-                throw new Exception("ERROR cameraPrefHeight not found");
-            }
+        }
+        else{
+            throw new Exception("ERROR cameraPrefHeight not found");
+        }
 
         //Set editor window properties
         try{
-            Map.maxWidth = mapWidth*16;
-            Map.maxHeight = mapHeight*16;
+            Map.maxWidth = getWidth()*16;
+            Map.maxHeight = getHeight()*16;
             MapEditor.MapScrollPane.setPreferredSize(new Dimension(Map.maxWidth,Map.maxHeight));
-            Toolbox.mapWidthSpinner.setValue(mapWidth);
-            Toolbox.mapHeightSpinner.setValue(mapHeight);
+            Toolbox.mapWidthSpinner.setValue(getWidth());
+            Toolbox.mapHeightSpinner.setValue(getHeight());
             MapEditor.mapEdit.setSize(MapEditor.maxSize);
         }
         catch(Exception e){
@@ -293,9 +324,132 @@ public class Level {
         }
         
     return true;
-
+        
     }
+    
+    private String readTextFile(String fileName) throws Exception{
+        // Check if file exists:
+        if(!(new File(fileName).exists())){
+            throw new Exception("ERROR trying to read text: File "+ fileName +" does not exists");
+        }
+        
+        String read = "";
+        
+        // Read the text:
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(fileName));
+            String str;
+            while ((str = in.readLine()) != null) {
+                read += str + "\n";
+            }
+            in.close();
+        }
+        catch(Exception e){
+            throw new Exception("ERROR reading text: " + e);
+        }
+        
+        return read;
+    }
+    
+    public int getWidth(){
 
+        int width = 0;
+
+        while(level.charAt(width) != '\n'){
+            width++;
+        }
+
+        return width + 1;
+    }
+    
+    public int getHeight(){
+        // + 1 iss needed because a line ends always with '\n'
+        return level.length()/(getWidth());
+    }
+    
+    public GameObject[] getGameObjects(){
+
+        String[] tempList = new String[99999];
+        int numberOfEntries = 0;
+
+        // search objects db for objects and write them to list:
+        Pattern objectNamePattern = Pattern.compile("[a-zA-Z]+");
+        Matcher objectNameMatcher = objectNamePattern.matcher(objects);
+
+        while(objectNameMatcher.find()){
+            tempList[numberOfEntries] = objectNameMatcher.group();
+            numberOfEntries++;
+        }
+        String[] objectList = new String[numberOfEntries];
+        for(int i = 0; i < numberOfEntries; i++){
+            objectList[i] = tempList[i];
+        }
+        
+        // create regex pattern to read the db
+        Pattern[] objectPattern = new Pattern[objectList.length];
+        Matcher[] objectMatcher = new Matcher[objectList.length];
+        int[] objectNumber = new int[objectList.length];
+
+        for(int i = 0; i < objectList.length; i++){
+            objectPattern[i] = Pattern.compile(objectList[i] + " ?= ?[0-9]+");
+            objectMatcher[i] = objectPattern[i].matcher(objects);
+            if(objectMatcher[i].find()){
+                objectNumber[i] = Integer.parseInt(objectMatcher[i].group(0).replaceAll(objectList[i] + " ?= ?", ""));
+            }
+        }
+
+        //create GameObjects
+        GameObject[] gameObjects = new GameObject[objectList.length];
+
+        for(int i = 0; i < objectList.length; i++){
+            gameObjects[i] = new GameObject(objectList[i], objectNumber[i]);
+        }
+        
+        return gameObjects;
+    }
+    
+    public Camera getCamera () throws Exception {
+        //Initialize camera
+        Camera camera = new Camera(new Point(gameMain.width/2, gameMain.height/2), new Rectangle(0, 0, getWidth()*16, (getHeight())*16 - gameMain.height));
+
+        //create regex pattern/matcher to parse the string:
+        Pattern cameraTolerancePattern = Pattern.compile("cameraTolerance ?= ?[0-9]+");
+        Pattern cameraPrefHeightPattern = Pattern.compile("cameraPrefHeight ?= ?[0-9]+");
+        Pattern number = Pattern.compile("[0-9]+");
+
+        Matcher cameraToleranceMatcher = cameraTolerancePattern.matcher(properties);
+        Matcher cameraPrefHeightMatcher = cameraPrefHeightPattern.matcher(properties);
+
+        String found = "";
+
+        //set camera tolerance
+        if(cameraToleranceMatcher.find()){
+            found = properties.substring(cameraToleranceMatcher.start(), cameraToleranceMatcher.end());
+            Matcher numberMatcher = number.matcher(found);
+            if(numberMatcher.find()){
+                camera.tolerance = Integer.parseInt(numberMatcher.group(0));            
+            }
+        }
+        else{
+            throw new Exception("ERROR camera tolerance not found");
+        }
+
+        //set camera preferred height
+        if(cameraPrefHeightMatcher.find()){
+            found = properties.substring(cameraPrefHeightMatcher.start(), cameraPrefHeightMatcher.end());
+            Matcher numberMatcher = number.matcher(found);
+            if(numberMatcher.find()){
+                camera.prefHeight = Integer.parseInt(numberMatcher.group(0));
+            }
+        }
+        else{
+            throw new Exception("ERROR cameraPrefHeight not found");
+        }
+        
+        return camera;     
+        
+    }
+    
     public static void invoke(String aClass, String aMethod, Class[] params, Object[] args) throws Exception {
         Class c = Class.forName(aClass);
         Constructor constructor = c.getConstructor(params);
@@ -312,7 +466,7 @@ public class Level {
         new File("properties").delete();
     }
 
-    public static String[] getObjects(){
+    public static String[] getObjectClasses(){
         String[] classes = new String[9999];
         String jarName = new String();
         String[] ret = new String[0];

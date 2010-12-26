@@ -25,7 +25,6 @@ public class Map extends JPanel implements Runnable {
     
     Thread main;
     public static Image img = MapEditor.tiles;
-    public static Image img2 = MapEditor.sprites;
     public static Tiles[][] tile = new Tiles[999][999];
     public static int maxWidth=0;
     public static int maxHeight=0;
@@ -85,7 +84,6 @@ public class Map extends JPanel implements Runnable {
 
             if (mb.getButton()==1){
                 img = MapEditor.tiles;
-                img2 = MapEditor.sprites;
                 for (int i=0;i<=tileChooser.lengthx;i++){
                     for (int j=0;j<=tileChooser.lengthy;j++){
                         tile[(int)(m.getX()/16)+i][(int)(m.getY()/16)+j].x=(tileChooser.numbx+i)*16;
@@ -145,7 +143,7 @@ public class Map extends JPanel implements Runnable {
         //draw tiles
         for (int x=0;x<maxWidth;x+=16){
             for (int y=0;y<maxHeight;y+=16){
-                g2d.drawImage(img,x,y,x+16,y+16,tile[x/16][y/16].x,tile[x/16][y/16].y,tile[x/16][y/16].x+16,tile[x/16][y/16].y+16,this);
+                g2d.drawImage(tile[x/16][y/16].tileImage,x,y,x+16,y+16,tile[x/16][y/16].x,tile[x/16][y/16].y,tile[x/16][y/16].x+16,tile[x/16][y/16].y+16,this);
                 //g2d.setColor(Color.WHITE);
                 //g2d.drawString(tile[x/16][y/16].x+"", x, y+16);
             }

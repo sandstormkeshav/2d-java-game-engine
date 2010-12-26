@@ -5,6 +5,8 @@
 
 package mapeditor;
 
+import java.awt.Image;
+
 
 /**
  *
@@ -12,13 +14,43 @@ package mapeditor;
  */
 public class Tiles {
 
-        public int x = 0;
-        public int y = 0;
-        public boolean good=false;
+    public int x = 0;
+    public int y = 0;
+    public boolean good=false;
+    public Image tileImage;
 
-    public Tiles(int a, int b){
-        x = 16*(a-1);
-        y = 16*(b-1);
+    public Tiles(int x, int y){
+        this.x = 16*(x-1);
+        this.y = 16*(y-1);
+        tileImage = MapEditor.tiles;
+    }
+    
+    public Tiles(int x, int y, Image tileImage){
+        this.tileImage = tileImage;
+        while(tileImage.getWidth(null) == -1){
+            this.x = tileImage.getWidth(null)*(x-1);
+            this.y = tileImage.getWidth(null)*(y-1);
+            System.out.println("width of tile image still -1");
+        }
+    }
+    
+    public Tiles(Image tileImage){
+        this.tileImage = tileImage;
+        while(tileImage.getWidth(null) == -1){
+            System.out.println("width of tile image still -1");
+        }
+        this.x = tileImage.getWidth(null);
+        this.y = tileImage.getWidth(null);
+    }
+    
+    public void setImage(Image img){
+        while(img.getWidth(null) == -1 || tileImage.getWidth(null) == -1){
+            System.out.println("width of tile image still -1");
+        }
+        int tempx = tileImage.getWidth(null);
+        this.tileImage = img;
+        x = (x/tempx) * tileImage.getWidth(null);
+        y = (y/tempx) * tileImage.getWidth(null);
     }
 
     public void setPart(int c, int r){

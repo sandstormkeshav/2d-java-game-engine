@@ -162,31 +162,7 @@ public class MainDebugMode extends javax.swing.JFrame {
     }//GEN-LAST:event_OpenMenuItemMouseClicked
 
     private void OpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenMenuItemActionPerformed
-        //File Chooser
-        JFileChooser fc = new JFileChooser();
-        int returnVal = fc.showOpenDialog(this);
-
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            Level level = new Level(file.getPath());
-            try{
-                level.load();
-            }
-            catch(Exception e){
-            }
-
-            level.clean();
-
-            gameMain.loadedLevel = level;
-        }
-        else{
-            System.out.println("Open command cancelled by user." + "\n");
-        }
-
-        gameMain.camera.forceSetPosition(gameMain.mario.spawn);
-
-        gameMain.pCoin = new PopupCoin(new Point(-80,-80));
-
+        gameMain.loadLevel();
     }//GEN-LAST:event_OpenMenuItemActionPerformed
 
     private void resetMarioMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetMarioMenuItemActionPerformed

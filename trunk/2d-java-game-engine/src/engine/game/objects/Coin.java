@@ -7,12 +7,13 @@ package engine.game.objects;
 
 import java.awt.*;
 import engine.game.*;
+import mapeditor.GameObject;
 
 /**
  *
  * @author Philipp
  */
-public class Coin {
+public class Coin{
 
     //boolean for state of container:
     boolean opened = false;
