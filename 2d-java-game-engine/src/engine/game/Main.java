@@ -5,10 +5,14 @@ import javax.swing.JFrame;
 
 
 public class Main extends JFrame{
-    
+
+    public static gameMain GAME;
+
     public Main(){
 
-        add(new gameMain());
+        GAME = new gameMain();
+
+        add(GAME);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(16*30, 16*28);

@@ -28,7 +28,7 @@ public class Mario{
 
     public static int mariosprite;
 
-    public Point spawn = new Point(0,0);
+    public Point spawn;
 
     //Spritesheet Image for Sprite creation:
     Image marioSpritesheet = gameMain.marioSpriteSheet;
@@ -46,6 +46,9 @@ public class Mario{
 
     //standart animation for all objects:
     public Animation none = new Animation(sprite, 0, 0, 0, false);
+
+    //active animation:
+    public Animation activeAnimation;
 
     //Key Mapping:
     public Keymapping keymapping = new Keymapping(new Key[]{
@@ -79,13 +82,11 @@ public class Mario{
         gameMain.sprite[gameMain.numberOfSprites] = gameMain.mario.sprite;
         gameMain.mario.mariosprite = gameMain.numberOfSprites;
         gameMain.numberOfSprites++;
-
-        System.out.println("new Mario created at point " + p.x + ", " + p.y);
     }
 
     public void duck(){
         //set animation:
-        sprite.animation = duck;
+        activeAnimation = duck;
 
         //change collision size:
         sprite.setCollisionSize(new Dimension(8, 16));
@@ -93,7 +94,7 @@ public class Mario{
 
     public void look(){
         //set animation:
-        sprite.animation = look;
+        activeAnimation = look;
 
         //this "ability" does nothing... yet
     }
@@ -115,14 +116,14 @@ public class Mario{
 
         if(Jumping == false && verticalCollision == false){
             //set animation:
-            sprite.setAnimation(fall);
+            activeAnimation = fall;
             //change vertical position:
             sprite.setPosition(sprite.posx, sprite.posy + 1);
             //disable Jump:
             canJump = false;
         }
 
-        if(Jumping == false && verticalCollision == true){
+        if(Jumping == false && verticalCollision == true && keymapping.keyPressed("keyJump")){
             canJump = true;
         }
     }
@@ -133,7 +134,7 @@ public class Mario{
         boolean topCollision = false;
 
         //set animation:
-        sprite.animation =  jump;
+        activeAnimation  =  jump;
         
 
         if(Jumping == false && canJump == true){
@@ -181,7 +182,7 @@ public class Mario{
         boolean rightCollision = false;
 
         //set animation
-        sprite.animation = walk;
+        activeAnimation = walk;
         
         sprite.animation.play();
         
@@ -218,7 +219,7 @@ public class Mario{
 
     public void stand(){
         //set animation
-        sprite.animation = none;
+        activeAnimation = none;
 
         //reset collision size:
         sprite.setCollisionSize(new Dimension(8, 24));
@@ -227,7 +228,7 @@ public class Mario{
     public void keyActions(){
 
         //reset animation:
-        sprite.setAnimation(none);
+        activeAnimation = none;
 
         //Up Arrow Down:
         if(keymapping.keyPressed("keyUp") == true){
@@ -301,6 +302,8 @@ public class Mario{
 
         x = sprite.posx;
         y = sprite.posy;
+
+        sprite.setAnimation(activeAnimation);
     }
 
 }

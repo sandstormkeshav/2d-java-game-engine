@@ -54,6 +54,8 @@ public class MapEditor extends JFrame {
     public static Dimension maxSize = new Dimension(0,0);
     public static Dimension minSize = new Dimension(48,48);
 
+    public static String[] gameObjectList;
+
     /** Creates new form MapEditor */
     public MapEditor() {
         initComponents();
@@ -89,8 +91,8 @@ public class MapEditor extends JFrame {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
-        javax.swing.JMenuItem jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        javax.swing.JMenuItem jMenuItem1 = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         WindowMenu = new javax.swing.JMenu();
         toolsCheckBox = new javax.swing.JCheckBoxMenuItem();
@@ -199,8 +201,6 @@ public class MapEditor extends JFrame {
         menuBar.setBackground(new java.awt.Color(153, 153, 153));
         menuBar.setName("menuBar"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MapEditor.class, this);
-        fileMenu.setAction(actionMap.get("saveFile")); // NOI18N
         fileMenu.setBackground(new java.awt.Color(153, 153, 153));
         fileMenu.setText("File");
         fileMenu.setName("fileMenu"); // NOI18N
@@ -215,16 +215,6 @@ public class MapEditor extends JFrame {
         });
         fileMenu.add(jMenuItem3);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Save");
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        fileMenu.add(jMenuItem1);
-
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem2.setText("Open");
         jMenuItem2.setName("jMenuItem2"); // NOI18N
@@ -235,6 +225,17 @@ public class MapEditor extends JFrame {
         });
         fileMenu.add(jMenuItem2);
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Save");
+        jMenuItem1.setName("jMenuItem1"); // NOI18N
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem1);
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MapEditor.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setText("Quit");
         exitMenuItem.setName("exitMenuItem"); // NOI18N
