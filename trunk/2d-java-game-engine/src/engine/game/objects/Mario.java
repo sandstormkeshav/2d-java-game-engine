@@ -82,6 +82,7 @@ public class Mario{
         gameMain.sprite[gameMain.numberOfSprites] = gameMain.mario.sprite;
         gameMain.mario.mariosprite = gameMain.numberOfSprites;
         gameMain.numberOfSprites++;
+        System.out.println("new mario");
     }
 
     public void duck(){
@@ -123,7 +124,7 @@ public class Mario{
             canJump = false;
         }
 
-        if(Jumping == false && verticalCollision == true && keymapping.keyPressed("keyJump")){
+        if(Jumping == false && verticalCollision == true && keymapping.keyPressed("keyJump") == false){
             canJump = true;
         }
     }
@@ -133,10 +134,6 @@ public class Mario{
         //collision boolean:
         boolean topCollision = false;
 
-        //set animation:
-        activeAnimation  =  jump;
-        
-
         if(Jumping == false && canJump == true){
             Jumping = true;
             canJump = false;
@@ -145,6 +142,9 @@ public class Mario{
         }
         
         if(Jumping == true){
+            //set animation:
+            activeAnimation  =  jump;
+
             jumpHeight++;
             if(startJumpHeight - sprite.posy < maxJumpHeight){
                 for(int i = 0; i < gameMain.numberOfTiles; i++){
@@ -207,12 +207,13 @@ public class Mario{
                 rightCollision = true;
             }
         }
+
         //change sprite position:
-        if(leftCollision == false && sprite.flipH == -1){
+        if(leftCollision == false && sprite.flipH == -1 && keymapping.keyPressed("KeyDown") == false){
             sprite.setPosition(sprite.posx + sprite.flipH, sprite.posy);
         }
 
-        if(rightCollision == false && sprite.flipH == 1){
+        if(rightCollision == false && sprite.flipH == 1 && keymapping.keyPressed("KeyDown") == false){
             sprite.setPosition(sprite.posx + sprite.flipH, sprite.posy);
         }
     }

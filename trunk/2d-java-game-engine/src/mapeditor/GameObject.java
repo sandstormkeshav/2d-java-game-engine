@@ -62,7 +62,7 @@ public class GameObject {
 
     @Override
     public String toString(){
-        return name + " = " + objectChar;
+        return name + " = " + (int)objectChar;
     }
 
 }
