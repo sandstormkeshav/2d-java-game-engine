@@ -14,8 +14,8 @@ public class Camera{
 
     Rectangle bounds;
 
-    int prefHeight = 0;
-    int tolerance = 0;
+    public int prefHeight = 0;
+    public int tolerance = 0;
 
     double zoom = 1;
 
@@ -58,11 +58,14 @@ public class Camera{
 
             // check distance from preferred height:
             if(newPosition.y - tolerance/2 > prefHeight){
-                position.y = newPosition.y - tolerance;
+                position.y = newPosition.y - tolerance/2;
             }
             if(newPosition.y + tolerance/2 < prefHeight){
-                position.y = newPosition.y + tolerance;
+                position.y = newPosition.y + tolerance/2;
             }
+            
+        }
+        else{
         }
     }
 

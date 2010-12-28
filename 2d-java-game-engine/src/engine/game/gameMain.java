@@ -31,7 +31,8 @@ public class gameMain extends JPanel implements Runnable {
     public static boolean showSpriteNum = false;
     public static boolean showCamera = false;
 
-    //
+    //Some Random things
+    private static boolean levelLoaded = false;
 
     //Key Mapping
     public static boolean[] keyPressed = new boolean[99999];
@@ -104,9 +105,7 @@ public class gameMain extends JPanel implements Runnable {
             catch(Exception e){
         }
 
-        loadLevel();
-
-        System.out.println();
+        loadLevel(FileOpenDialog("Open ..."));
 
     }
 
@@ -119,7 +118,7 @@ public class gameMain extends JPanel implements Runnable {
         //start main loop:
         while(true){
 
-            if(){
+            if(levelLoaded == true){
 
                 camera.follow(mario.sprite);
 
@@ -150,13 +149,13 @@ public class gameMain extends JPanel implements Runnable {
                     mario.sprite.setPosition(5, 0);
                 }
 
-                try{
-                    repaint();
-                    main.sleep(7L);
-                }
-                catch(Exception e){
+            }
 
-                }
+            try{
+                repaint();
+                main.sleep(7L);
+            }
+            catch(Exception e){
 
             }
 
@@ -218,7 +217,24 @@ public class gameMain extends JPanel implements Runnable {
 
         catch(Exception e){
         }
-        
+
+        //Draw Tiles:
+        for(int i = 0; i < numberOfTiles; i++){
+            try{
+
+                //Draw tile:
+                g2d.drawImage(tile[i].img,
+                /*X1*/tile[i].posx + ((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/tile[i].posy + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y,
+                /*X2*/tile[i].posx+tile[i].size.width*tile[i].flipH+((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y2*/tile[i].posy+tile[i].size.height*tile[i].flipV + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y, // destination
+                tile[i].getAnimation().col*tile[i].size.width, tile[i].getAnimation().row*tile[i].size.height, // source
+                (tile[i].getAnimation().col+1)*tile[i].size.width, (tile[i].getAnimation().row+1)*tile[i].size.height,
+                this);
+
+            }
+            catch(Exception e){
+                g2d.drawString("Error drawing a Tile", 20, 20);
+            }
+        }
         
         //Draw all kinds of Sprites:
         for(int i = 0; i < numberOfSprites; i++){
@@ -240,27 +256,6 @@ public class gameMain extends JPanel implements Runnable {
             }
             catch(Exception e){
                 g2d.drawString("Error drawing a Sprite", 20, 20);
-            }
-
-
-        }
-        //Draw Tiles:
-        for(int i = 0; i < numberOfTiles; i++){
-            //apply camera modifiers:
-
-            try{
-
-                //Draw tile:
-                g2d.drawImage(tile[i].img,
-                /*X1*/tile[i].posx + ((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/tile[i].posy + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y,
-                /*X2*/tile[i].posx+tile[i].size.width*tile[i].flipH+((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y2*/tile[i].posy+tile[i].size.height*tile[i].flipV + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y, // destination
-                tile[i].getAnimation().col*tile[i].size.width, tile[i].getAnimation().row*tile[i].size.height, // source
-                (tile[i].getAnimation().col+1)*tile[i].size.width, (tile[i].getAnimation().row+1)*tile[i].size.height,
-                this);
-
-            }
-            catch(Exception e){
-                g2d.drawString("Error drawing a Tile", 20, 20);
             }
         }
 
@@ -309,13 +304,9 @@ public class gameMain extends JPanel implements Runnable {
 
     }
 
-    public static void loadLevel(){
-
-        //clean up old loads:
-        loadedLevel.clean();
-
+    public static File FileOpenDialog(String title){
         // Open File Dialog:
-        FileDialog filedialog = new FileDialog((Frame)null, "Open ...", FileDialog.LOAD);
+        FileDialog filedialog = new FileDialog((Frame)null, title , FileDialog.LOAD);
         filedialog.setVisible(true);
         File fileSelected = null;
         try{
@@ -324,12 +315,33 @@ public class gameMain extends JPanel implements Runnable {
         catch(Exception e){
 
         }
+        return fileSelected;
+    }
 
-        if(fileSelected != null){
+    public static File FileSaveDialog(String title){
+        // Open File Dialog:
+        FileDialog filedialog = new FileDialog((Frame)null, title , FileDialog.SAVE);
+        filedialog.setVisible(true);
+        File fileSelected = null;
+        try{
+            fileSelected = new File(filedialog.getDirectory(), filedialog.getFile());
+        }
+        catch(Exception e){
+
+        }
+        return fileSelected;
+    }
+
+    public static void loadLevel(File levelFile){
+
+        //clean up old loads:
+        loadedLevel.clean();
+
+        if(levelFile != null){
             GameObject[] go = new GameObject[0];
 
             try{
-                loadedLevel = new Level(fileSelected.getPath());
+                loadedLevel = new Level(levelFile.getPath());
                 camera = loadedLevel.getCamera();
                 go = loadedLevel.getGameObjects();
             }
@@ -359,7 +371,7 @@ public class gameMain extends JPanel implements Runnable {
                     //Number entered in the position represents tileNumber;
                     //position of the sprite x*16, y*16
 
-                    //get char at position X/Y in the level string
+                    //get char at position X/Y in the levelLoaded string
                     char CharAtXY = loadedLevel.level.substring(MapWidth * y, loadedLevel.level.length()).charAt(x);
 
                     // Load objects into the engine/game
@@ -389,6 +401,8 @@ public class gameMain extends JPanel implements Runnable {
             //additional game-specific loading options:
             camera.forceSetPosition(new Point(mario.spawn.x, camera.prefHeight));
             pCoin = new PopupCoin(new Point(-80,-80));
+
+            levelLoaded = true;
         }
         else{
             System.out.println("Loading cancelled...");

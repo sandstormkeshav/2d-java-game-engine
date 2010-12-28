@@ -162,7 +162,7 @@ public class MainDebugMode extends javax.swing.JFrame {
     }//GEN-LAST:event_OpenMenuItemMouseClicked
 
     private void OpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenMenuItemActionPerformed
-        gameMain.loadLevel();
+        //gameMain.loadLevel();
     }//GEN-LAST:event_OpenMenuItemActionPerformed
 
     private void resetMarioMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetMarioMenuItemActionPerformed
@@ -183,7 +183,7 @@ public class MainDebugMode extends javax.swing.JFrame {
     }//GEN-LAST:event_spriteNumCheckBoxActionPerformed
 
     private void resetLevelMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetLevelMenuItemActionPerformed
-        // -- load .level file again:
+        // -- load .loadedLevel file again:
         Level level = new Level(gameMain.loadedLevel.levelArchive);
         try{
             level.load();

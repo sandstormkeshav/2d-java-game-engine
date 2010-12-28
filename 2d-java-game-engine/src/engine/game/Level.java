@@ -30,7 +30,7 @@ public class Level {
     public Level(String levelArchive){
         this.levelArchive = levelArchive;
         
-        //Unpack the level archive:
+        //Unpack the loadedLevel archive:
         try{
             extractArchive(new File(levelArchive), new File("."));
             properties = readTextFile("properties");
@@ -102,7 +102,7 @@ public class Level {
         gameMain.numberOfSprites = 0;
         gameMain.numberOfTiles = 0;
 
-        //Unpack the level archive:
+        //Unpack the loadedLevel archive:
         try{
             extractArchive(new File(levelArchive), new File("."));
         }
@@ -126,6 +126,7 @@ public class Level {
             String str;
             while ((str = in.readLine()) != null) {
                 objectsDB += str;
+                System.out.println(str);
             }
             in.close();
         }
@@ -136,7 +137,7 @@ public class Level {
         String[] tempList = new String[99999];
         int numberOfEntries = 0;
 
-        // search objects db for objects and write them to list:
+        // search object db for object and write them to list:
         Pattern objectNamePattern = Pattern.compile("[a-zA-Z]+");
         Matcher objectNameMatcher = objectNamePattern.matcher(objectsDB);
 
@@ -147,6 +148,7 @@ public class Level {
         String[] objectList = new String[numberOfEntries];
         for(int i = 0; i < numberOfEntries; i++){
             objectList[i] = tempList[i];
+            System.out.println(objectList[i]);
         }
         
         // create regex pattern to read the db
@@ -169,7 +171,7 @@ public class Level {
             gameObjects[i] = new GameObject(objectList[i], objectNumber[i]);
         }
 
-        // -- read the level file
+        // -- read the loadedLevel file
         String[] readLine = new String[99999];
         int a = 0;
 
@@ -197,7 +199,7 @@ public class Level {
                 //position of the sprite x*16, y*16
                 if(readLine[y].charAt(x) != ' '){
 
-                    // Load objects into editor:
+                    // Load object into editor:
                     for(int i = 0; i < objectList.length; i++){
                         if(readLine[y].charAt(x) == (char)objectNumber[i]){
                             try{
@@ -219,7 +221,7 @@ public class Level {
                         }
                     }
 
-                    // Load objects into the engine/game
+                    // Load object into the engine/game
                     for(int i = 0; i < objectList.length; i++){
                         if(readLine[y].charAt(x) == (char)objectNumber[i]){
                             try{
@@ -372,7 +374,7 @@ public class Level {
         String[] tempList = new String[99999];
         int numberOfEntries = 0;
 
-        // search objects db for objects and write them to list:
+        // search object db for object and write them to list:
         Pattern objectNamePattern = Pattern.compile("[a-zA-Z]+");
         Matcher objectNameMatcher = objectNamePattern.matcher(objects);
 
@@ -458,15 +460,16 @@ public class Level {
         Object r = m.invoke(i, args);
     }
 
-    public void clean(){
+    public static void clean(){
         new File("bg0.png").delete();
         new File("bg1.png").delete();
         new File("tilesheet.png").delete();
         new File("level").delete();
         new File("properties").delete();
+        new File("objects").delete();
     }
 
-    public static String[] getObjectClasses(){
+    public static String[] getObjectClasses() throws Exception{
         String[] classes = new String[9999];
         String jarName = new String();
         String[] ret = new String[0];
@@ -498,7 +501,7 @@ public class Level {
                 }
             }
             catch( Exception e){
-                e.printStackTrace ();
+                throw new Exception("ERROR trying to read object list from JAR: " + "Not packed in .jar-file");
             }
        return ret;
     }

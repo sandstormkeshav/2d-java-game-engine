@@ -26,6 +26,8 @@ import engine.game.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.image.ImageObserver;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 
@@ -35,11 +37,21 @@ import javax.swing.JFileChooser;
  */
 public class MapEditor extends JFrame {
 
+    // DEFINITIONS (DO NOT CHANGE!):
+
+    public static int DRAW = 0;
+    public static int ERASE = 1;
+    public static int SELECT = 2;
+
+    // DEFINITIONS END
+
     public static Image tiles;
     public static Image sprites;
     public static int tab;
     public static String tilepath="";
     public static String spritepath="";
+
+    public static int drawMode = DRAW;
 
     public static int cameraPrefHeight;
     public static int cameraTolerance;
@@ -56,13 +68,20 @@ public class MapEditor extends JFrame {
 
     public static String[] gameObjectList;
 
+    public static Level loadedLevel = new Level("");
+
+    public static GameObject[] objectList = new GameObject[0];
+
+    public static Map map;
+
+    public static GameObject selectedObject = null;
+
     /** Creates new form MapEditor */
     public MapEditor() {
         initComponents();
 
         tiles = Toolkit.getDefaultToolkit().getImage("newsmb.png");
         tilepath = "newsmb.png";
-        tileChooser.image = tiles;
 
         sprites = Toolkit.getDefaultToolkit().getImage("mario.gif");
         spritepath = "mario.gif";
@@ -85,14 +104,34 @@ public class MapEditor extends JFrame {
         jButton1 = new javax.swing.JButton();
         jSpinner1 = new javax.swing.JSpinner();
         jSpinner2 = new javax.swing.JSpinner();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jToolBar1 = new javax.swing.JToolBar();
+        NewButton = new javax.swing.JButton();
+        OpenButton = new javax.swing.JButton();
+        SaveButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        DrawButton1 = new javax.swing.JButton();
+        EraseButton = new javax.swing.JButton();
+        DrawButton = new javax.swing.JButton();
+        MagicButton = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        ToolsButton = new javax.swing.JButton();
+        GridButton = new javax.swing.JButton();
+        BackgroundButton = new javax.swing.JButton();
+        CameraButton = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        jPanel2 = new javax.swing.JPanel();
+        EditorModeLabel = new javax.swing.JLabel();
         mainPanel = new javax.swing.JPanel();
         MapScrollPane = new javax.swing.JScrollPane();
-        MapPanel = new Map();
+        MapPanel = map = new Map();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        javax.swing.JMenuItem jMenuItem1 = new javax.swing.JMenuItem();
+        NewMenuItem = new javax.swing.JMenuItem();
+        OpenMenuItem = new javax.swing.JMenuItem();
+        javax.swing.JMenuItem SaveMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         WindowMenu = new javax.swing.JMenu();
         toolsCheckBox = new javax.swing.JCheckBoxMenuItem();
@@ -158,6 +197,12 @@ public class MapEditor extends JFrame {
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jSplitPane1.setName("jSplitPane1"); // NOI18N
+
+        jLabel1.setText("   Editor Mode: ");
+        jLabel1.setAlignmentY(0.0F);
+        jLabel1.setName("jLabel1"); // NOI18N
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Map Editor");
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -166,8 +211,195 @@ public class MapEditor extends JFrame {
             }
         });
 
+        jPanel1.setName("jPanel1"); // NOI18N
+
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.setName("jToolBar1"); // NOI18N
+
+        NewButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/document-new.png"))); // NOI18N
+        NewButton.setToolTipText("New Level");
+        NewButton.setBorder(null);
+        NewButton.setName("NewButton"); // NOI18N
+        NewButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(NewButton);
+
+        OpenButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/document-open.png"))); // NOI18N
+        OpenButton.setToolTipText("Open Level");
+        OpenButton.setBorder(null);
+        OpenButton.setName("OpenButton"); // NOI18N
+        OpenButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(OpenButton);
+
+        SaveButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/save.png"))); // NOI18N
+        SaveButton.setToolTipText("Save Level");
+        SaveButton.setBorder(null);
+        SaveButton.setName("SaveButton"); // NOI18N
+        SaveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(SaveButton);
+        jToolBar1.add(jSeparator1);
+
+        DrawButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/select.png"))); // NOI18N
+        DrawButton1.setToolTipText("Select");
+        DrawButton1.setBorder(null);
+        DrawButton1.setFocusable(false);
+        DrawButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        DrawButton1.setName("DrawButton1"); // NOI18N
+        DrawButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        DrawButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DrawButton1ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(DrawButton1);
+
+        EraseButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/draw-eraser.png"))); // NOI18N
+        EraseButton.setToolTipText("Rubber");
+        EraseButton.setBorder(null);
+        EraseButton.setFocusable(false);
+        EraseButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        EraseButton.setName("EraseButton"); // NOI18N
+        EraseButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        EraseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EraseButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(EraseButton);
+
+        DrawButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/draw.png"))); // NOI18N
+        DrawButton.setToolTipText("Draw");
+        DrawButton.setBorder(null);
+        DrawButton.setName("DrawButton"); // NOI18N
+        DrawButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DrawButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(DrawButton);
+
+        MagicButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/magic.png"))); // NOI18N
+        MagicButton.setToolTipText("sort tiles \"magically\"...");
+        MagicButton.setBorder(null);
+        MagicButton.setFocusable(false);
+        MagicButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        MagicButton.setName("MagicButton"); // NOI18N
+        MagicButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        MagicButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MagicButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(MagicButton);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        jToolBar1.add(jSeparator2);
+
+        ToolsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/toolbox.png"))); // NOI18N
+        ToolsButton.setToolTipText("Toggle Tools Window");
+        ToolsButton.setBorder(null);
+        ToolsButton.setFocusable(false);
+        ToolsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ToolsButton.setName("ToolsButton"); // NOI18N
+        ToolsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ToolsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ToolsButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(ToolsButton);
+
+        GridButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/grid.png"))); // NOI18N
+        GridButton.setToolTipText("Toggle Grid");
+        GridButton.setBorder(null);
+        GridButton.setFocusable(false);
+        GridButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        GridButton.setName("GridButton"); // NOI18N
+        GridButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        GridButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GridButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(GridButton);
+
+        BackgroundButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/drawbg.png"))); // NOI18N
+        BackgroundButton.setToolTipText("Toggle Background");
+        BackgroundButton.setBorder(null);
+        BackgroundButton.setFocusable(false);
+        BackgroundButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BackgroundButton.setName("BackgroundButton"); // NOI18N
+        BackgroundButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BackgroundButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackgroundButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BackgroundButton);
+
+        CameraButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/camera.png"))); // NOI18N
+        CameraButton.setToolTipText("Toggle Camera");
+        CameraButton.setBorder(null);
+        CameraButton.setFocusable(false);
+        CameraButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        CameraButton.setName("CameraButton"); // NOI18N
+        CameraButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        CameraButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CameraButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(CameraButton);
+
+        jSeparator3.setName("jSeparator3"); // NOI18N
+        jToolBar1.add(jSeparator3);
+
+        jPanel2.setName("jPanel2"); // NOI18N
+
+        EditorModeLabel.setText("Editor Mode: Draw");
+        EditorModeLabel.setName("EditorModeLabel"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(186, Short.MAX_VALUE)
+                .add(EditorModeLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 132, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(EditorModeLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+        );
+
+        jToolBar1.add(jPanel2);
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+        );
+
         mainPanel.setName("mainPanel"); // NOI18N
 
+        MapScrollPane.setBorder(null);
         MapScrollPane.setMinimumSize(new java.awt.Dimension(0, 0));
         MapScrollPane.setName("MapScrollPane"); // NOI18N
         MapScrollPane.setPreferredSize(new java.awt.Dimension(586, 447));
@@ -191,49 +423,52 @@ public class MapEditor extends JFrame {
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, MapScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, MapScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(MapScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, MapScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
         );
 
         menuBar.setBackground(new java.awt.Color(153, 153, 153));
+        menuBar.setBorder(null);
         menuBar.setName("menuBar"); // NOI18N
 
         fileMenu.setBackground(new java.awt.Color(153, 153, 153));
         fileMenu.setText("File");
         fileMenu.setName("fileMenu"); // NOI18N
 
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem3.setText("New");
-        jMenuItem3.setName("jMenuItem3"); // NOI18N
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        NewMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        NewMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/document-new-16.png"))); // NOI18N
+        NewMenuItem.setText("New");
+        NewMenuItem.setName("NewMenuItem"); // NOI18N
+        NewMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                NewMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem3);
+        fileMenu.add(NewMenuItem);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("Open");
-        jMenuItem2.setName("jMenuItem2"); // NOI18N
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        OpenMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/document-open-16.png"))); // NOI18N
+        OpenMenuItem.setText("Open");
+        OpenMenuItem.setName("OpenMenuItem"); // NOI18N
+        OpenMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                OpenMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem2);
+        fileMenu.add(OpenMenuItem);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Save");
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        SaveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        SaveMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/save-16.png"))); // NOI18N
+        SaveMenuItem.setText("Save");
+        SaveMenuItem.setName("SaveMenuItem"); // NOI18N
+        SaveMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                SaveMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem1);
+        fileMenu.add(SaveMenuItem);
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MapEditor.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
@@ -248,7 +483,6 @@ public class MapEditor extends JFrame {
         WindowMenu.setName("WindowMenu"); // NOI18N
 
         toolsCheckBox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
-        toolsCheckBox.setSelected(true);
         toolsCheckBox.setText("Tools");
         toolsCheckBox.setName("toolsCheckBox"); // NOI18N
         toolsCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -297,14 +531,14 @@ public class MapEditor extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 554, Short.MAX_VALUE)
-            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(mainPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(mainPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 417, Short.MAX_VALUE)
-            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(mainPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -336,164 +570,22 @@ public class MapEditor extends JFrame {
 
     }
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void NewMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewMenuItemActionPerformed
         Map.clear();
         createNewMapFrame.setVisible(true);
-}//GEN-LAST:event_jMenuItem3ActionPerformed
+}//GEN-LAST:event_NewMenuItemActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        //System.out.println("Save - gedrückt!");
-        int ow=0;
+    private void SaveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveMenuItemActionPerformed
 
-        JFileChooser fc = new JFileChooser();
+        saveLevel(gameMain.FileSaveDialog("Save..."));
 
-        int value = fc.showSaveDialog(this);
-        if (value == fc.APPROVE_OPTION){
-            int h = Map.Height();
-            int w = Map.Width();
-            File file = fc.getSelectedFile();
+}//GEN-LAST:event_SaveMenuItemActionPerformed
 
-            //Check if file already exists
-            if (file.exists()){
-                ow = JOptionPane.showConfirmDialog(null,"File already exists - overwrite?", "Error", JOptionPane.YES_NO_OPTION);
-                if (ow == 0){
-                    file.delete();
-                }
-            }
+    private void OpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenMenuItemActionPerformed
+    
+    loadLevel(gameMain.FileOpenDialog("Open..."));
 
-            //Create the level file
-            File levelFile = new File("level");
-            if(levelFile.exists()){
-                System.out.println("level already exists");
-            }
-            if (ow == 0){
-                String str="";
-                try{
-                    FileWriter fw = new FileWriter(levelFile);
-                    for (int y=0;y<=h;y+=16){
-                        for (int x=0;x<=w;x+=16){
-                            if (Map.tile[x/16][y/16].x>-16){
-                                str += ""+(char)(48+Map.tile[x/16][y/16].x/16);
-                            } else{
-                                str += " ";
-                            }
-                        }
-                        str += "\n";
-                    }
-                    fw.write(str);
-                    fw.close();
-                } catch(Exception e){
-                    System.out.println("ERROR saving level file: " + e);
-                }
-
-                //create properties file
-
-                File propertiesFile = new File("properties");
-                if(propertiesFile.exists()){
-                    System.out.println("properties file already exists");
-                }
-                str="";
-                try{
-                    FileWriter fw = new FileWriter(propertiesFile);
-
-                    str += "cameraPrefHeight =" + cameraPrefHeight + "\n";
-                    str += "cameraTolerance =" + cameraTolerance + "\n";
-                    str += "\n";
-
-                    fw.write(str);
-                    fw.close();
-                } catch(Exception e){
-                    System.out.println("ERROR saving properties file: " + e);
-                }
-
-                // Copy files to cache
-                try{
-
-                    copyFile(new File(Toolbox.bg0TextField.getText()), new File("bg0.png"));
-                    copyFile(new File(Toolbox.bg1TextField.getText()), new File("bg1.png"));
-                    copyFile(new File(tilepath), new File("tilesheet.png"));
-
-                } catch(Exception e){
-                    System.out.println("ERROR copying files: " + e);
-                }
-
-                // Add files to achrive
-                String filenames[] = {
-                    "level",
-                    "tilesheet.png",
-                    "bg0.png",
-                    "bg1.png",
-                    "properties"
-                };
-
-                // Create a buffer for reading the files
-                byte[] buf = new byte[1024];
-
-                try {
-                    // Create the ZIP file
-                    String outFilename = file.getPath();
-                    ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
-
-                    // Compress the files
-                    for (int i=0; i<filenames.length; i++) {
-                        FileInputStream in = new FileInputStream(filenames[i]);
-
-                        // Add ZIP entry to output stream.
-                        out.putNextEntry(new ZipEntry(filenames[i]));
-
-                        // Transfer bytes from the file to the ZIP file
-                        int len;
-                        while ((len = in.read(buf)) > 0) {
-                            out.write(buf, 0, len);
-                        }
-
-                        // Complete the entry
-                        out.closeEntry();
-                        in.close();
-                    }
-
-                    // Complete the ZIP file
-                    out.close();
-
-                    // Delete the created level file
-                    levelFile.delete();
-                } catch (IOException e) {
-                    System.out.println("ERROR saving level archive: " + e);
-                }
-
-            }
-        }
-}//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        //System.out.println("Open - gedrückt!");
-        JFileChooser fc = new JFileChooser();
-
-        int value = fc.showOpenDialog(null);
-        if (value == fc.APPROVE_OPTION){
-            File file = fc.getSelectedFile();
-
-            try{
-                new Level(file.getPath()).load();
-            }
-            catch(Exception e){
-                System.out.println(e);
-            }
-            
-            //load images into editor:
-            Toolbox.bg1TextField.setText(new File("bg1.png").getPath());
-            Toolbox.bg0TextField.setText(new File("bg0.png").getPath());
-
-            //load tile sheet into editor:
-            MapEditor.tilepath = "tilesheet.png";
-            MapEditor.tiles = Toolkit.getDefaultToolkit().getImage("tilesheet.png");
-            tileChooser.image = MapEditor.tiles;
-            Map.img = MapEditor.tiles;
-            Toolbox.TilesetPanel.setPreferredSize(new Dimension(MapEditor.tiles.getWidth(Toolbox.ImportButton), MapEditor.tiles.getHeight(Toolbox.ImportButton)));
-            tileChooser.image = tiles;
-            Map.img = tiles;
-        }
-}//GEN-LAST:event_jMenuItem2ActionPerformed
+}//GEN-LAST:event_OpenMenuItemActionPerformed
 
     private void toolsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolsCheckBoxActionPerformed
         toolbox.setVisible(toolsCheckBox.getState());
@@ -503,7 +595,7 @@ public class MapEditor extends JFrame {
         Toolbox.mapWidthSpinner.setValue(jSpinner1.getValue());
         Toolbox.mapHeightSpinner.setValue(jSpinner1.getValue());
 
-        Map.setMapSize(Integer.parseInt(jSpinner1.getValue().toString())*16,Integer.parseInt(jSpinner2.getValue().toString())*16);
+        MapEditor.map.setMapSize(Integer.parseInt(jSpinner1.getValue().toString())*16,Integer.parseInt(jSpinner2.getValue().toString())*16);
         createNewMapFrame.dispose();
 }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -536,19 +628,19 @@ public class MapEditor extends JFrame {
             //resize component if too big:
             if(c.getSize().height > maxSize.height && maxSize.height >= minSize.height){
                 if(maxwidth){
-                    c.setSize(c.getWidth(), maxSize.height);
+                    c.setSize(c.getWidth(), maxSize.height + 30);
                 }
                 else{
-                    c.setSize(c.getWidth(), maxSize.height + 15);
+                    c.setSize(c.getWidth(), maxSize.height + 45);
                 }
             }
 
             if(c.getSize().width > maxSize.width && maxSize.width >= minSize.width){
                 if(maxheight){
-                    c.setSize(maxSize.width, c.getHeight());
+                    c.setSize(maxSize.width, c.getHeight() + 30);
                 }
                 else{
-                    c.setSize(maxSize.width + 15, c.getHeight());
+                    c.setSize(maxSize.width + 30, c.getHeight() + 45);
                 }
             }
 
@@ -584,6 +676,69 @@ public class MapEditor extends JFrame {
         new Level("").clean();
     }//GEN-LAST:event_formWindowClosing
 
+    private void NewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NewButtonActionPerformed
+
+    private void OpenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenButtonActionPerformed
+        loadLevel(gameMain.FileOpenDialog("Open..."));
+    }//GEN-LAST:event_OpenButtonActionPerformed
+
+    private void ToolsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ToolsButtonActionPerformed
+        toolsCheckBox.setSelected(!toolsCheckBox.getState());
+        toolbox.setVisible(toolsCheckBox.getState());
+    }//GEN-LAST:event_ToolsButtonActionPerformed
+
+    private void GridButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GridButtonActionPerformed
+        gridCheckBox.setSelected(!gridCheckBox.getState());
+    }//GEN-LAST:event_GridButtonActionPerformed
+
+    private void BackgroundButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackgroundButtonActionPerformed
+        bgLayerCheckBox.setSelected(!bgLayerCheckBox.getState());
+    }//GEN-LAST:event_BackgroundButtonActionPerformed
+
+    private void CameraButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CameraButtonActionPerformed
+        cameraCheckBox.setSelected(!cameraCheckBox.getState());
+    }//GEN-LAST:event_CameraButtonActionPerformed
+
+    private void MagicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MagicButtonActionPerformed
+        for (int x=0;x<Map.maxWidth;x+=16){
+            for (int y=0;y<Map.maxHeight;y+=16){
+                Map.tile[x/16][y/16].magic(x/16,y/16);
+            }
+        }
+        for (int x=0;x<Map.maxWidth;x+=16){
+            for (int y=0;y<Map.maxHeight;y+=16){
+                Map.tile[x/16][y/16].magic(x/16,y/16);
+            }
+        }
+}//GEN-LAST:event_MagicButtonActionPerformed
+
+    private void DrawButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DrawButton1ActionPerformed
+        
+        drawMode = SELECT;
+        EditorModeLabel.setText("Editor Mode: Select");
+
+    }//GEN-LAST:event_DrawButton1ActionPerformed
+
+    private void DrawButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DrawButtonActionPerformed
+
+        drawMode = DRAW;
+        EditorModeLabel.setText("Editor Mode: Draw");
+
+    }//GEN-LAST:event_DrawButtonActionPerformed
+
+    private void EraseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EraseButtonActionPerformed
+
+        drawMode = ERASE;
+        EditorModeLabel.setText("Editor Mode: Erase");
+
+    }//GEN-LAST:event_EraseButtonActionPerformed
+
+    private void SaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveButtonActionPerformed
+        saveLevel(gameMain.FileSaveDialog("Save..."));
+    }//GEN-LAST:event_SaveButtonActionPerformed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -593,28 +748,305 @@ public class MapEditor extends JFrame {
         });
 
         toolbox = new Toolbox();
-        toolbox.setVisible(true);
+        toolbox.setVisible(false);
 
         about = new MapEditorAbout();
         about.setVisible(false);
 
     }
 
+    public void saveLevel(File file){
+
+        if(file != null){
+
+            int h = Map.maxHeight/16;
+            int w = Map.maxWidth/16;
+
+            //Check if file already exists is done by the awt file dialog already.
+
+            //Create the level file
+            File levelFile = new File("level");
+            if(levelFile.exists()){
+                System.out.println("level already exists");
+            }
+
+            String str="";
+
+            try{
+                FileWriter fw = new FileWriter(levelFile);
+                for (int y = 0; y < h; y++){
+                    for (int x = 0; x < w; x++){
+                        if (Map.object[Map.getObjectNumberAt(new Point(x,y))] != null){
+                            str += "" + Map.object[Map.getObjectNumberAt(new Point(x,y))].objectChar;
+                        } else{
+                            str += " ";
+                        }
+                    }
+                    str += "\n";
+                }
+                fw.write(str);
+                fw.close();
+            } catch(Exception e){
+                System.out.println("ERROR saving level file: " + e);
+            }
+
+            //create properties file
+            File propertiesFile = new File("properties");
+            if(propertiesFile.exists()){
+                System.out.println("properties file already exists");
+            }
+            str="";
+            try{
+                FileWriter fw = new FileWriter(propertiesFile);
+
+                str += "cameraPrefHeight = " + cameraPrefHeight + "\n";
+                str += "cameraTolerance = " + cameraTolerance + "\n";
+                str += "\n";
+
+                fw.write(str);
+                fw.close();
+            } catch(Exception e){
+                System.out.println("ERROR saving properties file: " + e);
+            }
+
+            //create objects file
+            File objectsFile = new File("objects");
+            if(objectsFile.exists()){
+                System.out.println("objects file already exists");
+            }
+            str="";
+            try{
+                FileWriter fw = new FileWriter(objectsFile);
+
+                for(int i = 0; i < Toolbox.objectChooser.objectList.length; i++){
+                    str += Toolbox.objectChooser.objectList[i].toString() + "\n";
+                }
+
+                fw.write(str);
+                fw.close();
+            } catch(Exception e){
+                System.out.println("ERROR saving objects file: " + e);
+            }
+
+            // Copy files to cache
+            try{
+
+                copyFile(new File(Toolbox.bg0TextField.getText()), new File("bg0.png"));
+                copyFile(new File(Toolbox.bg1TextField.getText()), new File("bg1.png"));
+                copyFile(new File(tilepath), new File("tilesheet.png"));
+
+            } catch(Exception e){
+                System.out.println("ERROR copying files: " + e);
+            }
+
+            // Add files to achrive
+            String filenames[] = {
+                "level",
+                "tilesheet.png",
+                "bg0.png",
+                "bg1.png",
+                "properties",
+                "objects"
+            };
+
+            // Create a buffer for reading the files
+            byte[] buf = new byte[1024];
+
+            try {
+                // Create the ZIP file
+                String outFilename = file.getPath();
+                ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
+
+                // Compress the files
+                for (int i=0; i<filenames.length; i++) {
+                    FileInputStream in = new FileInputStream(filenames[i]);
+
+                    // Add ZIP entry to output stream.
+                    out.putNextEntry(new ZipEntry(filenames[i]));
+
+                    // Transfer bytes from the file to the ZIP file
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+
+                    // Complete the entry
+                    out.closeEntry();
+                    in.close();
+                }
+
+                // Complete the ZIP file
+                out.close();
+
+                // Delete the created loadedLevel file
+                levelFile.delete();
+            } catch (IOException e) {
+                System.out.println("ERROR saving level archive: " + e);
+            }
+
+            new File("level").delete();
+            new File("properties").delete();
+            new File("objects").delete();
+
+            System.out.println("Saving was successful!");
+
+            
+        }
+        else{
+            System.out.println("Saving cancelled...");
+        }
+    }
+
+    public static void loadLevel(File file){
+        
+        if(file != null){
+            //clean up old loads:
+            loadedLevel.clean();
+
+            loadedLevel = new Level(file.getPath());
+
+            Camera camera = null;
+            objectList = null;
+
+            try{
+                camera = loadedLevel.getCamera();
+                objectList = loadedLevel.getGameObjects();
+                
+                //check if inside JAR (this enables loading of ALL possible objects in the game
+                if(new File(MapEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).exists()){
+                    gameObjectList = loadedLevel.getObjectClasses(); //only works from within a .jar
+                }
+            }
+            catch(Exception e){
+            }
+
+            if(camera != null){
+                Toolbox.camPrefHeightSpinner.setValue(camera.prefHeight);
+                Toolbox.camToleranceSpinner.setValue(camera.tolerance);
+            }
+
+            Map.maxWidth = loadedLevel.getWidth()*16;
+            Map.maxHeight = loadedLevel.getHeight()*16;
+            MapEditor.MapScrollPane.setPreferredSize(new Dimension(Map.maxWidth,Map.maxHeight));
+            Toolbox.mapWidthSpinner.setValue(loadedLevel.getWidth());
+            Toolbox.mapHeightSpinner.setValue(loadedLevel.getHeight());
+            MapEditor.mapEdit.setSize(mapEdit.getSize().width, maxSize.height + 45);
+
+            //load images into editor:
+            Toolbox.bg1TextField.setText(new File("bg1.png").getPath());
+            Toolbox.bg0TextField.setText(new File("bg0.png").getPath());
+
+            Map.background_layer = new Image[2];
+            try{
+                Map.background_layer[0] = ImageIO.read(new File("bg0.png"));
+                Map.background_layer[1] = ImageIO.read(new File("bg1.png"));
+            }
+            catch(Exception e){
+            }
+
+            //load tile sheet into editor:
+            MapEditor.tilepath = "tilesheet.png";
+            MapEditor.tiles = Toolkit.getDefaultToolkit().getImage("tilesheet.png");
+            Toolbox.tilesheetTextField.setText(tilepath);
+            Map.img = MapEditor.tiles;
+            Map.img = tiles;
+
+            int MapWidth = loadedLevel.getWidth();
+            int MapHeight = loadedLevel.getHeight();
+
+            EditorObject[] tempObj = new EditorObject[99999];
+            for(int i = 0; i < tempObj.length; i++){
+                tempObj[i] = null;
+            }
+
+            int a = 0;
+
+            for(int y = 0; y < MapHeight; y++){
+                for(int x = 0; x < MapWidth; x++){
+                    //Number entered in the position represents tileNumber;
+                    //position of the sprite x*16, y*16
+
+                    //get char at position X/Y in the levelLoaded string
+                    char CharAtXY = loadedLevel.level.substring(MapWidth * y, loadedLevel.level.length()).charAt(x);
+
+                    // Load objects
+                    for(int i = 0; i < objectList.length; i++){
+                        if(CharAtXY == objectList[i].objectChar){
+                            tempObj[a] = new EditorObject(objectList[i], new Point(x, y));
+                            a++;
+                        }
+                    }
+
+                    // Load tiles
+                    // 48 = '0' , 57 = '9'
+                    if( (int)CharAtXY >= 48 && (int)CharAtXY <= 57 ){
+                        GameObject tile = new GameObject("WorldTile", CharAtXY);
+                        tempObj[a] = new EditorObject(tile, new Point(x, y), Integer.parseInt(""+CharAtXY));
+                        a++;
+                    }
+
+
+                }
+
+                Map.object = tempObj;
+
+                // Update tile/object chooser
+                try{
+                    Toolbox.tileChooser.updateTileChooser();
+                    Toolbox.objectChooser.objectList = objectList;
+                    Toolbox.objectChooser.updateObjectChooser();
+                }
+                catch(Exception e){
+                }
+
+            }
+
+            new File("level").delete();
+            new File("properties").delete();
+            new File("objects").delete();
+
+        }
+        else{
+            System.out.println("Opening cancelled...");
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BackgroundButton;
+    private javax.swing.JButton CameraButton;
+    private javax.swing.JButton DrawButton;
+    private javax.swing.JButton DrawButton1;
+    public static javax.swing.JLabel EditorModeLabel;
+    private javax.swing.JButton EraseButton;
+    private javax.swing.JButton GridButton;
+    private javax.swing.JButton MagicButton;
     public static javax.swing.JPanel MapPanel;
     public static javax.swing.JScrollPane MapScrollPane;
+    private javax.swing.JButton NewButton;
+    public javax.swing.JMenuItem NewMenuItem;
+    private javax.swing.JButton OpenButton;
+    private javax.swing.JMenuItem OpenMenuItem;
+    private javax.swing.JButton SaveButton;
+    private javax.swing.JButton ToolsButton;
     public static javax.swing.JMenu WindowMenu;
     public static javax.swing.JCheckBoxMenuItem bgLayerCheckBox;
     public static javax.swing.JCheckBoxMenuItem cameraCheckBox;
     public static javax.swing.JFrame createNewMapFrame;
     public static javax.swing.JCheckBoxMenuItem gridCheckBox;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuItem jMenuItem2;
-    public javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     public static javax.swing.JCheckBoxMenuItem toolsCheckBox;
