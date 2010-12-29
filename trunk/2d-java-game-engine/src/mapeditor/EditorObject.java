@@ -5,6 +5,7 @@
 
 package mapeditor;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.ImageObserver;
@@ -19,6 +20,7 @@ public class EditorObject extends GameObject {
     
     Point position = new Point(0, 0);
     int tile = 0;
+    boolean selected = false;
 
     public EditorObject(GameObject go, Point position){
         super(go.name, go.objectChar);
@@ -39,6 +41,10 @@ public class EditorObject extends GameObject {
 
     public void draw(Graphics g, ImageObserver io){
         g.drawImage(image, position.x*16, position.y*16, position.x*16 + 16, position.y*16 + 16, 0 + 16*tile, 0, 16 + 16*tile, 16, io);
+        if(selected){
+            g.setColor(new Color(1,0,0,0.5f));
+            g.fillRect(position.x*16, position.y*16, 16, 16);
+        }
     }
 
     public GameObject getParent(){

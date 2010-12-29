@@ -36,6 +36,11 @@ public class Map extends JPanel implements Runnable {
     private boolean update = false;
 
     private Rectangle selectionRect = null;
+    private EditorObject[] selectionObjects = null;
+    private Point selectedPoint = null;
+    private boolean clickingSelection = false;
+    private static EditorObject[] objectTemp = null;
+    private static boolean moving = false;
 
     public boolean magic=true;
 
@@ -144,14 +149,74 @@ public class Map extends JPanel implements Runnable {
         // Object selection
         if(Toolbox.ToolboxTab.getSelectedIndex() == 0 && MapEditor.drawMode == MapEditor.SELECT){
             if(mouseClickListener.getButtonState(1) == true){
-                //create selection:
-                if(mouseClickListener.initialClick.x >= p.x && mouseClickListener.initialClick.y >= p.y)selectionRect = new Rectangle(p.x, p.y, mouseClickListener.initialClick.x - p.x , Math.abs(mouseClickListener.initialClick.y - p.y));
-                if(mouseClickListener.initialClick.x >= p.x && mouseClickListener.initialClick.y < p.y)selectionRect = new Rectangle(p.x, mouseClickListener.initialClick.y, mouseClickListener.initialClick.x - p.x ,  Math.abs(p.y - mouseClickListener.initialClick.y));
-                if(mouseClickListener.initialClick.x < p.x && mouseClickListener.initialClick.y >= p.y)selectionRect = new Rectangle(mouseClickListener.initialClick.x, p.y, p.x - mouseClickListener.initialClick.x,  Math.abs(mouseClickListener.initialClick.y - p.y));
-                if(mouseClickListener.initialClick.x < p.x && mouseClickListener.initialClick.y < p.y)selectionRect = new Rectangle(mouseClickListener.initialClick.x, mouseClickListener.initialClick.y, p.x - mouseClickListener.initialClick.x,  Math.abs(p.y - mouseClickListener.initialClick.y));
+                // create selection if not clicking a selecion
+                if(object[getObjectNumberAt(new Point(p.x/16, p.y/16))] != null){
+                    if(object[getObjectNumberAt(new Point(p.x/16, p.y/16))].selected == true){
+                        clickingSelection = true;
+                    }
+                }
+                if(clickingSelection == false){
+                    if(mouseClickListener.initialClick.x >= p.x && mouseClickListener.initialClick.y >= p.y)selectionRect = new Rectangle(p.x, p.y, mouseClickListener.initialClick.x - p.x , Math.abs(mouseClickListener.initialClick.y - p.y));
+                    if(mouseClickListener.initialClick.x >= p.x && mouseClickListener.initialClick.y < p.y)selectionRect = new Rectangle(p.x, mouseClickListener.initialClick.y, mouseClickListener.initialClick.x - p.x ,  Math.abs(p.y - mouseClickListener.initialClick.y));
+                    if(mouseClickListener.initialClick.x < p.x && mouseClickListener.initialClick.y >= p.y)selectionRect = new Rectangle(mouseClickListener.initialClick.x, p.y, p.x - mouseClickListener.initialClick.x,  Math.abs(mouseClickListener.initialClick.y - p.y));
+                    if(mouseClickListener.initialClick.x < p.x && mouseClickListener.initialClick.y < p.y)selectionRect = new Rectangle(mouseClickListener.initialClick.x, mouseClickListener.initialClick.y, p.x - mouseClickListener.initialClick.x,  Math.abs(p.y - mouseClickListener.initialClick.y));
+
+                }
+                //move object if clicking a selection
+                else{
+                    moving = true;
+                    int a = 0;
+                    while(object[a] != null){
+                        if(object[a].selected){
+                            object[a].position = new Point(objectTemp[a].position.x + p.x/16 - mouseClickListener.initialClick.x/16, objectTemp[a].position.y - mouseClickListener.initialClick.y/16 + p.y/16);
+                        }
+                        a++;
+                    }
+                }
+
             }
             else{
+                if(selectionRect != null){
+                    
+                    // set point
+                    selectedPoint = new Point(selectionRect.x/16, selectionRect.y/16);
+                    
+                    // deselect all
+                    selectionObjects = new EditorObject[99999];
+                    int a = 0;
+                    while(object[a] != null){
+                        object[a].selected = false;
+                        a++;
+                    }
+                    // select objects
+
+                    // get selected fields
+                    a = 0;
+                    for(int x = selectionRect.x/16; x < selectionRect.x/16 + selectionRect.width/16 + 1; x++){
+                        for(int y = selectionRect.y/16; y < selectionRect.y/16 + selectionRect.height/16 + 1; y++){
+                            int n = getObjectNumberAt(new Point(x,y));
+                            // add to selection if there is an object
+                            if(object[n] != null){
+                                selectionObjects[a] = object[n];
+                                object[n].selected = true;
+                                a++;
+                            }
+                        }
+                    }
+                    
+                }
+                
+                objectTemp = new EditorObject[99999];
+                
+                int a = 0;
+                while(object[a] != null){
+                    objectTemp[a] = new EditorObject(new GameObject(object[a].name, object[a].objectChar), object[a].position);
+                    a++;
+                }
+                
                 selectionRect = null;
+                clickingSelection = false;
+                
             }
         }
         
@@ -178,10 +243,22 @@ public class Map extends JPanel implements Runnable {
         if(MapEditor.drawMode == MapEditor.ERASE){
             if (mouseClickListener.getButton() == 1){
                 Point p16 = new Point(p.x/16, p.y/16);
-                object[getObjectNumberAt(p16)] = null;
+                int objectNumber = getNumberOfObjects();
+                for(int i = getObjectNumberAt(p16); i < objectNumber; i++){
+                    object[i] = object[i+1];
+                }
+                object[objectNumber] = null;
             }
         }
 
+    }
+
+    public int getNumberOfObjects(){
+        int a = 0;
+        while(object[a] != null){
+            a++;
+        }
+        return a;
     }
 
     public static int getObjectNumberAt(Point p){
