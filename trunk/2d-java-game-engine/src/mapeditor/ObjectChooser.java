@@ -87,6 +87,7 @@ public class ObjectChooser extends JPanel implements Runnable {
     }
 
     public void updateObjectChooser() throws IOException{
+        
         editorObject = new EditorObject[objectList.length];
 
         for(int i = 0; i < objectList.length; i++){

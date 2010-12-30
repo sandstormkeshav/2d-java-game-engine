@@ -52,6 +52,7 @@ public class Toolbox extends javax.swing.JFrame {
         CharLabel = new javax.swing.JLabel();
         CharLabel1 = new javax.swing.JLabel();
         ObjectNameTextField = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         camPrefHeightSpinner = new javax.swing.JSpinner();
@@ -151,6 +152,16 @@ public class Toolbox extends javax.swing.JFrame {
 
         ObjectNameTextField.setName("ObjectNameTextField"); // NOI18N
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/document-properties.png"))); // NOI18N
+        jButton1.setToolTipText("Edit Object List");
+        jButton1.setBorder(null);
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout TileTabPanelLayout = new org.jdesktop.layout.GroupLayout(TileTabPanel);
         TileTabPanel.setLayout(TileTabPanelLayout);
         TileTabPanelLayout.setHorizontalGroup(
@@ -158,10 +169,6 @@ public class Toolbox extends javax.swing.JFrame {
             .add(TileTabPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(TilesPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                .addContainerGap())
-            .add(TileTabPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(ObjectsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                 .addContainerGap())
             .add(TileTabPanelLayout.createSequentialGroup()
                 .add(9, 9, 9)
@@ -182,6 +189,12 @@ public class Toolbox extends javax.swing.JFrame {
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(ObjectCharTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 39, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(11, 11, 11)))))
+            .add(TileTabPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jButton1)
+                    .add(ObjectsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
+                .addContainerGap())
         );
         TileTabPanelLayout.setVerticalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -193,7 +206,9 @@ public class Toolbox extends javax.swing.JFrame {
                 .add(jLabel9)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(ObjectsPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 123, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jButton1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 94, Short.MAX_VALUE)
                 .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(ObjectNameTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(CharLabel1)
@@ -326,7 +341,7 @@ public class Toolbox extends javax.swing.JFrame {
 
         bg0TextField.setName("bg0TextField"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 10));
         jLabel1.setText("Background Layer 0");
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -348,7 +363,7 @@ public class Toolbox extends javax.swing.JFrame {
 
         bg1TextField.setName("bg1TextField"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 10));
         jLabel2.setText("Background Layer 1");
         jLabel2.setName("jLabel2"); // NOI18N
 
@@ -357,7 +372,7 @@ public class Toolbox extends javax.swing.JFrame {
 
         fgTextField.setName("fgTextField"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 10));
         jLabel3.setText("Foreground Layer");
         jLabel3.setName("jLabel3"); // NOI18N
 
@@ -371,7 +386,7 @@ public class Toolbox extends javax.swing.JFrame {
 
         tilesheetTextField.setName("tilesheetTextField"); // NOI18N
 
-        jLabel10.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Lucida Grande", 0, 10));
         jLabel10.setText("Tilesheet");
         jLabel10.setName("jLabel10"); // NOI18N
 
@@ -493,11 +508,13 @@ public class Toolbox extends javax.swing.JFrame {
     }//GEN-LAST:event_mapHeightSpinnerPropertyChange
 
     private void browseButtonTileSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonTileSheetActionPerformed
+        
         File selectedFile = gameMain.FileOpenDialog("... Browse for Tilesheet");
 
         try{
            gameMain.background_layer1 = ImageIO.read(selectedFile);
            tilesheetTextField.setText(selectedFile.getPath());
+           tileChooser.updateTileChooser();
         }
         catch(Exception e){
         }
@@ -527,6 +544,10 @@ public class Toolbox extends javax.swing.JFrame {
     private void ObjectCharTextFieldInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_ObjectCharTextFieldInputMethodTextChanged
 
     }//GEN-LAST:event_ObjectCharTextFieldInputMethodTextChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MapEditor.objectListEditor.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     ChangeListener mapSizeSpinnerListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -583,6 +604,7 @@ public class Toolbox extends javax.swing.JFrame {
     public static javax.swing.JSpinner camPrefHeightSpinner;
     public static javax.swing.JSpinner camToleranceSpinner;
     public static javax.swing.JTextField fgTextField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 public class GameObject {
 
     public char objectChar;
-    public Image image;
+    public Image image = null;
     public String name;
 
     public GameObject(String name, char objectChar){
@@ -26,6 +26,16 @@ public class GameObject {
         }
         catch(Exception e){
         }
+        // if image loading had an exception load the standard "?" image
+        if(image == null && !name.equals("WorldTile") && name != ""){
+            try{
+                image = ImageIO.read(getClass().getResource("/mapeditor/resources/help-browser.png"));
+                //System.out.println("No image found for " + name);
+            }
+            catch(Exception e){
+            }
+        }
+
         this.objectChar = objectChar;
     }
 
