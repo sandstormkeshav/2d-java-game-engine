@@ -9,6 +9,9 @@ package mapeditor;
 import java.io.IOException;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseListener.*;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -20,7 +23,7 @@ public class ObjectChooser extends JPanel implements Runnable {
     private Point selection = new Point(0, 0);
     private Point oldSelection = new Point(0, 0);
 
-    private TileMouse mouse = new TileMouse();
+    private Mouse mouse = new Mouse();
 
     public GameObject[] objectList = new GameObject[1];
     public EditorObject[] editorObject = new EditorObject[1];
@@ -96,14 +99,15 @@ public class ObjectChooser extends JPanel implements Runnable {
 
     }
 
-    public void updateTileChooser() throws IOException{
+    public void updateTileChooser() throws Exception{
 
-        Image tilesheet = null;
+        Image tilesheet = null;        
+
         try{
             tilesheet = ImageIO.read(new File(Toolbox.tilesheetTextField.getText()));
         }
         catch(Exception e){
-            System.out.println("ERROR no tilesheet found");
+            throw new Exception("ERROR no tilesheet found");
         }
 
         editorObject = new EditorObject[tilesheet.getWidth(this)/16];
@@ -129,6 +133,21 @@ public class ObjectChooser extends JPanel implements Runnable {
             g.fillRect((int)(selection.x/16)*16, (int)(selection.y/16)*16, 16, 16);
         }
         
+    }
+
+}
+
+private class Mouse extends MouseAdapter implements MouseListener{
+
+    public Point MouseLocation = new Point(0, 0);
+    public static Component clickedComponent = null;
+
+    @Override
+    public  void mousePressed(MouseEvent me) {
+
+        MouseLocation = me.getPoint();
+        clickedComponent = me.getComponent();
+
     }
 
 }

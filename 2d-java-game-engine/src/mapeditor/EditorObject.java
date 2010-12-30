@@ -32,7 +32,7 @@ public class EditorObject extends GameObject {
         this.position = position;
         this.tile = tile;
         try{
-            image = ImageIO.read(new File("tilesheet.png"));
+            image = ImageIO.read(new File(Toolbox.tilesheetTextField.getText()));
         }
         catch(Exception e){
             System.out.println(e);

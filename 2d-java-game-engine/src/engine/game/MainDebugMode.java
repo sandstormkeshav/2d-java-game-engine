@@ -183,16 +183,16 @@ public class MainDebugMode extends javax.swing.JFrame {
     }//GEN-LAST:event_spriteNumCheckBoxActionPerformed
 
     private void resetLevelMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetLevelMenuItemActionPerformed
-        // -- load .loadedLevel file again:
-        Level level = new Level(gameMain.loadedLevel.levelArchive);
+        // -- load the already loaded level again:
+
         try{
-            level.load();
+            gameMain.loadLevel(new File(gameMain.loadedLevel.levelArchive));
         }
         catch(Exception e){
         }
-        gameMain.loadedLevel = level;
 
         gameMain.camera.forceSetPosition(new Point(gameMain.mario.spawn.x, gameMain.mario.spawn.y));
+
     }//GEN-LAST:event_resetLevelMenuItemActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

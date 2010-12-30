@@ -24,8 +24,6 @@ public class Map extends JPanel implements Runnable {
     //public static int mousey=0;
     
     Thread main;
-    public static Image img = MapEditor.tiles;
-    public static Tiles[][] tile = new Tiles[999][999];
     public static int maxWidth=0;
     public static int maxHeight=0;
     public static int fillx;
@@ -334,10 +332,6 @@ public class Map extends JPanel implements Runnable {
     }
 
     public static void clear(){
-        for (int i=0;i<100;i++){
-            for (int j=0;j<100;j++){
-                tile[i][j].x=-16;
-            }
-        }
+        //TODO: add new clear method for EditorObject class
     }    
 }

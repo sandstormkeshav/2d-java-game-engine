@@ -66,10 +66,6 @@ public class GameObject {
         this.objectChar = (char)objectChar;
     }
 
-    public Tiles getTile(){
-        return new Tiles(image);
-    }
-
     @Override
     public String toString(){
         return name + " = " + (int)objectChar;

@@ -39,17 +39,13 @@ public class MapEditor extends JFrame {
 
     // DEFINITIONS (DO NOT CHANGE!):
 
-    public static int DRAW = 0;
-    public static int ERASE = 1;
-    public static int SELECT = 2;
+    public static final int DRAW = 0;
+    public static final int ERASE = 1;
+    public static final int SELECT = 2;
 
     // DEFINITIONS END
 
-    public static Image tiles;
-    public static Image sprites;
     public static int tab;
-    public static String tilepath="";
-    public static String spritepath="";
 
     public static int drawMode = DRAW;
 
@@ -76,17 +72,9 @@ public class MapEditor extends JFrame {
 
     public static GameObject selectedObject = null;
 
-    /** Creates new form MapEditor */
     public MapEditor() {
+
         initComponents();
-
-        tiles = Toolkit.getDefaultToolkit().getImage("newsmb.png");
-        tilepath = "newsmb.png";
-
-        sprites = Toolkit.getDefaultToolkit().getImage("mario.gif");
-        spritepath = "mario.gif";
-        spriteChooser.image = sprites;
-
         addComponentListener(resizeListener);
 
     }
@@ -716,6 +704,9 @@ public class MapEditor extends JFrame {
     }//GEN-LAST:event_CameraButtonActionPerformed
 
     private void MagicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MagicButtonActionPerformed
+        //TODO: add magic button code here
+        
+        /*
         for (int x=0;x<Map.maxWidth;x+=16){
             for (int y=0;y<Map.maxHeight;y+=16){
                 Map.tile[x/16][y/16].magic(x/16,y/16);
@@ -726,6 +717,7 @@ public class MapEditor extends JFrame {
                 Map.tile[x/16][y/16].magic(x/16,y/16);
             }
         }
+        */
 }//GEN-LAST:event_MagicButtonActionPerformed
 
     private void DrawButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DrawButton1ActionPerformed
@@ -855,7 +847,7 @@ public class MapEditor extends JFrame {
 
                 copyFile(new File(Toolbox.bg0TextField.getText()), new File("bg0.png"));
                 copyFile(new File(Toolbox.bg1TextField.getText()), new File("bg1.png"));
-                copyFile(new File(tilepath), new File("tilesheet.png"));
+                copyFile(new File(Toolbox.tilesheetTextField.getText()), new File("tilesheet.png"));
 
             } catch(Exception e){
                 System.out.println("ERROR copying files: " + e);
@@ -941,21 +933,24 @@ public class MapEditor extends JFrame {
             catch(Exception e){
             }
 
+            // update toolbox
             if(camera != null){
                 Toolbox.camPrefHeightSpinner.setValue(camera.prefHeight);
                 Toolbox.camToleranceSpinner.setValue(camera.tolerance);
             }
-
-            Map.maxWidth = loadedLevel.getWidth()*16 - 1;
-            Map.maxHeight = loadedLevel.getHeight()*16;
-            MapEditor.MapScrollPane.setPreferredSize(new Dimension(Map.maxWidth - 1,Map.maxHeight));
-            Toolbox.mapWidthSpinner.setValue(loadedLevel.getWidth() - 1);
-            Toolbox.mapHeightSpinner.setValue(loadedLevel.getHeight());
-            MapEditor.mapEdit.setSize(mapEdit.getSize().width, maxSize.height + 45);
-
-            //load images into editor:
             Toolbox.bg1TextField.setText(new File("bg1.png").getPath());
             Toolbox.bg0TextField.setText(new File("bg0.png").getPath());
+            Toolbox.tilesheetTextField.setText(new File("tilesheet.png").getPath());
+            Toolbox.mapWidthSpinner.setValue(loadedLevel.getWidth() - 1);
+            Toolbox.mapHeightSpinner.setValue(loadedLevel.getHeight());
+
+            // update draw area
+            Map.maxWidth = loadedLevel.getWidth()*16 - 1;
+            Map.maxHeight = loadedLevel.getHeight()*16;
+            
+            // update window
+            MapEditor.MapScrollPane.setPreferredSize(new Dimension(Map.maxWidth - 1,Map.maxHeight));
+            MapEditor.mapEdit.setSize(mapEdit.getSize().width, maxSize.height + 45);
 
             Map.background_layer = new Image[2];
             try{
@@ -964,13 +959,6 @@ public class MapEditor extends JFrame {
             }
             catch(Exception e){
             }
-
-            //load tile sheet into editor:
-            MapEditor.tilepath = "tilesheet.png";
-            MapEditor.tiles = Toolkit.getDefaultToolkit().getImage("tilesheet.png");
-            Toolbox.tilesheetTextField.setText(tilepath);
-            Map.img = MapEditor.tiles;
-            Map.img = tiles;
 
             int MapWidth = loadedLevel.getWidth();
             int MapHeight = loadedLevel.getHeight();
