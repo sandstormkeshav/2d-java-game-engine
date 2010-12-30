@@ -498,7 +498,7 @@
                           </Group>
                           <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="tilesheetTextField" pref="191" max="32767" attributes="1"/>
+                              <Component id="tilesheetTextField" min="-2" pref="191" max="-2" attributes="1"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="browseButtonTileSheet" min="-2" pref="37" max="-2" attributes="0"/>
                           </Group>

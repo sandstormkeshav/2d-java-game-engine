@@ -412,7 +412,7 @@ public class Toolbox extends javax.swing.JFrame {
                             .add(browseButtonBG0, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                     .add(jLabel10)
                     .add(jPanel2Layout.createSequentialGroup()
-                        .add(tilesheetTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                        .add(tilesheetTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 191, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(browseButtonTileSheet, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -478,7 +478,7 @@ public class Toolbox extends javax.swing.JFrame {
         File selectedFile = gameMain.FileOpenDialog("... Browse for Background Image");
         
         try{
-           gameMain.background_layer0 = ImageIO.read(selectedFile);
+           Map.background_layer[0] = ImageIO.read(selectedFile);
            bg0TextField.setText(selectedFile.getPath());
         }
         catch(Exception e){
@@ -491,7 +491,7 @@ public class Toolbox extends javax.swing.JFrame {
         File selectedFile = gameMain.FileOpenDialog("... Browse for Background Image");
 
         try{
-           gameMain.background_layer1 = ImageIO.read(selectedFile);
+           Map.background_layer[1] = ImageIO.read(selectedFile);
            bg1TextField.setText(selectedFile.getPath());
         }
         catch(Exception e){
@@ -510,15 +510,25 @@ public class Toolbox extends javax.swing.JFrame {
     private void browseButtonTileSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonTileSheetActionPerformed
         
         File selectedFile = gameMain.FileOpenDialog("... Browse for Tilesheet");
-
+        Image tilesheet = null;
         try{
-           gameMain.background_layer1 = ImageIO.read(selectedFile);
            tilesheetTextField.setText(selectedFile.getPath());
            tileChooser.updateTileChooser();
+           tilesheet = ImageIO.read(selectedFile);
         }
         catch(Exception e){
         }
-        
+
+        // update tiles already painted
+        int a = 0;
+        while(Map.object[a] != null){
+            if(Map.object[a].name.equals("WorldTile")){
+                Map.object[a].image = tilesheet;
+                
+            }
+            a++;
+        }
+
     }//GEN-LAST:event_browseButtonTileSheetActionPerformed
 
     private void ObjectCharTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ObjectCharTextFieldKeyPressed
