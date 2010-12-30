@@ -478,8 +478,8 @@ public class Toolbox extends javax.swing.JFrame {
         File selectedFile = gameMain.FileOpenDialog("... Browse for Background Image");
         
         try{
-           Map.background_layer[0] = ImageIO.read(selectedFile);
            bg0TextField.setText(selectedFile.getPath());
+           Map.background_layer[0] = ImageIO.read(selectedFile);
         }
         catch(Exception e){
         }
@@ -491,8 +491,8 @@ public class Toolbox extends javax.swing.JFrame {
         File selectedFile = gameMain.FileOpenDialog("... Browse for Background Image");
 
         try{
-           Map.background_layer[1] = ImageIO.read(selectedFile);
            bg1TextField.setText(selectedFile.getPath());
+           Map.background_layer[1] = ImageIO.read(selectedFile);
         }
         catch(Exception e){
         }

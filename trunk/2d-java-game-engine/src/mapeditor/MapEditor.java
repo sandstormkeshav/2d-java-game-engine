@@ -397,7 +397,7 @@ public class MapEditor extends JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+            .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE)
         );
 
         mainPanel.setName("mainPanel"); // NOI18N
@@ -413,7 +413,7 @@ public class MapEditor extends JFrame {
         MapPanel.setLayout(MapPanelLayout);
         MapPanelLayout.setHorizontalGroup(
             MapPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 792, Short.MAX_VALUE)
+            .add(0, 1054, Short.MAX_VALUE)
         );
         MapPanelLayout.setVerticalGroup(
             MapPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -844,12 +844,11 @@ public class MapEditor extends JFrame {
 
             // Copy files to cache
             try{
-
                 copyFile(new File(Toolbox.bg0TextField.getText()), new File("bg0.png"));
                 copyFile(new File(Toolbox.bg1TextField.getText()), new File("bg1.png"));
                 copyFile(new File(Toolbox.tilesheetTextField.getText()), new File("tilesheet.png"));
-
-            } catch(Exception e){
+            }
+            catch(Exception e){
                 System.out.println("ERROR copying files: " + e);
             }
 

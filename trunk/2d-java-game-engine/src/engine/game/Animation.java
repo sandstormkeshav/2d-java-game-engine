@@ -1,10 +1,12 @@
 package engine.game;
 
 import java.awt.*;
+import java.awt.image.VolatileImage;
 
 public class Animation{
 
     private Image sheet;
+
     private int frame = 0;
 
     Sprite sprite;
