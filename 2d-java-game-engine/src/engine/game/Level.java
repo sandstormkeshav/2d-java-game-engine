@@ -29,7 +29,7 @@ public class Level {
     
     public Level(String levelArchive){
         this.levelArchive = levelArchive;
-        
+
         //Unpack the loadedLevel archive:
         try{
             extractArchive(new File(levelArchive), new File("."));

@@ -1,6 +1,7 @@
 package engine.game;
 
 import java.awt.*;
+import java.awt.image.ImageObserver;
 
 public class Sprite{
 
@@ -107,6 +108,16 @@ public class Sprite{
 
     public Animation getAnimation(){
         return animation;
+    }
+
+    public void draw(Graphics2D g2d, ImageObserver io){
+        //Draw tile:
+        g2d.drawImage(img,
+        /*X1*/posx + ((flipH - 1)/(-2))*size.width ,/*Y1*/posy + ((flipV - 1)/(-2))*size.height, // source
+        /*X2*/posx+size.width*flipH+((flipH - 1)/(-2))*size.width,/*Y2*/posy+size.height*flipV + ((flipV - 1)/(-2))*size.height, // destination
+        getAnimation().col*size.width, getAnimation().row*size.height, // source
+        (getAnimation().col+1)*size.width, (getAnimation().row+1)*size.height,
+        io);
     }
 
 }

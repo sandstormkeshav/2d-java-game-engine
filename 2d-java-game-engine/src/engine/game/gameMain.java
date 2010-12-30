@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
+import java.awt.image.VolatileImage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
@@ -50,8 +51,11 @@ public class gameMain extends JPanel implements Runnable {
     public static Image boxSpriteSheet;
     public static Image coinSpriteSheet;
     public static Image tileSheet;
-    public static Image background_layer0;
-    public static Image background_layer1;
+    public static Image[] backgroundImage;
+
+    //Volatile Images
+    private VolatileImage tileLayer;
+    private VolatileImage[] backgroundLayer;
 
     //All kinds of Sprites:
     public static int numberOfSprites;
@@ -127,6 +131,18 @@ public class gameMain extends JPanel implements Runnable {
         else{
             loadLevel(FileOpenDialog("Open ..."));
         }
+
+        //create tile layer:
+        renderTileLayer();
+
+        //create bg layer:
+        backgroundLayer = new VolatileImage[backgroundImage.length];
+
+        for(int i = 0; i < backgroundImage.length; i++){
+            renderBackgroundLayer(0);
+            renderBackgroundLayer(1);
+        }
+        
     }
 
     // -- Main Loop
@@ -206,6 +222,41 @@ public class gameMain extends JPanel implements Runnable {
 
     }
 
+    public void renderTileLayer(){
+            // create hardware accellerated tile layer (Volatile Image)
+            tileLayer = this.getGraphicsConfiguration().createCompatibleVolatileImage(loadedLevel.getWidth()*16, loadedLevel.getHeight()*16, Transparency.TRANSLUCENT);
+            Graphics2D g2d = tileLayer.createGraphics();
+            g2d.setComposite(AlphaComposite.Src);
+
+            // Clear the image.
+            g2d.setColor(new Color(0,0,0,0));
+            g2d.fillRect(0, 0, tileLayer.getWidth(), tileLayer.getHeight());
+            g2d.setBackground(new Color(0,0,0,0));
+
+            g2d.setColor(new Color(1f, 1f, 1f, 1f));
+
+            for(int i = 0; i < numberOfTiles; i++){
+                tile[i].draw(g2d, this);
+            }
+    }
+
+    public void renderBackgroundLayer(int LayerNumber){
+            // create hardware accellerated background layer (Volatile Image)
+            backgroundLayer[LayerNumber] = this.getGraphicsConfiguration().createCompatibleVolatileImage(loadedLevel.getWidth()*16, loadedLevel.getHeight()*16, Transparency.TRANSLUCENT);
+            Graphics2D g2d = backgroundLayer[LayerNumber].createGraphics();
+            g2d.setComposite(AlphaComposite.Src);
+
+            // Clear the image.
+            g2d.setColor(new Color(0,0,0,0));
+            g2d.fillRect(0, 0, backgroundLayer[LayerNumber].getWidth(), backgroundLayer[LayerNumber].getHeight());
+            g2d.setBackground(new Color(0,0,0,0));
+
+            g2d.setColor(new Color(1f, 1f, 1f, 1f));
+            for(int i = 0; i < backgroundLayer[LayerNumber].getWidth(this)/backgroundImage[LayerNumber].getWidth(this); i++){
+                g2d.drawImage(backgroundImage[LayerNumber], i*backgroundImage[LayerNumber].getWidth(this), 0, this);
+            }
+    }
+
     //Draw elements:
     @Override
     public void paint(Graphics g){
@@ -225,38 +276,25 @@ public class gameMain extends JPanel implements Runnable {
         
         try{
 
-            //Draw background_layer0:
-            for(int i = 0; i < 5; i++){
-                g2d.drawImage(background_layer0, i*background_layer0.getWidth(this) - (int)(camera.position.x * 0.25), 0 - background_layer0.getHeight(this)/8, this);
+            //Draw background layer:
+            for(int i = 0; i < backgroundLayer.length; i++){
+                g2d.drawImage(backgroundLayer[i], -(int)(camera.position.x * Math.pow(0.5, backgroundLayer.length - i)), - (int)(camera.position.y * Math.pow(0.5, backgroundLayer.length - i)) + backgroundLayer[i].getHeight(this) - backgroundLayer[i].getHeight(this)/(i+1), this);
             }
-            //Draw background_layer1:
-            for(int i = 0; i < 5; i++){
-                g2d.drawImage(background_layer1, i*background_layer1.getWidth(this) - (int)(camera.position.x * 0.5), (int)(camera.prefHeight*0.75) -(int)(camera.position.y * 0.5), this);
-            }
+
         }
 
         catch(Exception e){
         }
 
-        //Draw Tiles:
-        for(int i = 0; i < numberOfTiles; i++){
-            try{
-
-                //Draw tile:
-                g2d.drawImage(tile[i].img,
-                /*X1*/tile[i].posx + ((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/tile[i].posy + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y,
-                /*X2*/tile[i].posx+tile[i].size.width*tile[i].flipH+((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y2*/tile[i].posy+tile[i].size.height*tile[i].flipV + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y, // destination
-                tile[i].getAnimation().col*tile[i].size.width, tile[i].getAnimation().row*tile[i].size.height, // source
-                (tile[i].getAnimation().col+1)*tile[i].size.width, (tile[i].getAnimation().row+1)*tile[i].size.height,
-                this);
-
-            }
-            catch(Exception e){
-                g2d.drawString("Error drawing a Tile", 20, 20);
-            }
+        //Draw Tiles: (new)
+        try{
+            g2d.drawImage(tileLayer, camera.center.x - camera.position.x, camera.center.y - camera.position.y, this);
         }
-        
+        catch(Exception e){
+        }
+
         //Draw all kinds of Sprites:
+
         for(int i = 0; i < numberOfSprites; i++){
 
             try{
@@ -374,10 +412,12 @@ public class gameMain extends JPanel implements Runnable {
             numberOfSprites = 0;
             numberOfTiles = 0;
 
+            backgroundImage = new Image[2];
+
             try{
                 tileSheet = ImageIO.read(new File("tilesheet.png"));
-                background_layer0 = ImageIO.read(new File("bg0.png"));
-                background_layer1 = ImageIO.read(new File("bg1.png"));
+                backgroundImage[0] = ImageIO.read(new File("bg0.png"));
+                backgroundImage[1] = ImageIO.read(new File("bg1.png"));
             }
             catch(Exception e){
                 System.out.println("ERROR loading images: " + e);

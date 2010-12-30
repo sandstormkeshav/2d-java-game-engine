@@ -137,7 +137,7 @@ public class ObjectChooser extends JPanel implements Runnable {
 
 }
 
-private class Mouse extends MouseAdapter implements MouseListener{
+class Mouse extends MouseAdapter implements MouseListener{
 
     public Point MouseLocation = new Point(0, 0);
     public static Component clickedComponent = null;

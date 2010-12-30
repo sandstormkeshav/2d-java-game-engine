@@ -28,7 +28,7 @@ public class Map extends JPanel implements Runnable {
     public static int maxHeight=0;
     public static int fillx;
     public static EditorObject[] object = new EditorObject[99999];
-    public static Image[] background_layer;
+    public static Image[] background_layer = new Image[2];
     public static EditorObject[] selectedObject;
 
     private boolean update = false;
