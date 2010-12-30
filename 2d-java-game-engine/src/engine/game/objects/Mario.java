@@ -61,7 +61,7 @@ public class Mario{
 
     public Mario(Point position){
         //set spawn point
-        spawn = position;
+        spawn = new Point(position.x, position.y);
 
         //set position of sprite:
         x = sprite.posx = position.x;
@@ -82,7 +82,6 @@ public class Mario{
         gameMain.sprite[gameMain.numberOfSprites] = gameMain.mario.sprite;
         gameMain.mario.mariosprite = gameMain.numberOfSprites;
         gameMain.numberOfSprites++;
-        System.out.println("new mario");
     }
 
     public void duck(){

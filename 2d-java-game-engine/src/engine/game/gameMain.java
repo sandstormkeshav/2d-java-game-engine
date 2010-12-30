@@ -81,18 +81,34 @@ public class gameMain extends JPanel implements Runnable {
     public static int height;
 
     //Levels:
+    private File initLevel = null;
     public static Level loadedLevel = new Level("");
 
     //Cameras
     public static Camera camera;
 
-    public gameMain(){
+    public gameMain(String level){
+        
             this.setDoubleBuffered(true);
             this.addKeyListener(new KeyPressListener());
             this.setFocusable(true);
             main = new Thread(this);
             main.start();
+
+            initLevel = new File(level);
+
     }
+
+    public gameMain(){
+
+            this.setDoubleBuffered(true);
+            this.addKeyListener(new KeyPressListener());
+            this.setFocusable(true);
+            main = new Thread(this);
+            main.start();
+
+    }
+
 
     public void initialize(){
 
@@ -105,8 +121,12 @@ public class gameMain extends JPanel implements Runnable {
             catch(Exception e){
         }
 
-        loadLevel(FileOpenDialog("Open ..."));
-
+        if(initLevel != null){
+            loadLevel(initLevel);
+        }
+        else{
+            loadLevel(FileOpenDialog("Open ..."));
+        }
     }
 
     // -- Main Loop
@@ -146,7 +166,7 @@ public class gameMain extends JPanel implements Runnable {
                 //reset mario if fallen off from screen:
                 if(mario.sprite.posy > loadedLevel.getHeight()*16 ){
                     camera.position = new Point(width/2, camera.prefHeight + camera.tolerance);
-                    mario.sprite.setPosition(5, 0);
+                    mario.sprite.setPosition(new Point(gameMain.mario.spawn.x, gameMain.mario.spawn.y));
                 }
 
             }

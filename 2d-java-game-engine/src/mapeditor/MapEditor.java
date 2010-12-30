@@ -59,6 +59,8 @@ public class MapEditor extends JFrame {
     public static javax.swing.JFrame toolbox;
     public static boolean toolboxVisible = false;
 
+    public static javax.swing.JFrame objectListEditor;
+
     public static javax.swing.JFrame about;
 
     public static javax.swing.JFrame mapEdit;
@@ -69,8 +71,6 @@ public class MapEditor extends JFrame {
     public static String[] gameObjectList;
 
     public static Level loadedLevel = new Level("");
-
-    public static GameObject[] objectList = new GameObject[0];
 
     public static Map map;
 
@@ -122,6 +122,7 @@ public class MapEditor extends JFrame {
         BackgroundButton = new javax.swing.JButton();
         CameraButton = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
+        TestButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         EditorModeLabel = new javax.swing.JLabel();
         mainPanel = new javax.swing.JPanel();
@@ -366,6 +367,20 @@ public class MapEditor extends JFrame {
         jSeparator3.setName("jSeparator3"); // NOI18N
         jToolBar1.add(jSeparator3);
 
+        TestButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/go-next.png"))); // NOI18N
+        TestButton.setToolTipText("Try Map");
+        TestButton.setBorder(null);
+        TestButton.setFocusable(false);
+        TestButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        TestButton.setName("TestButton"); // NOI18N
+        TestButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        TestButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TestButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(TestButton);
+
         jPanel2.setName("jPanel2"); // NOI18N
 
         EditorModeLabel.setText("Editor Mode: Draw");
@@ -376,7 +391,7 @@ public class MapEditor extends JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(186, Short.MAX_VALUE)
+                .addContainerGap(154, Short.MAX_VALUE)
                 .add(EditorModeLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 132, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -472,7 +487,6 @@ public class MapEditor extends JFrame {
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MapEditor.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
-        exitMenuItem.setText("Quit");
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
 
@@ -739,6 +753,11 @@ public class MapEditor extends JFrame {
         saveLevel(gameMain.FileSaveDialog("Save..."));
     }//GEN-LAST:event_SaveButtonActionPerformed
 
+    private void TestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TestButtonActionPerformed
+        saveLevel(new File("test.temp"));
+        new Main("test.temp");
+    }//GEN-LAST:event_TestButtonActionPerformed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -752,6 +771,9 @@ public class MapEditor extends JFrame {
 
         about = new MapEditorAbout();
         about.setVisible(false);
+
+        objectListEditor = new ObjectListEditor();
+        objectListEditor.setVisible(false);
 
     }
 
@@ -906,11 +928,10 @@ public class MapEditor extends JFrame {
             loadedLevel = new Level(file.getPath());
 
             Camera camera = null;
-            objectList = null;
 
             try{
                 camera = loadedLevel.getCamera();
-                objectList = loadedLevel.getGameObjects();
+                Toolbox.objectChooser.objectList = loadedLevel.getGameObjects();
                 
                 //check if inside JAR (this enables loading of ALL possible objects in the game
                 if(new File(MapEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).exists()){
@@ -925,10 +946,10 @@ public class MapEditor extends JFrame {
                 Toolbox.camToleranceSpinner.setValue(camera.tolerance);
             }
 
-            Map.maxWidth = loadedLevel.getWidth()*16;
+            Map.maxWidth = loadedLevel.getWidth()*16 - 1;
             Map.maxHeight = loadedLevel.getHeight()*16;
-            MapEditor.MapScrollPane.setPreferredSize(new Dimension(Map.maxWidth,Map.maxHeight));
-            Toolbox.mapWidthSpinner.setValue(loadedLevel.getWidth());
+            MapEditor.MapScrollPane.setPreferredSize(new Dimension(Map.maxWidth - 1,Map.maxHeight));
+            Toolbox.mapWidthSpinner.setValue(loadedLevel.getWidth() - 1);
             Toolbox.mapHeightSpinner.setValue(loadedLevel.getHeight());
             MapEditor.mapEdit.setSize(mapEdit.getSize().width, maxSize.height + 45);
 
@@ -970,9 +991,9 @@ public class MapEditor extends JFrame {
                     char CharAtXY = loadedLevel.level.substring(MapWidth * y, loadedLevel.level.length()).charAt(x);
 
                     // Load objects
-                    for(int i = 0; i < objectList.length; i++){
-                        if(CharAtXY == objectList[i].objectChar){
-                            tempObj[a] = new EditorObject(objectList[i], new Point(x, y));
+                    for(int i = 0; i < Toolbox.objectChooser.objectList.length; i++){
+                        if(CharAtXY == Toolbox.objectChooser.objectList[i].objectChar){
+                            tempObj[a] = new EditorObject(Toolbox.objectChooser.objectList[i], new Point(x, y));
                             a++;
                         }
                     }
@@ -993,11 +1014,13 @@ public class MapEditor extends JFrame {
                 // Update tile/object chooser
                 try{
                     Toolbox.tileChooser.updateTileChooser();
-                    Toolbox.objectChooser.objectList = objectList;
                     Toolbox.objectChooser.updateObjectChooser();
                 }
                 catch(Exception e){
                 }
+
+                // update Object List Editor
+                ObjectListEditor.updateTable();
 
             }
 
@@ -1028,6 +1051,7 @@ public class MapEditor extends JFrame {
     private javax.swing.JButton OpenButton;
     private javax.swing.JMenuItem OpenMenuItem;
     private javax.swing.JButton SaveButton;
+    private javax.swing.JButton TestButton;
     private javax.swing.JButton ToolsButton;
     public static javax.swing.JMenu WindowMenu;
     public static javax.swing.JCheckBoxMenuItem bgLayerCheckBox;
@@ -1040,7 +1064,7 @@ public class MapEditor extends JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JSpinner jSpinner1;

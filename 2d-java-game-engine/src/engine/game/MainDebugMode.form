@@ -126,8 +126,8 @@
         <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new gameMain();"/>
-        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="        gameMain.width = 16*23;&#xa;        gameMain.height = 16*19;&#xa;        setLocationRelativeTo(null);&#xa;"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new gameMain()"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="gameMain.width = 16*23;&#xa;        gameMain.height = 16*19;&#xa;        setLocationRelativeTo(null);"/>
       </AuxValues>
 
       <Layout>
