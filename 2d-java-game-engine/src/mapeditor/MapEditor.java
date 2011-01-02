@@ -61,6 +61,8 @@ public class MapEditor extends JFrame {
 
     public static javax.swing.JFrame mapEdit;
 
+    public static javax.swing.JFrame newMapWindow;
+
     public static Dimension maxSize = new Dimension(0,0);
     public static Dimension minSize = new Dimension(48,48);
 
@@ -547,7 +549,7 @@ public class MapEditor extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-        public boolean copyFile(File src, File dest) throws IOException{
+        public static boolean copyFile(File src, File dest) throws IOException{
 
         if(!src.equals(dest)){
             FileInputStream fis  = new FileInputStream(src);
@@ -679,7 +681,7 @@ public class MapEditor extends JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void NewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewButtonActionPerformed
-        // TODO add your handling code here:
+        newMapWindow.setVisible(true);
     }//GEN-LAST:event_NewButtonActionPerformed
 
     private void OpenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenButtonActionPerformed
@@ -764,12 +766,15 @@ public class MapEditor extends JFrame {
         about = new MapEditorAbout();
         about.setVisible(false);
 
+        newMapWindow = new NewDialog();
+        newMapWindow.setVisible(false);
+;
         objectListEditor = new ObjectListEditor();
         objectListEditor.setVisible(false);
 
     }
 
-    public void saveLevel(File file){
+    public static void saveLevel(File file){
 
         if(file != null){
 
