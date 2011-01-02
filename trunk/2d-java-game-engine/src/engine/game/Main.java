@@ -10,15 +10,17 @@ public class Main extends JFrame{
 
     public Main(){
 
-        gameMain.width = 16*30;
-        gameMain.height = 16*28;
-        
         GAME = new gameMain();
 
         add(GAME);
+        
+        gameMain.width = 640;
+        gameMain.height = 480;
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(16*30, 16*28);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        setSize(640, 480);
+
         setLocationRelativeTo(null);
         setTitle("2D Game Engine");
         setVisible(true);

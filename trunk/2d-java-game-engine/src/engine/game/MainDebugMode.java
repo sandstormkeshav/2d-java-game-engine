@@ -10,12 +10,18 @@ import javax.swing.*;
 import java.io.*;
 import engine.game.objects.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 /**
  *
  * @author Philipp
  */
 public class MainDebugMode extends javax.swing.JFrame {
+
+
+    public static javax.swing.JFrame changeRes;
 
     /** Creates new form MainDebugMode */
     public MainDebugMode() {
@@ -31,9 +37,9 @@ public class MainDebugMode extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new gameMain();
-        gameMain.width = 16*23;
-        gameMain.height = 16*19;
+        gameRenderPanel = new gameMain();
+        gameMain.width = gameRenderPanel.getWidth();
+        gameMain.height = gameRenderPanel.getHeight();
         setLocationRelativeTo(null);
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -44,6 +50,9 @@ public class MainDebugMode extends javax.swing.JFrame {
         spritePosCheckBox = new javax.swing.JCheckBoxMenuItem();
         spriteNumCheckBox = new javax.swing.JCheckBoxMenuItem();
         cameraCheckBox = new javax.swing.JCheckBoxMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        changeResMenuItem = new javax.swing.JMenuItem();
+        antiAliasingCheckBox = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("2D Game Engine (Debug Mode)");
@@ -53,21 +62,25 @@ public class MainDebugMode extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setName("jPanel1"); // NOI18N
+        gameRenderPanel.setName("gameRenderPanel"); // NOI18N
 
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+        org.jdesktop.layout.GroupLayout gameRenderPanelLayout = new org.jdesktop.layout.GroupLayout(gameRenderPanel);
+        gameRenderPanel.setLayout(gameRenderPanelLayout);
+        gameRenderPanelLayout.setHorizontalGroup(
+            gameRenderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(0, 400, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 286, Short.MAX_VALUE)
+        gameRenderPanelLayout.setVerticalGroup(
+            gameRenderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 287, Short.MAX_VALUE)
         );
 
+        jMenuBar1.setBackground(new java.awt.Color(153, 153, 153));
+        jMenuBar1.setBorder(null);
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
+        jMenu1.setBackground(new java.awt.Color(153, 153, 153));
+        jMenu1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jMenu1.setText("File");
         jMenu1.setName("jMenu1"); // NOI18N
 
@@ -88,6 +101,8 @@ public class MainDebugMode extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setBackground(new java.awt.Color(153, 153, 153));
+        jMenu2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jMenu2.setText("Engine");
         jMenu2.setName("jMenu2"); // NOI18N
 
@@ -142,17 +157,43 @@ public class MainDebugMode extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setBackground(new java.awt.Color(153, 153, 153));
+        jMenu3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jMenu3.setText("Graphics");
+        jMenu3.setName("jMenu3"); // NOI18N
+
+        changeResMenuItem.setText("Change Resolution");
+        changeResMenuItem.setName("changeResMenuItem"); // NOI18N
+        changeResMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeResMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu3.add(changeResMenuItem);
+
+        antiAliasingCheckBox.setSelected(true);
+        antiAliasingCheckBox.setText("Anti-Aliasing");
+        antiAliasingCheckBox.setName("antiAliasingCheckBox"); // NOI18N
+        antiAliasingCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                antiAliasingCheckBoxActionPerformed(evt);
+            }
+        });
+        jMenu3.add(antiAliasingCheckBox);
+
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, gameRenderPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(gameRenderPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -203,24 +244,61 @@ public class MainDebugMode extends javax.swing.JFrame {
         gameMain.showCamera = cameraCheckBox.getState();
     }//GEN-LAST:event_cameraCheckBoxActionPerformed
 
+    private void changeResMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeResMenuItemActionPerformed
+        changeRes.setVisible(true);
+    }//GEN-LAST:event_changeResMenuItemActionPerformed
+
+    private void antiAliasingCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_antiAliasingCheckBoxActionPerformed
+        gameMain.antialiasing = antiAliasingCheckBox.getState();
+    }//GEN-LAST:event_antiAliasingCheckBoxActionPerformed
+
     /**
     * @param args the command line arguments
     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainDebugMode().setVisible(true);
+                MainDebugMode frame = new MainDebugMode();
+                frame.setVisible(true);
+                frame.addComponentListener(resizeListener);
             }
         });
+
+        changeRes = new ChangeRes();
+        changeRes.setVisible(false);
+
     }
+
+
+    public static ComponentListener resizeListener = new ComponentAdapter(){
+
+        @Override
+        public void componentResized(ComponentEvent evt) {
+
+            gameMain.width = gameRenderPanel.getWidth();
+            gameMain.height = gameRenderPanel.getHeight();
+
+        }
+
+        @Override
+        public void componentMoved(ComponentEvent e) {
+
+            gameMain.width = gameRenderPanel.getWidth();
+            gameMain.height = gameRenderPanel.getHeight();
+
+        }
+    };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem OpenMenuItem;
+    private javax.swing.JCheckBoxMenuItem antiAliasingCheckBox;
     public static javax.swing.JCheckBoxMenuItem cameraCheckBox;
+    private javax.swing.JMenuItem changeResMenuItem;
+    public static javax.swing.JPanel gameRenderPanel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuItem resetLevelMenuItem;
     private javax.swing.JMenuItem resetMarioMenuItem;
     private javax.swing.JCheckBoxMenuItem spriteNumCheckBox;

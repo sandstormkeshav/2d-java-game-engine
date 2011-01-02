@@ -35,6 +35,10 @@ public class gameMain extends JPanel implements Runnable {
     //Some Random things
     private static boolean levelLoaded = false;
 
+    //Graphics settings
+    public static Dimension resolution = new Dimension(400, 300);
+    public static boolean antialiasing = true;
+
     //Key Mapping
     public static boolean[] keyPressed = new boolean[99999];
     public static boolean[] keyReleased = new boolean[99999];
@@ -56,6 +60,7 @@ public class gameMain extends JPanel implements Runnable {
     //Volatile Images
     private VolatileImage tileLayer;
     private VolatileImage[] backgroundLayer;
+    private VolatileImage renderImage;
 
     //All kinds of Sprites:
     public static int numberOfSprites;
@@ -138,10 +143,31 @@ public class gameMain extends JPanel implements Runnable {
         //create bg layer:
         backgroundLayer = new VolatileImage[backgroundImage.length];
 
+        //render layer:
         for(int i = 0; i < backgroundImage.length; i++){
             renderBackgroundLayer(0);
             renderBackgroundLayer(1);
         }
+
+        // create hardware accellerated rendering layer:
+        renderImage = this.getGraphicsConfiguration().createCompatibleVolatileImage(loadedLevel.getWidth()*16, loadedLevel.getHeight()*16, Transparency.TRANSLUCENT);
+        Graphics2D g2d = renderImage.createGraphics();
+        g2d.setComposite(AlphaComposite.Src);
+
+        // Clear the image.
+        g2d.setColor(new Color(0,0,0,0));
+        g2d.fillRect(0, 0, renderImage.getWidth(), renderImage.getHeight());
+        g2d.setBackground(new Color(0,0,0,0));
+
+        //Enable Antialiasing:
+        RenderingHints rh =
+            new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+                               RenderingHints.VALUE_ANTIALIAS_OFF);
+
+        rh.put(RenderingHints.KEY_RENDERING,
+             RenderingHints.VALUE_RENDER_QUALITY);
+
+        g2d.setRenderingHints(rh);
         
     }
 
@@ -257,23 +283,10 @@ public class gameMain extends JPanel implements Runnable {
             }
     }
 
-    //Draw elements:
-    @Override
-    public void paint(Graphics g){
-        //Set up Graphics Enigne:
-        Graphics2D g2d = (Graphics2D)g;
+    public void render(){
+       
+        Graphics2D g2d = renderImage.createGraphics();
 
-        //Enable Antialiasing:
-        RenderingHints rh =
-            new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-                               RenderingHints.VALUE_ANTIALIAS_ON);
-
-        rh.put(RenderingHints.KEY_RENDERING,
-             RenderingHints.VALUE_RENDER_QUALITY);
-
-        g2d.setRenderingHints(rh);
-
-        
         try{
 
             //Draw background layer:
@@ -302,7 +315,7 @@ public class gameMain extends JPanel implements Runnable {
                 if(sprite[i].animation.plays == true){
                     sprite[i].getAnimation().nextFrame();
                 }
-                
+
                 // -- Draw sprite:
                 g2d.drawImage(sprite[i].img,
                 /*X1*/sprite[i].posx + ((sprite[i].flipH - 1)/(-2))*sprite[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy + ((sprite[i].flipV - 1)/(-2))*sprite[i].size.height /*camera*/ - camera.position.y + camera.center.y,
@@ -324,7 +337,7 @@ public class gameMain extends JPanel implements Runnable {
         g2d.setColor(Color.WHITE);
         g2d.drawString("x "+collectedCoins, 32, 29);
         //Debug things:
-        
+
         for(int i = 0; i < numberOfSprites; i++){
                 if(showSpritePos == true){
                     g2d.setColor(Color.red);
@@ -359,6 +372,35 @@ public class gameMain extends JPanel implements Runnable {
             g2d.drawLine(camera.bounds.width - camera.center.x - camera.position.x + camera.center.x , 0, camera.bounds.width - camera.center.x - camera.position.x + camera.center.x, 999);
 
         }
+    }
+
+    //Draw elements:
+    @Override
+    public void paint(Graphics g){
+        // Set up Graphics Enigne:
+        Graphics2D g2d = (Graphics2D)g;
+
+        // Antialiasing:
+        if(antialiasing == true){
+            RenderingHints rh =
+                new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+                                   RenderingHints.VALUE_ANTIALIAS_ON);
+
+            rh.put(RenderingHints.KEY_RENDERING,
+                 RenderingHints.VALUE_RENDER_QUALITY);
+
+            g2d.setRenderingHints(rh);
+        }
+
+        // Render
+        try{
+            render();
+        }
+        catch(Exception e){
+        }
+
+        // Draw rendered image
+        g2d.drawImage(renderImage, 0, 0, width, height, 0, 0, resolution.width, resolution.height, this);
 
     }
 

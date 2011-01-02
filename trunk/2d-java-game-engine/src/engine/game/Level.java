@@ -173,7 +173,7 @@ public class Level {
     
     public Camera getCamera () throws Exception {
         //Initialize camera
-        Camera camera = new Camera(new Point(gameMain.width/2, gameMain.height/2), new Rectangle(0, 0, getWidth()*16, (getHeight())*16 - gameMain.height));
+        Camera camera = new Camera(new Point(gameMain.resolution.width/2, gameMain.resolution.height/2), new Rectangle(0, 0, getWidth()*16, (getHeight())*16 - gameMain.resolution.height));
 
         //create regex pattern/matcher to parse the string:
         Pattern cameraTolerancePattern = Pattern.compile("cameraTolerance ?= ?[0-9]+");
