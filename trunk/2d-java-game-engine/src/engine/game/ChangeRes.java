@@ -22,7 +22,7 @@ import java.awt.event.ActionListener;
  */
 public class ChangeRes extends javax.swing.JFrame {
 
-    Dimension resolution = new Dimension (320, 240);
+    Dimension resolution = new Dimension(320, 240);
 
     /** Creates new form ChangeRes */
     public ChangeRes() {
@@ -66,6 +66,7 @@ public class ChangeRes extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "320x240", "480x320", "640x480", "1024x768", "1920x1080" }));
+        jComboBox1.addActionListener(new ComboBoxActionListener());
         jComboBox1.setName("jComboBox1"); // NOI18N
 
         jButton1.setText("OK");
@@ -102,6 +103,7 @@ public class ChangeRes extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         gameMain.resolution = resolution;
+        System.out.println("changin resolution to: " + resolution.toString());
         gameMain.camera.bounds = new Rectangle(0, 0, gameMain.loadedLevel.getWidth()*16, (gameMain.loadedLevel.getHeight())*16 - resolution.height);
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -47,7 +47,7 @@
   <SubComponents>
     <Component class="javax.swing.JComboBox" name="jComboBox1">
       <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor" postCode="jComboBox1.addActionListener(new ComboBoxActionListener());">
           <StringArray count="5">
             <StringItem index="0" value="320x240"/>
             <StringItem index="1" value="480x320"/>
