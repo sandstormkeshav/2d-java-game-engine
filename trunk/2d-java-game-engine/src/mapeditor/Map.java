@@ -332,6 +332,10 @@ public class Map extends JPanel implements Runnable {
     }
 
     public static void clear(){
-        //TODO: add new clear method for EditorObject class
+        int a = 0;
+        while(object[a] != null){
+            object[a] = null;
+            a++;
+        }
     }    
 }
