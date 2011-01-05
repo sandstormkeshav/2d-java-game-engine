@@ -61,7 +61,7 @@ public class gameMain extends JPanel implements Runnable {
     //Volatile Images
     private VolatileImage tileLayer;
     private VolatileImage[] backgroundLayer;
-    private VolatileImage renderImage;
+    public static VolatileImage renderImage;
 
     //All kinds of Sprites:
     public static int numberOfSprites;
@@ -96,7 +96,11 @@ public class gameMain extends JPanel implements Runnable {
 
     //Cameras
     public static Camera camera;
-
+    
+    //Fullscreen
+    public static boolean fullscreen = false;
+    public static boolean newFrame = false;
+    
     public gameMain(String level){
         
             this.setDoubleBuffered(true);
@@ -235,8 +239,16 @@ public class gameMain extends JPanel implements Runnable {
             }
 
             try{
-                repaint();
+                        
+                // Draw to panel if not Fullscreen
+                if(fullscreen == false){
+                    render();
+                    repaint();
+                    
+                }
+
                 main.sleep(7L);
+
             }
             catch(Exception e){
 
@@ -269,7 +281,7 @@ public class gameMain extends JPanel implements Runnable {
 
     }
 
-    public void renderTileLayer(){
+    public VolatileImage renderTileLayer(){
             // create hardware accellerated tile layer (Volatile Image)
             tileLayer = this.getGraphicsConfiguration().createCompatibleVolatileImage(loadedLevel.getWidth()*16, loadedLevel.getHeight()*16, Transparency.TRANSLUCENT);
             Graphics2D g2d = tileLayer.createGraphics();
@@ -285,9 +297,11 @@ public class gameMain extends JPanel implements Runnable {
             for(int i = 0; i < numberOfTiles; i++){
                 tile[i].draw(g2d, this);
             }
+            
+            return tileLayer;
     }
 
-    public void renderBackgroundLayer(int LayerNumber){
+    public VolatileImage renderBackgroundLayer(int LayerNumber){
             // create hardware accellerated background layer (Volatile Image)
             backgroundLayer[LayerNumber] = this.getGraphicsConfiguration().createCompatibleVolatileImage(loadedLevel.getWidth()*16, loadedLevel.getHeight()*16, Transparency.TRANSLUCENT);
             Graphics2D g2d = backgroundLayer[LayerNumber].createGraphics();
@@ -302,9 +316,10 @@ public class gameMain extends JPanel implements Runnable {
             for(int i = 0; i < backgroundLayer[LayerNumber].getWidth(this)/backgroundImage[LayerNumber].getWidth(this); i++){
                 g2d.drawImage(backgroundImage[LayerNumber], i*backgroundImage[LayerNumber].getWidth(this), 0, this);
             }
+            return backgroundLayer[LayerNumber];
     }
 
-    public void render(){
+    public VolatileImage render(){
        
         Graphics2D g2d = renderImage.createGraphics();
 
@@ -393,6 +408,8 @@ public class gameMain extends JPanel implements Runnable {
             g2d.drawLine(camera.bounds.width - camera.center.x - camera.position.x + camera.center.x , 0, camera.bounds.width - camera.center.x - camera.position.x + camera.center.x, 999);
 
         }
+
+        return renderImage;
     }
 
     //Draw elements:
@@ -403,21 +420,10 @@ public class gameMain extends JPanel implements Runnable {
 
         // Antialiasing:
         if(antialiasing == true){
-            RenderingHints rh =
-                new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-                                   RenderingHints.VALUE_ANTIALIAS_ON);
-
-            rh.put(RenderingHints.KEY_RENDERING,
-                 RenderingHints.VALUE_RENDER_QUALITY);
+            RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
             g2d.setRenderingHints(rh);
-        }
-
-        // Render
-        try{
-            render();
-        }
-        catch(Exception e){
         }
 
         // Draw rendered image
