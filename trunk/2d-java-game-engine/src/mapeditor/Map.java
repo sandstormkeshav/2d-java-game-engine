@@ -286,18 +286,17 @@ public class Map extends JPanel implements Runnable {
         g2d.setColor(Color.GRAY);
         g2d.fillRect(0,0,maxWidth,maxHeight);
 
-        //draw background layer 0
-        try{
-            for(int i = 0; i < background_layer.length; i ++){
-                if(MapEditor.bgLayerCheckBox.getState() == true){
+        //draw background layer
+        if(MapEditor.bgLayerCheckBox.getState() == true){
+            try{
+                for(int i = 0; i < background_layer.length; i ++){
                     for(int w = 0; w < ((MapEditor.loadedLevel.getWidth()*16)/background_layer[i].getWidth(this))+1; w++){
-                        g2d.drawImage(background_layer[i], background_layer[i].getWidth(this)*w, 0, this);
+                        g2d.drawImage(background_layer[i], background_layer[i].getWidth(this)*w, background_layer[i].getHeight(this) - background_layer[i].getHeight(this)/(i+1), this);
                     }
                 }
             }
-
-        }
-        catch(Exception e){
+            catch(Exception e){
+            }
         }
         
         

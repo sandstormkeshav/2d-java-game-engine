@@ -34,6 +34,7 @@ public class gameMain extends JPanel implements Runnable {
 
     //Some Random things
     private static boolean levelLoaded = false;
+    private boolean openLevelFile = false;
 
     //Graphics settings
     public static Dimension resolution = new Dimension(400, 300);
@@ -106,6 +107,20 @@ public class gameMain extends JPanel implements Runnable {
 
             initLevel = new File(level);
 
+            openLevelFile = false;
+
+    }
+
+    public gameMain( boolean open ){
+
+            this.setDoubleBuffered(true);
+            this.addKeyListener(new KeyPressListener());
+            this.setFocusable(true);
+            main = new Thread(this);
+            main.start();
+
+            openLevelFile = open;
+
     }
 
     public gameMain(){
@@ -116,12 +131,13 @@ public class gameMain extends JPanel implements Runnable {
             main = new Thread(this);
             main.start();
 
-    }
+            openLevelFile = true;
 
+    }
 
     public void initialize(){
 
-        //load images:
+        //openLevelFile images:
         try{
             marioSpriteSheet = ImageIO.read(new File("Mario.png"));
             boxSpriteSheet = ImageIO.read(new File("ItemContainer.png"));
@@ -130,8 +146,13 @@ public class gameMain extends JPanel implements Runnable {
             catch(Exception e){
         }
 
-        if(initLevel != null){
-            loadLevel(initLevel);
+        if(openLevelFile == false){
+            try{
+                loadLevel(initLevel);
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
         }
         else{
             loadLevel(FileOpenDialog("Open ..."));

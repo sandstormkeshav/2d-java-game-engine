@@ -29,17 +29,38 @@ public class Main extends JFrame{
 
     }
 
+    public Main(boolean open){
+
+        GAME = new gameMain(open);
+
+        add(GAME);
+
+        gameMain.width = 400;
+        gameMain.height = 300;
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        setSize(400, 300);
+
+        setLocationRelativeTo(null);
+        setTitle("2D Game Engine");
+        setVisible(true);
+        setResizable(false);
+        this.setBackground(Color.black);
+
+    }
+
     public Main(String level){
 
-        gameMain.width = 16*30;
-        gameMain.height = 16*28;
+        gameMain.width = 400;
+        gameMain.height = 300;
 
         GAME = new gameMain(level);
 
         add(GAME);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(16*30, 16*28);
+        setSize(400, 300);
         setLocationRelativeTo(null);
         setTitle("2D Game Engine");
         setVisible(true);

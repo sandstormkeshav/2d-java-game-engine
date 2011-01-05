@@ -63,6 +63,8 @@ public class MapEditor extends JFrame {
 
     public static javax.swing.JFrame newMapWindow;
 
+    public static javax.swing.JFrame tryGame;
+
     public static Dimension maxSize = new Dimension(0,0);
     public static Dimension minSize = new Dimension(48,48);
 
@@ -749,7 +751,18 @@ public class MapEditor extends JFrame {
 
     private void TestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TestButtonActionPerformed
         saveLevel(new File("test.temp"));
-        new Main("test.temp");
+        
+        if(tryGame == null){
+            tryGame = new Main("test.temp");
+        }
+        else{tryGame.setVisible(true);
+            Main.GAME.loadLevel(new File("test.temp"));
+            Main.GAME.renderTileLayer();
+            Main.GAME.renderBackgroundLayer(0);
+            Main.GAME.renderBackgroundLayer(1);
+        }
+
+        tryGame.setVisible(true);
     }//GEN-LAST:event_TestButtonActionPerformed
 
     public static void main(String args[]) {
@@ -768,10 +781,12 @@ public class MapEditor extends JFrame {
 
         newMapWindow = new NewDialog();
         newMapWindow.setVisible(false);
-;
+
         objectListEditor = new ObjectListEditor();
         objectListEditor.setVisible(false);
 
+        tryGame = null;
+        //tryGame.setVisible(false);
     }
 
     public static void saveLevel(File file){
