@@ -7,8 +7,11 @@ package mapeditor;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Transparency;
 import java.awt.image.ImageObserver;
+import java.awt.image.VolatileImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
