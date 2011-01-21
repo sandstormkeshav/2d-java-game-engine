@@ -11,25 +11,15 @@
 
 package mapeditor;
 
-import org.jdesktop.application.Action;
-import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
-import javax.swing.Timer;
-import javax.swing.Icon;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import java.awt.*;
 import java.io.*;
-import javax.swing.JOptionPane;
 import java.util.zip.*;
 import engine.game.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.image.ImageObserver;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 
 /**
  *
