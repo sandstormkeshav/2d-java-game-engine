@@ -77,6 +77,22 @@ public class Map extends JPanel implements Runnable {
         }
     }
 
+    //sort
+    public void sortTiles(){
+
+        int a = 0;
+
+        while(object[a] != null){
+            //selbst, rechts, links und oben erde:
+            if (object[a].tile < 6 && object[getObjectNumberAt(new Point(object[a].position.x-16, object[a].position.y))].tile <6 && object[getObjectNumberAt(new Point(object[a].position.x+16, object[a].position.y))].tile <6 && object[getObjectNumberAt(new Point(object[a].position.x, object[a].position.y-16))].tile <6){
+                object[a].tile = 1;//falls 1 = pure erde ?
+            }
+            
+            a++;
+        }
+
+    }
+
     //set new MapSize
     public void setMapSize(int a, int b){
         maxWidth = a;
@@ -268,6 +284,10 @@ public class Map extends JPanel implements Runnable {
                 return a;
             }
             a++;
+        }
+
+        if(a == 0 && !object[a].position.equals(p)){
+            return -1;
         }
 
         return a;
