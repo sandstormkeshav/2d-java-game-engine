@@ -40,13 +40,22 @@ public class Map extends JPanel implements Runnable {
     private static EditorObject[] objectTemp = null;
     private static boolean moving = false;
 
-    public boolean magic=true;
-
     MouseKlick mouseClickListener = new MouseKlick();
     MouseMotion mouseMotionListener = new MouseMotion();
 
     VolatileImage grid = this.createVolatileImage(maxWidth, maxHeight);
     VolatileImage objectLayer = this.createVolatileImage(maxWidth, maxHeight);
+
+    public static int tile[] = new int[]{
+        0, // corner left
+        1, // corner right
+        2, // incorner right
+        3, // incorner left
+        4, // border left
+        5, // border right
+        6, // border top
+        7, // mud
+    };
 
     public Map(){
 
@@ -77,15 +86,120 @@ public class Map extends JPanel implements Runnable {
         }
     }
 
+
+    public int getTileAt(Point p){
+
+        // -1 means no tile since its an object.
+        // -1 means no tile since there is nothing.
+
+        // -1 (now) also means tile, but no mud tile (this is a very bad thing to do).
+
+        boolean isTile = false;
+
+        if(object[getObjectNumberAt(p)] != null){
+            for(int i = 0; i < tile.length; i++){
+                if(object[getObjectNumberAt(p)].tile == tile[i]) isTile = true;
+            }
+        }
+
+        if(object[getObjectNumberAt(p)] != null && isTile == true){
+            return object[getObjectNumberAt(p)].tile;
+        }
+        else{
+            return -1;
+        }
+    }
+
     //sort
     public void sortTiles(){
 
         int a = 0;
 
         while(object[a] != null){
-            //selbst, rechts, links und oben erde:
-            if (object[a].tile < 6 && object[getObjectNumberAt(new Point(object[a].position.x-16, object[a].position.y))].tile <6 && object[getObjectNumberAt(new Point(object[a].position.x+16, object[a].position.y))].tile <6 && object[getObjectNumberAt(new Point(object[a].position.x, object[a].position.y-16))].tile <6){
-                object[a].tile = 1;//falls 1 = pure erde ?
+
+            boolean isTile = false;
+
+            for(int i = 0; i < tile.length; i++){
+                if(object[a].tile == tile[i]) isTile = true;
+            }
+
+            if (isTile == true){
+
+                object[a].tile = tile[7];
+               
+                // single border check
+                Point[] p = new Point[]{
+                    new Point(object[a].position.x-1, object[a].position.y),
+                    new Point(object[a].position.x, object[a].position.y-1),
+                    new Point(object[a].position.x+1, object[a].position.y),
+                };
+
+                // border tiles could be editable in the editor using this array.
+                int[] borderTile = new int[]{
+                    tile[4],
+                    tile[6],
+                    tile[5]
+                };
+
+                for(int i = 0; i < p.length; i++){
+
+                    // feld am punkt p ist leer      || im feld am punkt p ist nicht erde
+                    if(getObjectNumberAt(p[i]) == -1 || getTileAt(p[i]) == -1){
+                        object[a].tile = borderTile[i];
+                    }
+
+                }
+
+                // corner check
+                Point[][] cornerPoint = new Point[][]{
+                    new Point[]{ p[0], p[1] },
+                    new Point[]{ p[2], p[1] },
+                    new Point[]{ p[0], p[1] },
+                    new Point[]{ p[2], p[1] },
+                    new Point[]{ p[0], p[1] },
+                    new Point[]{ p[2], p[1] },
+                    new Point[]{ p[0], p[1] },
+                    new Point[]{ p[2], p[1] },
+                    new Point[]{ p[0], p[1] },
+                    new Point[]{ p[2], p[1] },
+                };
+
+                int[][] checkTileNumber = new int[][]{
+                    new int[]{-1, -1},
+                    new int[]{-1, -1},
+                    new int[]{tile[6], tile[4]},
+                    new int[]{tile[6], tile[5]},
+                    new int[]{tile[0], tile[4]},
+                    new int[]{tile[1], tile[5]},
+                    new int[]{tile[0], tile[0]},
+                    new int[]{tile[1], tile[1]},
+                    new int[]{tile[6], tile[0]},
+                    new int[]{tile[6], tile[1]},
+                };
+
+                // editable as before.
+                borderTile = new int[]{
+                    tile[0],
+                    tile[1],
+                    tile[3],
+                    tile[2],
+                    tile[3],
+                    tile[2],
+                    tile[3],
+                    tile[2],
+                    tile[3],
+                    tile[2]
+                };
+
+                for(int i = 0; i < cornerPoint.length; i++){
+
+                    // feld am punkt cornerPoint - 0 ist leer      || im feld am punkt cornerPoint - 0 ist nicht erde .. für beide Punkte im array
+                    if((getObjectNumberAt(cornerPoint[i][0]) == checkTileNumber[i][0] || getTileAt(cornerPoint[i][0]) == checkTileNumber[i][0]) && (getObjectNumberAt(cornerPoint[i][1]) == checkTileNumber[i][1] || getTileAt(cornerPoint[i][1]) == checkTileNumber[i][1])){
+                        object[a].tile = borderTile[i];
+                    }
+
+                }
+
             }
             
             a++;
@@ -286,9 +400,11 @@ public class Map extends JPanel implements Runnable {
             a++;
         }
 
+        /*
         if(a == 0 && !object[a].position.equals(p)){
             return -1;
         }
+        */
 
         return a;
 

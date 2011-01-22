@@ -11,7 +11,6 @@
 
 package mapeditor;
 
-import javax.swing.ImageIcon;
 import java.awt.*;
 import java.io.*;
 import engine.game.*;
@@ -53,6 +52,7 @@ public class Toolbox extends javax.swing.JFrame {
         CharLabel1 = new javax.swing.JLabel();
         ObjectNameTextField = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         camPrefHeightSpinner = new javax.swing.JSpinner();
@@ -117,7 +117,7 @@ public class Toolbox extends javax.swing.JFrame {
         ObjectsPanel.setLayout(ObjectsPanelLayout);
         ObjectsPanelLayout.setHorizontalGroup(
             ObjectsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 234, Short.MAX_VALUE)
+            .add(0, 254, Short.MAX_VALUE)
         );
         ObjectsPanelLayout.setVerticalGroup(
             ObjectsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -162,38 +162,52 @@ public class Toolbox extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mapeditor/resources/document-properties.png"))); // NOI18N
+        jButton2.setToolTipText("Edit Object List");
+        jButton2.setBorder(null);
+        jButton2.setName("jButton2"); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout TileTabPanelLayout = new org.jdesktop.layout.GroupLayout(TileTabPanel);
         TileTabPanel.setLayout(TileTabPanelLayout);
         TileTabPanelLayout.setHorizontalGroup(
             TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(TileTabPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(TilesPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                .addContainerGap())
-            .add(TileTabPanelLayout.createSequentialGroup()
                 .add(9, 9, 9)
                 .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(TileTabPanelLayout.createSequentialGroup()
-                        .add(jLabel9)
+                        .add(jLabel8)
                         .addContainerGap())
-                    .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(TileTabPanelLayout.createSequentialGroup()
-                            .add(jLabel8)
-                            .addContainerGap())
-                        .add(TileTabPanelLayout.createSequentialGroup()
-                            .add(CharLabel1)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(ObjectNameTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(CharLabel)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(ObjectCharTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 39, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(11, 11, 11)))))
+                    .add(TileTabPanelLayout.createSequentialGroup()
+                        .add(CharLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(ObjectNameTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(CharLabel)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(ObjectCharTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 39, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(11, 11, 11))))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, TileTabPanelLayout.createSequentialGroup()
+                .add(9, 9, 9)
+                .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(TileTabPanelLayout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jButton1)
+                            .add(ObjectsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)))
+                    .add(TileTabPanelLayout.createSequentialGroup()
+                        .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 48, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 219, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
             .add(TileTabPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jButton1)
-                    .add(ObjectsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
+                    .add(jButton2)
+                    .add(TilesPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
                 .addContainerGap())
         );
         TileTabPanelLayout.setVerticalGroup(
@@ -202,13 +216,15 @@ public class Toolbox extends javax.swing.JFrame {
                 .add(jLabel8)
                 .add(4, 4, 4)
                 .add(TilesPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jButton2)
+                .add(8, 8, 8)
                 .add(jLabel9)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(ObjectsPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jButton1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 94, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 65, Short.MAX_VALUE)
                 .add(TileTabPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(ObjectNameTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(CharLabel1)
@@ -361,6 +377,7 @@ public class Toolbox extends javax.swing.JFrame {
             }
         });
 
+        bg1TextField.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         bg1TextField.setName("bg1TextField"); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 10));
@@ -402,9 +419,9 @@ public class Toolbox extends javax.swing.JFrame {
                     .add(jLabel2)
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                            .add(bg0TextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                            .add(bg1TextField)
-                            .add(fgTextField))
+                            .add(bg0TextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 190, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(fgTextField)
+                            .add(bg1TextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 186, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(browseButtonFG, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -460,7 +477,7 @@ public class Toolbox extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .add(ToolboxTab, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                 .addContainerGap())
@@ -559,6 +576,10 @@ public class Toolbox extends javax.swing.JFrame {
         MapEditor.objectListEditor.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        MapEditor.tilePropertiesEditor.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     ChangeListener mapSizeSpinnerListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
         
@@ -615,6 +636,7 @@ public class Toolbox extends javax.swing.JFrame {
     public static javax.swing.JSpinner camToleranceSpinner;
     public static javax.swing.JTextField fgTextField;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

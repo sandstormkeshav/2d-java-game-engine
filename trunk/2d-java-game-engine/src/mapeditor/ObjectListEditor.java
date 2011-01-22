@@ -11,8 +11,6 @@
 
 package mapeditor;
 
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
 import javax.swing.table.*;
 
 /**
@@ -24,7 +22,7 @@ public class ObjectListEditor extends javax.swing.JFrame {
     static DefaultTableModel ObjectListTableModel = new DefaultTableModel(
         null,
         new String[]{
-            "Name","Char"
+            "Object Name","Char"
         }
     );
 

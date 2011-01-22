@@ -46,6 +46,8 @@ public class MapEditor extends JFrame {
     public static boolean toolboxVisible = false;
 
     public static javax.swing.JFrame objectListEditor;
+    
+    public static javax.swing.JFrame tilePropertiesEditor;
 
     public static javax.swing.JFrame about;
 
@@ -391,7 +393,7 @@ public class MapEditor extends JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE)
+            .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
         );
 
         mainPanel.setName("mainPanel"); // NOI18N
@@ -698,20 +700,7 @@ public class MapEditor extends JFrame {
     }//GEN-LAST:event_CameraButtonActionPerformed
 
     private void MagicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MagicButtonActionPerformed
-        //TODO: add magic button code here
-        
-        /*
-        for (int x=0;x<Map.maxWidth;x+=16){
-            for (int y=0;y<Map.maxHeight;y+=16){
-                Map.tile[x/16][y/16].magic(x/16,y/16);
-            }
-        }
-        for (int x=0;x<Map.maxWidth;x+=16){
-            for (int y=0;y<Map.maxHeight;y+=16){
-                Map.tile[x/16][y/16].magic(x/16,y/16);
-            }
-        }
-        */
+        map.sortTiles();
 }//GEN-LAST:event_MagicButtonActionPerformed
 
     private void DrawButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DrawButton1ActionPerformed
@@ -775,6 +764,8 @@ public class MapEditor extends JFrame {
         objectListEditor = new ObjectListEditor();
         objectListEditor.setVisible(false);
 
+        tilePropertiesEditor = new TilePropertiesEditor();
+        tilePropertiesEditor.setVisible(false);
         tryGame = null;
         //tryGame.setVisible(false);
     }
