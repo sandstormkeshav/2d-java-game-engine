@@ -183,7 +183,7 @@ public class gameMain extends JPanel implements Runnable {
         g2d.setColor(new Color(0,0,0,0));
         g2d.fillRect(0, 0, renderImage.getWidth(), renderImage.getHeight());
         g2d.setBackground(new Color(0,0,0,0));
-
+        /*
         //Enable Antialiasing:
         RenderingHints rh =
             new RenderingHints(RenderingHints.KEY_ANTIALIASING,
@@ -193,7 +193,7 @@ public class gameMain extends JPanel implements Runnable {
              RenderingHints.VALUE_RENDER_QUALITY);
 
         g2d.setRenderingHints(rh);
-        
+        */
     }
 
     // -- Main Loop
@@ -484,9 +484,9 @@ public class gameMain extends JPanel implements Runnable {
             backgroundImage = new Image[2];
 
             try{
-                tileSheet = ImageIO.read(new File("tilesheet.png"));
-                backgroundImage[0] = ImageIO.read(new File("bg0.png"));
-                backgroundImage[1] = ImageIO.read(new File("bg1.png"));
+                tileSheet = ImageIO.read(new File(loadedLevel.levelName + "/tilesheet.png"));
+                backgroundImage[0] = ImageIO.read(new File(loadedLevel.levelName + "/bg0.png"));
+                backgroundImage[1] = ImageIO.read(new File(loadedLevel.levelName + "/bg1.png"));
             }
             catch(Exception e){
                 System.out.println("ERROR loading images: " + e);
