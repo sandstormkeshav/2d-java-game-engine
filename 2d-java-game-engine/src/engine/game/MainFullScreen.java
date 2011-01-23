@@ -148,8 +148,8 @@ public class MainFullScreen extends Frame implements KeyListener{
 
     public static void main(String args[]) {
 
-        new MainFullScreen(640, 480, 16);
-        //printDisplayModes();
+        new MainFullScreen(1680, 1050, 32);
+        printDisplayModes();
         GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
         DisplayMode originalDisplayMode = graphicsDevice.getDisplayMode();
@@ -167,7 +167,7 @@ public class MainFullScreen extends Frame implements KeyListener{
             }
         };
 
-        Main game = new Main("test.level", bestDisplayMode.getWidth(), bestDisplayMode.getHeight());
+        Main game = new Main("test4.level", bestDisplayMode.getWidth(), bestDisplayMode.getHeight());
         gameMain.fullscreen = true;
 
         try {
@@ -194,12 +194,13 @@ public class MainFullScreen extends Frame implements KeyListener{
                     g = bufferStrategy.getDrawGraphics();
                     Graphics2D g2d = (Graphics2D)g;
 
+                    /*
                     // Antialiasing:
                     RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
                     g2d.setRenderingHints(rh);
-                    
+                    */
 
                     if ((counter <= 2)) { // 2 buffers
                         g2d.setColor(Color.BLACK);

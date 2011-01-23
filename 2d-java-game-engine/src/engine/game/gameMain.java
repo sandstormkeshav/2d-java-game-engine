@@ -183,17 +183,7 @@ public class gameMain extends JPanel implements Runnable {
         g2d.setColor(new Color(0,0,0,0));
         g2d.fillRect(0, 0, renderImage.getWidth(), renderImage.getHeight());
         g2d.setBackground(new Color(0,0,0,0));
-        /*
-        //Enable Antialiasing:
-        RenderingHints rh =
-            new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-                               RenderingHints.VALUE_ANTIALIAS_OFF);
 
-        rh.put(RenderingHints.KEY_RENDERING,
-             RenderingHints.VALUE_RENDER_QUALITY);
-
-        g2d.setRenderingHints(rh);
-        */
     }
 
     // -- Main Loop
@@ -201,6 +191,9 @@ public class gameMain extends JPanel implements Runnable {
 
         //called only once:
         initialize();
+
+        //create me a timer
+        Timer t = new Timer();
 
         //start main loop:
         while(true){
@@ -242,13 +235,29 @@ public class gameMain extends JPanel implements Runnable {
                         
                 // Draw to panel if not Fullscreen
                 if(fullscreen == false){
+
+                    t.start();
+                    
                     render();
                     repaint();
+
+                    long sleeptime = 6 - t.stop();
+
+                    //calculate sleep time (max fps)
+                    if(sleeptime < 0){
+                        sleeptime = 0;
+                    }
+
+                    main.sleep(1L + sleeptime);
+
+                    System.out.println("FPS: " + 100/t.stop());
+
+                }
+                else{
+
+                    main.sleep(7L);
                     
                 }
-
-                main.sleep(7L);
-
             }
             catch(Exception e){
 
@@ -258,6 +267,23 @@ public class gameMain extends JPanel implements Runnable {
 
     }
 
+    private class Timer{
+
+        long startTime;
+
+        public Timer(){
+            start();
+        }
+
+        public void start(){
+            startTime = System.currentTimeMillis();
+        }
+
+        public long stop(){
+            return System.currentTimeMillis() - startTime;
+        }
+
+    }
 
     private class KeyPressListener extends KeyAdapter {
 
@@ -344,26 +370,28 @@ public class gameMain extends JPanel implements Runnable {
 
         //Draw all kinds of Sprites:
 
-        for(int i = 0; i < numberOfSprites; i++){
+        try{
+            int a = 0;
 
-            try{
+            while(sprite[a] != null){
                 //Play Animation for sprite:
-                if(sprite[i].animation.plays == true){
-                    sprite[i].getAnimation().nextFrame();
+                if(sprite[a].animation.plays == true){
+                    sprite[a].getAnimation().nextFrame();
                 }
 
                 // -- Draw sprite:
-                g2d.drawImage(sprite[i].img,
-                /*X1*/sprite[i].posx + ((sprite[i].flipH - 1)/(-2))*sprite[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy + ((sprite[i].flipV - 1)/(-2))*sprite[i].size.height /*camera*/ - camera.position.y + camera.center.y,
-                /*X2*/sprite[i].posx + sprite[i].size.width*sprite[i].flipH + ((sprite[i].flipH - 1)/(-2))*sprite[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y2*/sprite[i].posy+sprite[i].size.height*sprite[i].flipV + ((sprite[i].flipV - 1)/(-2))*sprite[i].size.height /*camera*/ - camera.position.y + camera.center.y, // destination
-                sprite[i].getAnimation().col*sprite[i].size.width, sprite[i].getAnimation().row*sprite[i].size.height, // source
-                (sprite[i].getAnimation().col+1)*sprite[i].size.width, (sprite[i].getAnimation().row+1)*sprite[i].size.height,
+                g2d.drawImage(sprite[a].img,
+                /*X1*/sprite[a].posx + ((sprite[a].flipH - 1)/(-2))*sprite[a].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[a].posy + ((sprite[a].flipV - 1)/(-2))*sprite[a].size.height /*camera*/ - camera.position.y + camera.center.y,
+                /*X2*/sprite[a].posx + sprite[a].size.width*sprite[a].flipH + ((sprite[a].flipH - 1)/(-2))*sprite[a].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y2*/sprite[a].posy+sprite[a].size.height*sprite[a].flipV + ((sprite[a].flipV - 1)/(-2))*sprite[a].size.height /*camera*/ - camera.position.y + camera.center.y, // destination
+                sprite[a].getAnimation().col*sprite[a].size.width, sprite[a].getAnimation().row*sprite[a].size.height, // source
+                (sprite[a].getAnimation().col+1)*sprite[a].size.width, (sprite[a].getAnimation().row+1)*sprite[a].size.height,
                 this);
-
+                
+                a++;
             }
-            catch(Exception e){
-                g2d.drawString("Error drawing a Sprite", 20, 20);
-            }
+        }
+        catch(Exception e){
+            g2d.drawString("Error drawing a Sprite", 20, 20);
         }
 
         //Draw "GUI":
@@ -372,30 +400,32 @@ public class gameMain extends JPanel implements Runnable {
         g2d.drawString("x "+collectedCoins, 32, 30);
         g2d.setColor(Color.WHITE);
         g2d.drawString("x "+collectedCoins, 32, 29);
-        //Debug things:
 
-        for(int i = 0; i < numberOfSprites; i++){
-                if(showSpritePos == true){
-                    g2d.setColor(Color.red);
-                    g2d.drawRect(/*X1*/sprite[i].posx /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy /*camera*/ - camera.position.y + camera.center.y, 1, 1);
-                    g2d.setColor(Color.black);
-                }
-
-                if(showSpriteNum == true){
-                    g2d.setColor(Color.black);
-                    g2d.drawString("" + i, /*X1*/sprite[i].posx /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy /*camera*/ - camera.position.y + camera.center.y);
-                    g2d.setColor(Color.white);
-                    g2d.drawString("" + i, /*X1*/sprite[i].posx /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy /*camera*/ - camera.position.y + camera.center.y - 1);
-
-                }
+        if(showSpritePos == true){
+            for(int i = 0; i < numberOfSprites; i++){
+                g2d.setColor(Color.red);
+                g2d.drawRect(/*X1*/sprite[i].posx /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy /*camera*/ - camera.position.y + camera.center.y, 1, 1);
+                g2d.setColor(Color.black);
+            }
         }
-        for(int i = 0; i < numberOfTiles; i++){
-                if(showSpritePos == true){
-                    g2d.setColor(Color.red);
-                    g2d.drawRect(/*X1*/tile[i].posx + ((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/tile[i].posy + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y, 1, 1);
-                    g2d.setColor(Color.black);
-                }
+
+        if(showSpriteNum == true){
+            for(int i = 0; i < numberOfSprites; i++){
+                g2d.setColor(Color.black);
+                g2d.drawString("" + i, /*X1*/sprite[i].posx /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy /*camera*/ - camera.position.y + camera.center.y);
+                g2d.setColor(Color.white);
+                g2d.drawString("" + i, /*X1*/sprite[i].posx /*camera*/ - camera.position.x + camera.center.x,/*Y1*/ sprite[i].posy /*camera*/ - camera.position.y + camera.center.y - 1);
+            }
         }
+
+        if(showSpritePos == true){
+            for(int i = 0; i < numberOfTiles; i++){
+                g2d.setColor(Color.red);
+                g2d.drawRect(/*X1*/tile[i].posx + ((tile[i].flipH - 1)/(-2))*tile[i].size.width /*camera*/ - camera.position.x + camera.center.x,/*Y1*/tile[i].posy + ((tile[i].flipV - 1)/(-2))*tile[i].size.height /*camera*/ - camera.position.y + camera.center.y, 1, 1);
+                g2d.setColor(Color.black);
+            }
+        }
+
         if(showCamera == true){
             g2d.setColor(Color.red);
             g2d.drawLine(0, camera.prefHeight - camera.position.y + camera.center.y, loadedLevel.getWidth() * 16, camera.prefHeight - camera.position.y + camera.center.y);
@@ -410,11 +440,13 @@ public class gameMain extends JPanel implements Runnable {
         }
 
         return renderImage;
+        
     }
 
     //Draw elements:
     @Override
     public void paint(Graphics g){
+
         // Set up Graphics Enigne:
         Graphics2D g2d = (Graphics2D)g;
 
