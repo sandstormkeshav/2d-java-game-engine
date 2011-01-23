@@ -843,7 +843,6 @@ public class MapEditor extends JFrame {
                 System.out.println("ERROR saving objects file: " + e);
             }
 
-            // Copy files to cache
             try{
                 copyFile(new File(Toolbox.bg0TextField.getText()), new File("bg0.png"));
                 copyFile(new File(Toolbox.bg1TextField.getText()), new File("bg1.png"));
@@ -914,6 +913,7 @@ public class MapEditor extends JFrame {
     public static void loadLevel(File file){
         
         if(file != null){
+
             //clean up old loads:
             loadedLevel.clean();
 
@@ -938,9 +938,10 @@ public class MapEditor extends JFrame {
                 Toolbox.camPrefHeightSpinner.setValue(camera.prefHeight);
                 Toolbox.camToleranceSpinner.setValue(camera.tolerance);
             }
-            Toolbox.bg1TextField.setText(new File("bg1.png").getPath());
-            Toolbox.bg0TextField.setText(new File("bg0.png").getPath());
-            Toolbox.tilesheetTextField.setText(new File("tilesheet.png").getPath());
+
+            Toolbox.bg1TextField.setText(loadedLevel.levelName + "/bg1.png");
+            Toolbox.bg0TextField.setText(loadedLevel.levelName + "/bg0.png");
+            Toolbox.tilesheetTextField.setText(loadedLevel.levelName + "/tilesheet.png");
             Toolbox.mapWidthSpinner.setValue(loadedLevel.getWidth() - 1);
             Toolbox.mapHeightSpinner.setValue(loadedLevel.getHeight());
 
@@ -954,8 +955,8 @@ public class MapEditor extends JFrame {
 
             Map.background_layer = new Image[2];
             try{
-                Map.background_layer[0] = ImageIO.read(new File("bg0.png"));
-                Map.background_layer[1] = ImageIO.read(new File("bg1.png"));
+                Map.background_layer[0] = ImageIO.read(new File(loadedLevel.levelName + "/bg0.png"));
+                Map.background_layer[1] = ImageIO.read(new File(loadedLevel.levelName + "/bg1.png"));
             }
             catch(Exception e){
             }
@@ -1005,6 +1006,7 @@ public class MapEditor extends JFrame {
                     Toolbox.objectChooser.updateObjectChooser();
                 }
                 catch(Exception e){
+                    System.out.println(e);
                 }
 
                 // update Object List Editor
@@ -1012,9 +1014,11 @@ public class MapEditor extends JFrame {
 
             }
 
-            new File("level").delete();
-            new File("properties").delete();
-            new File("objects").delete();
+            new File(loadedLevel.levelName + "/level").delete();
+            new File(loadedLevel.levelName + "/properties").delete();
+            new File(loadedLevel.levelName + "/objects").delete();
+
+            System.out.println("Opening finished");
 
         }
         else{

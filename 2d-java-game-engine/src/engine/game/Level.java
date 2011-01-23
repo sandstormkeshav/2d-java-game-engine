@@ -7,7 +7,6 @@ package engine.game;
 
 import java.io.*;
 import java.awt.*;
-import engine.game.objects.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.zip.*;
@@ -16,12 +15,12 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.imageio.*;
 import mapeditor.*;
 
 public class Level {
 
     public String levelArchive;
+    public String levelName;
     
     private String properties = "";
     private String objects = "";
@@ -29,13 +28,13 @@ public class Level {
     
     public Level(String levelArchive){
         this.levelArchive = levelArchive;
-
+        this.levelName = levelArchive.replaceAll("\\.[a-zA-Z0-9]*", "");
         //Unpack the loadedLevel archive:
         try{
-            extractArchive(new File(levelArchive), new File("."));
-            properties = readTextFile("properties");
-            objects = readTextFile("objects");
-            level = readTextFile("level");
+            extractArchive(new File(levelArchive), new File(levelName));
+            properties = readTextFile(levelName + "/properties");
+            objects = readTextFile(levelName + "/objects");
+            level = readTextFile(levelName + "/level");
         }
         catch(Exception e){
             if(e.toString().substring(0, 4).equals("ERROR")){
@@ -221,13 +220,14 @@ public class Level {
         Object r = m.invoke(i, args);
     }
 
-    public static void clean(){
-        new File("bg0.png").delete();
-        new File("bg1.png").delete();
-        new File("tilesheet.png").delete();
-        new File("level").delete();
-        new File("properties").delete();
-        new File("objects").delete();
+    public void clean(){
+        new File(levelName + "/bg0.png").delete();
+        new File(levelName + "/bg1.png").delete();
+        new File(levelName + "/tilesheet.png").delete();
+        new File(levelName + "/level").delete();
+        new File(levelName + "/properties").delete();
+        new File(levelName + "/objects").delete();
+        new File(levelName).delete();
     }
 
     public static String[] getObjectClasses() throws Exception{
