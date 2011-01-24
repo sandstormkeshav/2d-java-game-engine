@@ -6,9 +6,6 @@
 
 package game;
 
-import editor.MouseKlick;
-import editor.GameObject;
-import editor.MouseMotion;
 import game.objects.*;
 import game.objects.Mario;
 import editor.*;
@@ -23,11 +20,6 @@ import java.awt.image.VolatileImage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-
-/**
- *
- * @author Philipp
- */
 public class gameMain extends JPanel implements Runnable {
 
     //Debug Options
@@ -479,6 +471,8 @@ public class gameMain extends JPanel implements Runnable {
         // Draw rendered image
         g2d.drawImage(renderImage, 0, 0, width, height, 0, 0, resolution.width, resolution.height, this);
 
+        g2d.setColor(Color.yellow);
+
         g2d.drawString("FPS: " + fps, 20, 20);
 
     }
@@ -563,7 +557,7 @@ public class gameMain extends JPanel implements Runnable {
                     for(int i = 0; i < go.length; i++){
                         if(CharAtXY == go[i].objectChar){
                             try{
-                                invoke("engine.game.objects." + go[i].name, "new" + go[i].name, new Class[] { Point.class }, new Object[] { new Point (x*16, y*16) });
+                                invoke("game.objects." + go[i].name, "new" + go[i].name, new Class[] { Point.class }, new Object[] { new Point (x*16, y*16) });
                             }
                             catch(Exception e){
                                 System.out.println("ERROR trying to invoke method: " + e);
