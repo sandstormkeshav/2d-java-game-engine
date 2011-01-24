@@ -236,14 +236,6 @@ public class MainFullScreen extends Frame implements KeyListener{
         return (counter++ == MAX);
     }
 
-    private static boolean getNewFrame(){
-        //if(gameMain.newFrame){
-            renderImage = gameMain.renderImage;
-            return true;
-        //}
-        // return false;
-    }
-
     public static void getFPS(long time){
 
 

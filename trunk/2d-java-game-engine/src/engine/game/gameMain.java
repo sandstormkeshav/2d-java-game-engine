@@ -73,6 +73,9 @@ public class gameMain extends JPanel implements Runnable {
     public static Sprite[] tile = new Sprite[99999];
     public static Image[] tileImage = new Image[99999];
 
+    //Actors
+    public static Actor[] actor = new Actor[99999];
+
     //Objects
     public static Mario mario;
     public static PopupCoin pCoin;
@@ -149,6 +152,7 @@ public class gameMain extends JPanel implements Runnable {
         }
             catch(Exception e){
         }
+        
 
         if(openLevelFile == false){
             try{
@@ -202,8 +206,14 @@ public class gameMain extends JPanel implements Runnable {
 
                 camera.follow(mario.sprite);
 
-                //actions for objects:
-                mario.keyActions();
+                //act() all actors that are actable:
+                int a = 0;
+                while(actor[a] != null && actor[a] instanceof Actable){
+                    Actable actable = (Actable) actor[a];
+                    actable.act();
+                    a++;
+                }
+                
                 pCoin.fly();
 
                 for(int i = 0; i < numberOfBoxes; i++){
@@ -512,6 +522,10 @@ public class gameMain extends JPanel implements Runnable {
             numberOfBoxes = 0;
             numberOfSprites = 0;
             numberOfTiles = 0;
+
+            for(int i = 0; i < actor.length; i++){
+                actor[i] = null;
+            }
 
             backgroundImage = new Image[2];
 

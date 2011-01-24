@@ -56,7 +56,7 @@ public class Coin{
     public void collect(){
         //check for Mario Collision:
         opening();
-        if(Point.distance(sprite.posx+8,sprite.posy+8,gameMain.mario.x+12,gameMain.mario.y+12)<16){
+        if(Point.distance(sprite.posx+8,sprite.posy+8,gameMain.mario.sprite.posx+12,gameMain.mario.sprite.posy+12)<16){
             opening = true;
         }
     }
